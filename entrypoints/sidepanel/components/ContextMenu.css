@@ -1,0 +1,113 @@
+/* The favourite group list is drawn as the same menu, so it shares the panel and item looks. */
+.context-menu,
+.favourite-group-panel {
+  display: grid;
+  overflow-y: auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 7px;
+  color: var(--ink);
+  background: var(--surface-strong);
+  box-shadow: 0 12px 32px var(--shadow);
+}
+
+.context-menu {
+  z-index: 1000;
+  width: max-content;
+  min-width: 168px;
+  max-width: min(260px, calc(100vw - 8px));
+  padding: 5px;
+  outline: 0;
+  transition: opacity 100ms ease-out;
+}
+
+.context-menu-item,
+.favourite-group-row-main {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 28px;
+  gap: 8px;
+  border: 0;
+  border-radius: 5px;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 560;
+  text-align: left;
+}
+
+.context-menu-item {
+  padding: 0 8px 0 7px;
+}
+
+.context-menu-item:hover,
+.context-menu-item:focus-visible,
+.context-menu-item:focus {
+  outline: 0;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.context-menu-item svg {
+  color: var(--muted);
+}
+
+.context-menu-item.is-danger,
+.context-menu-item.is-danger svg {
+  color: var(--warm);
+}
+
+/* Disabled entries stay focusable, so their tooltip can say why. */
+.context-menu-item.is-disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.context-menu-item-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.context-menu-item kbd {
+  color: var(--faint);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 520;
+}
+
+.context-menu-visual {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+}
+
+.context-menu-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--context-menu-swatch, var(--muted));
+}
+
+.context-menu-separator {
+  height: 1px;
+  margin: 4px 3px;
+  background: var(--line);
+}
+
+.context-menu-section {
+  margin: 4px 2px 2px;
+  padding: 6px 6px 2px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 9.5px;
+  font-weight: 620;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .context-menu {
+    transition: none;
+  }
+}

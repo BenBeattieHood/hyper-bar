@@ -1,0 +1,662 @@
+.command-bar,
+.search-command-shell {
+  --command-border-aqua: #00aebd;
+  --command-border-cyan: #3abcf2;
+  --command-border-purple: #9278f4;
+  --command-border-pink: #d466c5;
+}
+
+.command-bar {
+  width: 100%;
+  min-width: 0;
+  color: var(--ink);
+}
+
+.search-command-shell .command-bar {
+  height: 100%;
+}
+
+.command-bar-input {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  gap: 8px;
+  padding: 0 7px 0 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  color: var(--muted);
+  background: var(--surface-strong);
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--shadow) 52%, transparent);
+}
+
+.search-command-shell .command-bar-input {
+  height: 100%;
+  padding: 0 36px 0 11px;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* The spinning gradient border, shared with the sidebar's search shell in style.css. */
+.command-bar-input::before,
+.search-command-shell::before {
+  content: '';
+  position: absolute;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--command-border-angle),
+    var(--command-border-aqua),
+    var(--command-border-cyan),
+    var(--command-border-purple),
+    var(--command-border-pink),
+    var(--command-border-aqua)
+  );
+  pointer-events: none;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.command-bar-input::before {
+  z-index: 0;
+  inset: -2px;
+  border-radius: 9px;
+  animation: command-border-spin 15s linear infinite;
+}
+
+.search-command-shell .command-bar-input::before {
+  display: none;
+}
+
+.command-bar-input > * {
+  position: relative;
+  z-index: 1;
+}
+
+.command-bar-input input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  color: var(--ink);
+  background: transparent;
+  font-size: 12.5px;
+  font-weight: 560;
+}
+
+.command-bar-input input:focus-visible {
+  outline: 0;
+  outline-offset: 0;
+}
+
+.command-bar-input input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.command-bar-input input::placeholder {
+  color: var(--faint);
+  opacity: 1;
+}
+
+.command-bar-input button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  border-radius: 6px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.command-bar-input button:hover,
+.command-bar-input button:focus-visible {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+.command-bar-results {
+  overflow-y: auto;
+  scrollbar-color: color-mix(in srgb, var(--muted) 35%, transparent) transparent;
+  scrollbar-width: thin;
+}
+
+.command-bar-sidebar .command-bar-results {
+  position: absolute;
+  z-index: 3;
+  top: 100%;
+  right: 0;
+  left: 0;
+  height: calc(100vh - 66px);
+  padding: 9px 8px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--canvas);
+  transform: none;
+  animation: command-results-fade-in 140ms ease-out both;
+}
+
+.command-bar-results > button,
+.command-result-main {
+  display: grid;
+  grid-template-columns: 25px minmax(0, 1fr) auto;
+  align-items: center;
+  width: 100%;
+  min-height: 43px;
+  gap: 9px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.command-result-row {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  border-radius: 6px;
+}
+
+.command-result-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.command-bar-results > button.is-selected,
+.command-result-row.is-selected {
+  background: var(--accent-soft);
+}
+
+.command-bar-results > button:hover,
+.command-result-row:hover {
+  background: color-mix(in srgb, var(--accent-soft) 68%, transparent);
+}
+
+.command-space-links {
+  display: flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  max-width: min(164px, 48%);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.command-space-links::-webkit-scrollbar {
+  display: none;
+}
+
+.command-space-link {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+  width: 30px;
+  min-height: 43px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.command-space-link::after,
+.command-current-space-indicator {
+  width: 9px;
+  height: 9px;
+  border: 1px solid color-mix(in srgb, var(--command-space-colour) 72%, transparent);
+  border-radius: 50%;
+  background: var(--command-space-colour, var(--accent-strong));
+}
+
+.command-space-link::after {
+  content: '';
+  opacity: 0.5;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.command-space-link:hover,
+.command-space-link:focus-visible {
+  background: var(--surface-hover);
+}
+
+.command-space-link:hover::after,
+.command-space-link:focus-visible::after {
+  opacity: 1;
+  transform: scale(1.18);
+}
+
+.command-current-space-indicator {
+  flex: 0 0 auto;
+  opacity: 0.72;
+}
+
+.command-result-meta {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: 8px;
+}
+
+.command-result-meta > small {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.command-history-date {
+  flex: 0 0 auto;
+  color: var(--faint);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 560;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.command-history-delete,
+.command-recent-forget {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: var(--faint);
+  background: transparent;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: color 120ms ease, background 120ms ease, opacity 120ms ease;
+}
+
+.command-result-row:hover .command-history-delete,
+.command-history-delete:focus-visible,
+.command-result-row:hover .command-recent-forget,
+.command-result-row.is-selected .command-recent-forget,
+.command-recent-forget:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.command-history-delete:hover,
+.command-history-delete:focus-visible {
+  color: var(--warm);
+  background: var(--surface-hover);
+}
+
+.command-recent-forget:hover,
+.command-recent-forget:focus-visible {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+/* The commands that follow the recent picks start a quiet second group. */
+.command-bar-results > button.is-group-start,
+.command-result-row.is-group-start {
+  position: relative;
+  margin-top: 9px;
+}
+
+.command-bar-results > button.is-group-start::before,
+.command-result-row.is-group-start::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: 8px;
+  left: 8px;
+  height: 1px;
+  background: var(--line);
+  pointer-events: none;
+}
+
+.command-history-delete:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.command-result-icon {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  color: var(--accent-strong);
+}
+
+.command-result-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.command-result-copy strong,
+.command-result-copy small {
+  overflow: hidden;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.command-result-copy strong {
+  font-size: 11.5px;
+  font-weight: 650;
+}
+
+.command-result-copy small {
+  color: var(--muted);
+  font-size: 9.5px;
+  font-weight: 500;
+}
+
+.command-result-copy mark {
+  padding: 0 1px;
+  border-radius: 2px;
+  color: inherit;
+  background: color-mix(in srgb, var(--warm) 24%, transparent);
+  font-weight: 750;
+}
+
+.command-result-url.is-recentered {
+  display: flex;
+  align-items: baseline;
+}
+
+.command-result-url-prefix {
+  flex: 0 1 auto;
+  max-width: 42%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.command-result-url.is-recentered > mark {
+  flex: 0 0 auto;
+}
+
+.command-result-url-suffix {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.command-bar-results kbd {
+  max-width: 92px;
+  overflow: hidden;
+  color: var(--faint);
+  font-size: 8.5px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.command-bar-results kbd {
+  padding: 2px 5px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface-control);
+  font-family: inherit;
+}
+
+.command-bar-empty {
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.command-bar-newtab {
+  position: relative;
+  z-index: 2;
+  width: min(640px, calc(100vw - 32px));
+}
+
+.command-bar-newtab .command-bar-input {
+  height: 52px;
+  padding-inline: 15px;
+  border-radius: 8px;
+  box-shadow: 0 14px 38px color-mix(in srgb, var(--shadow) 60%, transparent);
+}
+
+.command-bar-newtab .command-bar-input::before {
+  border-radius: 9px;
+}
+
+.command-bar-newtab .command-bar-input input {
+  font-size: 15px;
+}
+
+/* A page on its way: the words stay where they were typed, with no field around them. */
+.command-bar-input.is-underway {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.command-bar-input.is-underway::before {
+  display: none;
+}
+
+/* The magnifier becomes a spinner: its handle draws back into the lens, which opens into a turning arc.
+   The lens has radius 8, so it is 50.3 around; the handle is 6.14 long. */
+.command-bar-input > svg circle {
+  stroke-dasharray: 50.3 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: stroke-dasharray 320ms ease;
+}
+
+.command-bar-input > svg path {
+  stroke-dasharray: 7 7;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 220ms ease;
+}
+
+.command-bar-input.is-underway > svg circle {
+  stroke-dasharray: 30 20.3;
+}
+
+.command-bar-input.is-underway > svg path {
+  stroke-dashoffset: -7;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .command-bar-input.is-underway > svg circle {
+    animation: command-underway-spin 0.9s linear infinite;
+  }
+}
+
+@keyframes command-underway-spin {
+  to { transform: rotate(1turn); }
+}
+
+.command-bar-underway {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 560;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+
+.command-bar-newtab .command-bar-underway {
+  font-size: 15px;
+}
+
+/* Centred on the field's bottom border, which the gradient ring draws 2px deep. */
+.command-bar-input > .command-bar-underway-line {
+  position: absolute;
+  z-index: 0;
+  right: -2px;
+  bottom: -2.5px;
+  left: -2px;
+  height: 3px;
+  overflow: hidden;
+  clip-path: inset(0 100% 0 0 round 2px);
+  animation: command-underway-fill 12s cubic-bezier(0.08, 0.7, 0.2, 1) forwards;
+}
+
+.command-bar-underway-line > .hyper-mark-gradient {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  aspect-ratio: 1;
+  animation-duration: 4s;
+}
+
+@keyframes command-underway-fill {
+  to { clip-path: inset(0 0 0 0 round 2px); }
+}
+
+.command-bar-newtab .command-bar-results {
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  right: 0;
+  left: 0;
+  max-height: min(430px, 56vh);
+  margin-top: 8px;
+  padding: 7px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-strong);
+  box-shadow: 0 16px 42px color-mix(in srgb, var(--shadow) 50%, transparent);
+  animation: fade-in 120ms ease-out;
+}
+
+.command-bar-newtab .command-bar-results > button,
+.command-bar-newtab .command-result-main,
+.command-bar-newtab .command-space-link {
+  min-height: 47px;
+}
+
+@media (max-width: 110px) {
+  .command-bar-results > button {
+    grid-template-columns: 20px minmax(0, 1fr);
+    gap: 4px;
+    padding-inline: 3px;
+  }
+
+  .command-bar-results kbd,
+  .command-bar-results > button > svg {
+    display: none;
+  }
+}
+
+@media (max-width: 49px) {
+  .command-bar-input {
+    gap: 1px;
+    padding: 0 1px;
+  }
+
+  .command-bar-input > svg {
+    display: none;
+  }
+
+  .command-bar-input input {
+    font-size: 10px;
+  }
+
+  .command-bar-input button {
+    width: 18px;
+  }
+
+  .command-bar-sidebar .command-bar-results {
+    padding-inline: 2px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .command-bar,
+  .search-command-shell {
+    --command-border-aqua: #56ead7;
+    --command-border-cyan: #5fcdf6;
+    --command-border-purple: #b89aff;
+    --command-border-pink: #df8bd5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .command-bar-input::before,
+  .search-command-shell::before {
+    animation: none;
+  }
+}
+
+@property --command-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes command-border-spin {
+  0% { --command-border-angle: 0deg; }
+  10% { --command-border-angle: 45deg; }
+  25% { --command-border-angle: 90deg; }
+  40% { --command-border-angle: 135deg; }
+  50% { --command-border-angle: 180deg; }
+  60% { --command-border-angle: 225deg; }
+  75% { --command-border-angle: 270deg; }
+  90% { --command-border-angle: 315deg; }
+  100% { --command-border-angle: 360deg; }
+}
+
+@keyframes command-results-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.history-result-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+}
+
+.history-result-icon > * {
+  grid-area: 1 / 1;
+  transition: opacity 180ms ease;
+}
+
+.history-result-icon img {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 5px;
+  object-fit: contain;
+  opacity: 0;
+}
+
+.history-result-icon.is-loaded img {
+  opacity: 1;
+}
+
+.history-result-icon.is-loaded .history-result-placeholder {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .history-result-icon > * {
+    transition: none;
+  }
+}

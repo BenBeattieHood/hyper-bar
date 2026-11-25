@@ -1,1 +1,0 @@
-export { SortableTreeItem } from './TreeItem';

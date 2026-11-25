@@ -1,0 +1,4294 @@
+@import "./base.css";
+
+:root {
+  --surface: rgba(255, 255, 255, 0.58);
+  --surface-control: rgba(255, 255, 255, 0.52);
+  --surface-hover: rgba(255, 255, 255, 0.82);
+  --topbar: rgba(235, 240, 241, 0.88);
+  --grid-line: rgba(44, 58, 63, 0.035);
+  --overlay: rgba(28, 34, 36, 0.2);
+  --canvas-gradient: linear-gradient(
+    135deg,
+    var(--canvas-deep) 0%,
+    var(--canvas) 58%,
+    var(--surface-strong) 100%
+  );
+  /*
+   * The colours Edge paints each tab group colour in a light tab strip, and
+   * below, in a dark one, so a space looks the same here as its group does there.
+   * See docs/decisions/45-a-space-wears-its-tab-group-s-colour.md.
+   */
+  --tab-group-grey: #706d6b;
+  --tab-group-blue: #296eeb;
+  --tab-group-red: #c239b3;
+  --tab-group-yellow: #986f0b;
+  --tab-group-green: #004e8c;
+  --tab-group-pink: #e3008c;
+  --tab-group-purple: #8230ff;
+  --tab-group-cyan: #038387;
+  --tab-group-orange: #ca5010;
+  --space-pagination-opaque-background: rgb(237, 235, 228);
+  --list-hover-background: rgba(255, 255, 255, 0.38);
+  --row-selected-background: color-mix(in srgb, var(--accent) 8%, transparent);
+  --row-hover-background: color-mix(in srgb, var(--accent) 12%, transparent);
+  --row-active-background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+body {
+  background: var(--canvas-gradient);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.app-shell {
+  --space-colour: var(--tab-group-grey);
+  --list-selected-background: color-mix(
+    in srgb,
+    var(--accent) 18%,
+    var(--surface-control)
+  );
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  color: var(--ink);
+}
+
+/*
+ * Once the global bookmarks or archived spaces panel has covered the space, its fill spreads over the whole sidebar.
+ * It fades in after the reveal, so the reveal stays visible, and drops at once on close.
+ */
+.app-shell:has(.workspace-stack.is-covered) {
+  background-color: var(--surface-control);
+  transition: background-color 180ms ease;
+}
+
+.app-shell:has(.workspace-stack.is-covered) .topbar {
+  background-color: transparent;
+  transition: background-color 180ms ease;
+}
+
+.space-colour-track {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.space-colour-strip {
+  position: absolute;
+  inset: 0;
+}
+
+.app-shell,
+.app-shell :where(:not(input):not(textarea):not([contenteditable="true"])) {
+  cursor: default !important;
+}
+
+.app-shell
+  :is(
+    input[type="text"],
+    input[type="search"],
+    textarea,
+    [contenteditable="true"]
+  ) {
+  cursor: text !important;
+}
+
+.topbar {
+  --search-shell-gutter: 28px;
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  min-height: 66px;
+  padding: 12px 14px 10px;
+  border-bottom: 0;
+  background: var(--topbar);
+  backdrop-filter: blur(18px) saturate(1.2);
+}
+
+.brand-mark {
+  flex: 0 0 auto;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 4px 14px rgba(34, 65, 59, 0.16);
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--muted);
+  background: var(--surface-control);
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.icon-button:hover {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+.icon-button[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+
+.icon-button:active {
+  transform: translateY(1px);
+}
+
+.settings-button,
+.countdown-button {
+  border: 0;
+}
+
+.countdown-button > * {
+  grid-area: 1 / 1;
+  transition: opacity 120ms ease;
+}
+
+.countdown-button-progress {
+  width: 24px;
+  height: 24px;
+  transform: rotate(-90deg);
+}
+
+.countdown-button-progress circle {
+  fill: none;
+  stroke-width: 2.5;
+}
+
+.countdown-button-track {
+  stroke: color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.countdown-button-ring {
+  stroke: var(--notice-tone, var(--accent));
+  stroke-dasharray: 100;
+  stroke-linecap: round;
+  animation: countdown-ring var(--countdown-duration) linear var(--countdown-elapsed) forwards;
+}
+
+@keyframes countdown-ring {
+  to { stroke-dashoffset: 100; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countdown-button-ring { animation: none; }
+}
+
+/* The icon inside the ring says what the button does while the ring counts down. */
+.countdown-button-icon {
+  color: color-mix(in srgb, var(--notice-tone, var(--accent)) 70%, var(--ink));
+}
+
+.countdown-notice {
+  --notice-tone: var(--tab-group-blue);
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+  gap: 6px;
+}
+
+.countdown-notice.is-warning {
+  --notice-tone: var(--tab-group-yellow);
+}
+
+.countdown-notice.is-error {
+  --notice-tone: var(--tab-group-red);
+}
+
+.countdown-notice-message {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 34px;
+  padding: 0 12px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--notice-tone) 55%, transparent);
+  border-radius: 7px;
+  color: color-mix(in srgb, var(--notice-tone) 62%, var(--ink));
+  background: color-mix(in srgb, var(--notice-tone) 13%, var(--surface-strong));
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 32px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A timed message takes the header while it lasts; the space title, Settings and Search step aside. */
+.topbar:not(.has-search):has(.countdown-notice) :is(.topbar-space-title, .settings-button, .search-command-shell) {
+  display: none;
+}
+
+/* In Settings only the heading steps aside, so Back stays where it was. */
+.topbar.is-settings:has(.countdown-notice) .settings-topbar {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.topbar.is-settings:has(.countdown-notice) .settings-topbar h1 {
+  display: none;
+}
+
+/* Settings keeps its message slot mounted so a message can animate out; empty, it takes no room. */
+.topbar.is-settings .topbar-actions:empty {
+  display: none;
+}
+
+.topbar:not(.has-search):has(.countdown-notice) .topbar-actions {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-left: 0;
+  padding-right: 0;
+}
+
+.topbar-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding-right: 40px;
+}
+
+.search-command-shell {
+  position: absolute;
+  isolation: isolate;
+  top: 50%;
+  right: 0;
+  width: calc(100vw - var(--search-shell-gutter));
+  height: 40px;
+  overflow: visible;
+  border-radius: 8px;
+  color: var(--muted);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.search-command-shell::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-control);
+  clip-path: inset(3px 3px 3px calc(100% - 37px) round 7px);
+  pointer-events: none;
+  transition:
+    clip-path 220ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+/* Its gradient and mask come from the command bar's border in CommandBar.css. */
+.search-command-shell::before {
+  z-index: 2;
+  inset: 0;
+  border-radius: 8px;
+  clip-path: inset(0 0 0 100% round 8px);
+  opacity: 0;
+  transition:
+    clip-path 260ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 140ms ease;
+  animation: command-border-spin 15s linear infinite;
+  animation-play-state: paused;
+}
+
+.search-command-shell.is-open {
+  pointer-events: auto;
+}
+
+.search-command-shell.is-open::after {
+  clip-path: inset(0 0 0 0 round 8px);
+  background: var(--surface-strong);
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--shadow) 52%, transparent);
+}
+
+.search-command-shell.is-open::before {
+  clip-path: inset(0 0 0 0 round 8px);
+  opacity: 1;
+  animation-play-state: running;
+  transition-delay: 45ms;
+  transition-duration: 280ms, 120ms;
+  transition-timing-function: cubic-bezier(0.2, 0.75, 0.25, 1), ease;
+}
+
+.search-command-content {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+}
+
+.search-command-action {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  right: 3px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 7px;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translateY(-50%);
+  transition:
+    color 150ms ease,
+    background 150ms ease;
+}
+
+.search-command-shell.is-open .search-command-action {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+}
+
+.search-command-action > span {
+  display: grid;
+  place-items: center;
+}
+
+.search-command-action:hover,
+.search-command-action:focus-visible {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+.search-command-shell.is-open .search-command-action:hover {
+  background: transparent;
+}
+
+.topbar-actions.is-search-open .settings-button,
+.topbar-actions.is-search-open .countdown-button,
+.topbar-actions.is-search-open .countdown-notice {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-command-shell::after,
+  .search-command-shell::before {
+    transition-duration: 0ms;
+  }
+}
+
+.topbar-space-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-right: 10px;
+}
+
+.settings-topbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  gap: 10px;
+}
+
+.settings-topbar h1 {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 680;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-topbar .icon-button {
+  flex: 0 0 34px;
+}
+
+.workspace-scroll {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: rgba(58, 55, 48, 0.23) transparent;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+}
+
+.settings-page {
+  padding: 8px 14px 28px;
+}
+
+.settings-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  background: var(--canvas);
+  pointer-events: none;
+}
+
+.settings-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--canvas-gradient);
+  box-shadow: -10px 0 24px var(--shadow);
+}
+
+.settings-section {
+  padding: 16px 2px 20px;
+  border-top: 1px solid var(--line);
+}
+
+.settings-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.settings-section-heading h2,
+.settings-section-heading span {
+  margin: 0;
+}
+
+.settings-section-heading h2 {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.settings-section-heading span {
+  color: var(--faint);
+  font-size: 9.5px;
+}
+
+.settings-control-list {
+  display: grid;
+  gap: 8px;
+}
+
+.settings-toggle-row,
+.settings-slider-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--surface-control);
+}
+
+.settings-toggle-row {
+  width: 100%;
+  min-height: 54px;
+  padding: 7px 9px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.settings-toggle-row:hover,
+.settings-slider-row:hover {
+  background: var(--surface-hover);
+}
+
+.settings-toggle-row:disabled {
+  cursor: wait;
+  opacity: 0.58;
+}
+
+.settings-row-icon,
+.editor-heading-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+
+.settings-toggle-row > span:nth-child(2),
+.settings-slider-row > span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+  text-wrap: pretty;
+}
+
+.settings-toggle-row strong,
+.settings-slider-row strong {
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.settings-toggle-row small,
+.settings-slider-row small {
+  color: var(--muted);
+  font-size: 9.5px;
+}
+
+@media (width < 205px) {
+  .settings-toggle-row small,
+  .settings-slider-row small {
+    display: none;
+  }
+}
+
+.settings-access-remove {
+  color: var(--accent-strong);
+  font-size: 9px;
+  font-weight: 650;
+  text-align: center;
+}
+
+.settings-switch {
+  position: relative;
+  width: 32px;
+  height: 19px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--muted) 36%, transparent);
+  transition: background 140ms ease;
+}
+
+.settings-switch span {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--surface-strong);
+  box-shadow: 0 1px 3px var(--shadow);
+  transition: transform 140ms ease;
+}
+
+.settings-toggle-row[aria-checked="true"] .settings-switch {
+  background: var(--accent);
+}
+
+.settings-toggle-row[aria-checked="true"] .settings-switch span {
+  transform: translateX(13px);
+}
+
+.settings-slider-row {
+  padding: 7px 9px 8px;
+}
+
+.settings-slider-row label {
+  cursor: pointer;
+}
+
+.settings-slider-value {
+  color: var(--accent-strong);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  text-align: center;
+}
+
+.settings-slider {
+  --settings-slider-bar: 4px;
+  --settings-slider-thumb: 14px;
+  display: grid;
+  grid-column: 2 / -1;
+  gap: 2px;
+  padding-right: 2px;
+}
+
+.settings-slider-control {
+  position: relative;
+  display: grid;
+  container-type: inline-size;
+}
+
+/* Spans the thumb centre's travel, so a share of its width is where the thumb sits for that value. */
+.settings-slider-rail {
+  /* The largest even dot up to 8px that leaves a bar's thickness of bar between neighbours. On a
+     rail too crowded for that, the dots shrink to the bar's thickness and merge into it. */
+  --settings-slider-dot: clamp(
+    var(--settings-slider-bar),
+    round(
+      down,
+      (100cqw - var(--settings-slider-thumb)) / var(--settings-slider-intervals) -
+        var(--settings-slider-bar),
+      2px
+    ),
+    8px
+  );
+  position: absolute;
+  top: calc(50% - var(--settings-slider-dot) / 2);
+  right: calc(var(--settings-slider-thumb) / 2);
+  left: calc(var(--settings-slider-thumb) / 2);
+  height: var(--settings-slider-dot);
+  pointer-events: none;
+}
+
+.settings-slider-fill,
+.settings-slider-rest {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(currentColor 0 0) no-repeat;
+}
+
+.settings-slider-fill {
+  color: var(--accent);
+  background-position: left center;
+  background-size: calc(100% * var(--settings-slider-share)) var(--settings-slider-bar);
+}
+
+/* Faded as one layer, so its dots stay the bar's exact tone where they overlap it. */
+.settings-slider-rest {
+  color: var(--muted);
+  background-position: right center;
+  background-size: calc(100% * (1 - var(--settings-slider-share))) var(--settings-slider-bar);
+  opacity: 0.36;
+}
+
+.settings-slider-dot {
+  position: absolute;
+  top: 0;
+  left: calc(100% * var(--settings-slider-share) - var(--settings-slider-dot) / 2);
+  width: var(--settings-slider-dot);
+  height: var(--settings-slider-dot);
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Positioned so it paints over the rail, letting the thumb cover the dot it rests on. */
+.settings-slider input {
+  position: relative;
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+
+.settings-slider input:focus-visible {
+  outline: none;
+}
+
+.settings-slider input::-webkit-slider-runnable-track {
+  height: var(--settings-slider-bar);
+  background: transparent;
+}
+
+.settings-slider input::-moz-range-track {
+  height: var(--settings-slider-bar);
+  background: transparent;
+}
+
+.settings-slider input::-webkit-slider-thumb {
+  width: var(--settings-slider-thumb);
+  height: var(--settings-slider-thumb);
+  margin-top: calc((var(--settings-slider-bar) - var(--settings-slider-thumb)) / 2);
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-strong);
+  box-shadow: 0 0 0 1px var(--line-strong), 0 1px 3px var(--shadow);
+  appearance: none;
+  transition: box-shadow 140ms ease;
+}
+
+.settings-slider input::-moz-range-thumb {
+  width: var(--settings-slider-thumb);
+  height: var(--settings-slider-thumb);
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-strong);
+  box-shadow: 0 0 0 1px var(--line-strong), 0 1px 3px var(--shadow);
+  transition: box-shadow 140ms ease;
+}
+
+.settings-slider input:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px var(--accent), 0 1px 3px var(--shadow);
+}
+
+.settings-slider input:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 2px var(--accent), 0 1px 3px var(--shadow);
+}
+
+.settings-slider-scale {
+  display: flex;
+  justify-content: space-between;
+  color: var(--faint);
+  font-size: 9.5px;
+}
+
+.favourites-section {
+  --favourites-padding-bottom: 12px;
+  --favourites-padding-inline: 14px;
+  position: relative;
+  padding: 12px var(--favourites-padding-inline) var(--favourites-padding-bottom);
+}
+
+/* Names the hovered tile in the gap below the grid, overlapping the grid's 1px edge so the pointer never crosses a seam. */
+.favourite-hover-label {
+  position: absolute;
+  z-index: 3;
+  top: calc(100% - var(--favourites-padding-bottom) - 1px);
+  right: var(--favourites-padding-inline);
+  left: var(--favourites-padding-inline);
+  display: flex;
+  height: 18px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  cursor: pointer;
+}
+
+.favourite-hover-label > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.section-add-button,
+.row-icon-button,
+.tab-bookmark-indicator {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
+}
+
+.section-add-button {
+  width: 24px;
+  height: 24px;
+}
+
+.row-icon-button {
+  width: 28px;
+  height: 28px;
+}
+
+.create-action-group {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 5px;
+}
+
+.section-add-button:hover,
+.row-icon-button:hover,
+.section-add-button:focus-visible,
+.row-icon-button:focus-visible {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.favourites-grid {
+  display: grid;
+  /* One row of as many columns as fit, the global bookmarks button's included, set by useFavouriteSlotCount; they share the width evenly. */
+  grid-template-columns: repeat(var(--favourite-columns, 8), minmax(0, 1fr));
+  justify-content: center;
+  gap: 6px;
+  padding: 1px;
+  border-radius: 8px;
+  transition:
+    background 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.favourites-grid.is-over {
+  background: rgba(40, 116, 102, 0.08);
+  box-shadow: 0 0 0 2px rgba(40, 116, 102, 0.3);
+}
+
+.favourite-tile-wrap,
+.favourite-placeholder {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 0;
+}
+
+.favourite-tile-wrap {
+  position: relative;
+  cursor: pointer;
+}
+
+.favourite-tile-wrap.is-dragging {
+  opacity: 0.25;
+}
+
+.favourite-tile {
+  /* A tile wears the colour of the space its tab is in, set inline when known. */
+  --tile-space-colour: var(--space-colour);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.46);
+  box-shadow: 0 2px 8px rgba(46, 43, 36, 0.045);
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.favourite-tile-wrap:hover .favourite-tile,
+.favourite-slot.is-hovered .favourite-tile {
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 5px 14px rgba(46, 43, 36, 0.08);
+}
+
+.favourite-tile.is-open {
+  background: var(--surface-control);
+}
+
+/* A grouped tile shows the edge of a second card under it, like a stack. */
+.favourite-tile.is-group::before {
+  position: absolute;
+  right: 5px;
+  bottom: -4px;
+  left: 5px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: color-mix(in srgb, var(--ink) 14%, transparent);
+  content: "";
+  pointer-events: none;
+}
+
+/* A tile open in a space carries that space's colour as a line under its icon, drawn like the space list's line. */
+.favourite-tile.is-open::after,
+.favourite-tile.is-recent.has-space::after {
+  position: absolute;
+  right: 2px;
+  bottom: 1px;
+  left: 2px;
+  height: 2px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--tile-space-colour) 52%, transparent);
+  content: "";
+  pointer-events: none;
+}
+
+/* The current tab's tile is washed in its space's colour. */
+.favourite-tile.is-active:is(.is-pinned, .is-recent) {
+  background: color-mix(in srgb, var(--tile-space-colour) 24%, var(--surface-hover));
+}
+
+.favourite-tile.is-active:is(.is-open, .is-recent.has-space)::after {
+  background: var(--tile-space-colour);
+}
+
+.favourite-tile.is-editing-title > .favicon,
+.favourite-tile.is-editing-title > .tab-count {
+  display: none;
+}
+
+.favourite-placeholder {
+  position: relative;
+  border: 1px dashed rgba(72, 68, 59, 0.13);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+.favourite-placeholder.is-over {
+  border-color: rgba(40, 116, 102, 0.5);
+  background: rgba(40, 116, 102, 0.12);
+}
+
+.favourite-title {
+  display: none;
+  width: 100%;
+  max-height: 24px;
+  margin: 0;
+  overflow: hidden;
+  color: #57544d;
+  font-size: 9.5px;
+  font-weight: 600;
+  line-height: 12px;
+  text-align: center;
+  white-space: normal;
+}
+
+.favourite-title.item-title-input {
+  width: calc(100% + 10px);
+}
+
+.favourite-tile.is-editing-title .favourite-title {
+  display: block;
+}
+
+.favourite-slot {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: 1;
+}
+
+.favourite-slot > * {
+  width: 100%;
+  height: 100%;
+}
+
+.favourite-pin {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  display: grid;
+  place-items: center;
+  width: 9px;
+  height: 9px;
+  color: var(--muted);
+  opacity: 0.85;
+  pointer-events: none;
+  transform: rotate(40deg);
+}
+
+/* Recent tabs fill the slots nothing is pinned to, quieter than favourites. */
+.favourite-tile.is-recent {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+
+.favourite-tile.is-recent.is-sleeping .favicon {
+  opacity: 0.55;
+}
+
+/* Drop feedback on a borderless recent tile is a background wash only. */
+.favourite-tile-wrap.is-recent.is-over .favourite-tile {
+  background: rgba(40, 116, 102, 0.2);
+}
+
+.global-bookmarks-button {
+  overflow: hidden;
+  border-color: rgba(52, 49, 43, 0.09);
+  color: var(--muted);
+  font: inherit;
+}
+
+.global-bookmarks-button:hover,
+.global-bookmarks-button:focus-visible {
+  border-color: rgba(52, 49, 43, 0.16);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 5px 14px rgba(46, 43, 36, 0.08);
+}
+
+.global-bookmarks-button.is-active {
+  border-color: transparent;
+  color: var(--ink);
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+/* The close button hovers like the settings button. */
+.global-bookmarks-button.is-active:hover,
+.global-bookmarks-button.is-active:focus-visible {
+  color: var(--ink);
+  background: var(--surface-hover);
+  box-shadow: none;
+  transform: none;
+}
+
+.global-bookmarks-button.is-over {
+  border-color: rgba(40, 116, 102, 0.5);
+  color: var(--ink);
+  background: rgba(40, 116, 102, 0.12);
+}
+
+.global-bookmarks-button > svg {
+  flex: 0 0 auto;
+}
+
+.item-title-input {
+  min-width: 0;
+  height: auto;
+  margin: -2px -5px;
+  padding: 2px 5px;
+  border: 0;
+  color: var(--ink);
+  background: var(--surface-strong);
+  outline: none;
+  text-overflow: clip;
+}
+
+.item-title-input:focus,
+.item-title-input:focus-visible {
+  outline: 0;
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+.favicon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  overflow: hidden;
+  border-radius: 5px;
+  color: #fff;
+  background: transparent;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.favicon-visual {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  background: var(--favicon-colour);
+}
+
+.favicon.has-image .favicon-visual {
+  background: transparent;
+}
+
+.favicon.is-loading .favicon-visual {
+  opacity: 0.5;
+}
+
+.favicon-large {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  font-size: 13px;
+  box-shadow: 0 2px 5px rgba(34, 31, 26, 0.12);
+}
+
+.favicon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+}
+
+.favicon-loading-spinner {
+  position: absolute;
+  inset: 1px;
+  z-index: 2;
+  box-sizing: border-box;
+  border: 2px solid color-mix(in srgb, var(--ink) 28%, transparent);
+  border-top-color: var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: favicon-loading-spin 700ms linear infinite;
+}
+
+@keyframes favicon-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.favicon-audio-overlay {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: var(--ink);
+  background: transparent;
+  pointer-events: none;
+}
+
+.favicon-audio-overlay > rect {
+  fill: currentColor;
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: favicon-audio-level 700ms ease-in-out infinite alternate;
+  transition:
+    x 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    y 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    width 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    height 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 260ms ease-in-out,
+    transform 320ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.favicon-audio-overlay > .audio-pause-half {
+  animation-delay: -420ms;
+}
+
+.favicon-audio-overlay > .audio-equaliser-outer.is-right {
+  animation-delay: -180ms;
+}
+
+.favicon-audio-overlay.is-paused > rect {
+  y: 2px;
+  height: 6px;
+  animation: none;
+  transform: scaleY(1);
+}
+
+.favicon-audio-overlay.is-paused > .audio-equaliser-outer {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.favicon-audio-overlay.is-paused > .audio-equaliser-outer.is-left {
+  x: 2px;
+  y: 5px;
+}
+
+.favicon-audio-overlay.is-paused > .audio-equaliser-outer.is-right {
+  x: 8px;
+  y: 5px;
+}
+
+.favicon-audio-overlay.is-paused > .audio-pause-half.is-left {
+  x: 2px;
+}
+
+.favicon-audio-overlay.is-paused > .audio-pause-half.is-right {
+  x: 6px;
+}
+
+@keyframes favicon-audio-level {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .favicon-loading-spinner,
+  .favicon-audio-overlay > rect {
+    animation: none;
+  }
+
+  .favicon-audio-overlay > rect {
+    transition: none;
+  }
+}
+
+.tab-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  color: #fff;
+  background: var(--warm);
+  box-shadow: 0 1px 3px rgba(79, 38, 28, 0.2);
+  font-size: 9px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+.favourite-tile .tab-count {
+  display: none;
+}
+
+.favourite-tile .favicon-large,
+.drag-overlay .favicon-large {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  box-shadow: none;
+}
+
+.tree-section {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0 4px;
+  border-top: 0;
+}
+
+.space-gesture-area {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  touch-action: pan-y;
+}
+
+.space-panel {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+.space-title-input {
+  width: 100%;
+  min-width: 0;
+  height: 34px;
+  margin: 0;
+  padding: 5px 7px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 3px;
+  outline: 0;
+  color: var(--ink);
+  background: transparent;
+  font-size: 16px;
+  font-weight: 680;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.space-title-input:hover,
+.space-title-input:focus {
+  background: color-mix(in srgb, var(--surface-hover) 58%, transparent);
+}
+
+.space-title-input:focus-visible {
+  outline: 0;
+}
+
+.tree-drop-zone {
+  flex: 0 0 auto;
+  min-height: calc(2 * 36px + 1px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 2px 0 12px;
+  border-radius: 8px;
+  transition:
+    background 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.tree-drop-zone.is-over {
+  background: rgba(40, 116, 102, 0.055);
+  box-shadow: inset 0 0 0 1px rgba(40, 116, 102, 0.22);
+}
+
+.tree-root-drop-target {
+  height: 18px;
+  margin: 2px 6px 0 24px;
+  border-radius: 4px;
+}
+
+.tree-list,
+.tabs-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tree-list > li {
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+}
+
+.tree-row,
+.tab-row {
+  --tree-indent: 16px;
+  --row-control-height: 34px;
+  --row-state-background: transparent;
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+  min-height: 36px;
+  padding-left: calc(var(--tree-depth) * var(--tree-indent));
+  border-radius: 6px;
+}
+
+.tree-row {
+  cursor: grab;
+  transition:
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.tree-depth-guides {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: calc(var(--tree-depth) * var(--tree-indent));
+  background-image: linear-gradient(
+    to right,
+    transparent 0 calc(50% - 0.5px),
+    var(--line) calc(50% - 0.5px) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+  background-position: left top;
+  background-size: var(--tree-indent) 100%;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.tree-row:hover > .tree-item-surface,
+.tab-folder-row:hover > .tab-folder-content {
+  background: var(--row-hover-background);
+}
+
+.tree-row:hover {
+  --row-state-background: var(--row-hover-background);
+}
+
+.tree-row.is-open {
+  background: transparent;
+}
+
+.bookmark-space-links {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  max-width: none;
+  overflow: hidden;
+  gap: 5px;
+  margin-left: 5px;
+}
+
+.bookmark-space-links.is-expanded {
+  gap: 0;
+}
+
+.bookmark-space-link {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.bookmark-space-links.is-collapsed .bookmark-space-summary {
+  flex-basis: 100%;
+  width: 100%;
+}
+
+.bookmark-space-links.is-expanded .bookmark-space-link {
+  border-radius: 0;
+}
+
+.bookmark-space-links.is-expanded .bookmark-space-link:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.bookmark-space-links.is-expanded .bookmark-space-link:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.bookmark-space-links.is-expanded .bookmark-space-link:hover,
+.bookmark-space-links.is-expanded .bookmark-space-link:focus-visible,
+.bookmark-space-links.is-expanded .bookmark-space-link.is-foremost {
+  z-index: 1;
+}
+
+.bookmark-space-summary-dots {
+  display: grid;
+  grid-auto-rows: 4px;
+  gap: 2px;
+}
+
+.bookmark-space-summary-dot {
+  width: 4px;
+  height: 4px;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--bookmark-space-colour) 72%,
+    transparent
+  );
+  border-radius: 50%;
+  background: var(--bookmark-space-colour);
+  opacity: 0.68;
+}
+
+.bookmark-space-link .bookmark-space-indicator {
+  --bookmark-indicator-colour: var(--bookmark-space-colour);
+  opacity: 0.5;
+  scale: 1;
+  transition:
+    opacity 120ms ease,
+    scale 120ms ease;
+}
+
+.bookmark-space-link:hover .bookmark-space-indicator,
+.bookmark-space-link:focus-visible .bookmark-space-indicator {
+  opacity: 1;
+  scale: 1.18;
+}
+
+.bookmark-space-link:hover,
+.bookmark-space-link:focus-visible {
+  background: var(--surface-hover);
+}
+
+.tree-row.is-foremost {
+  background: transparent;
+}
+
+.tree-row.is-foremost > .tree-item-surface {
+  background: var(--row-active-background);
+  box-shadow: none;
+}
+
+.tree-row.is-drag-selected:not(.is-dragging) > .tree-item-surface,
+.tab-folder-row.is-drag-selected:not(.is-dragging) > .tab-folder-content,
+.tab-row.is-drag-selected:not(.is-dragging) .tab-content {
+  background: var(--row-selected-background);
+  box-shadow: none;
+}
+
+.tree-row.is-drag-selected:not(.is-dragging),
+.tab-row.is-drag-selected:not(.is-dragging) {
+  --row-state-background: var(--row-selected-background);
+}
+
+.tree-row.is-drag-selected:not(.is-dragging):hover > .tree-item-surface,
+.tab-folder-row.is-drag-selected:not(.is-dragging):hover > .tab-folder-content,
+.tab-row.is-drag-selected:not(.is-dragging):hover .tab-content {
+  background: var(--row-hover-background);
+}
+
+.tree-row.is-drag-selected:not(.is-dragging):hover,
+.tab-row.is-drag-selected:not(.is-dragging):hover {
+  --row-state-background: var(--row-hover-background);
+}
+
+.tree-row.is-foremost.is-drag-selected:not(.is-dragging) > .tree-item-surface,
+.tree-row.is-foremost:hover > .tree-item-surface,
+.tab-row.is-active:hover .tab-content,
+.tab-row.is-active.is-drag-selected:not(.is-dragging) .tab-content {
+  background: var(--row-active-background);
+}
+
+.tree-row.is-foremost,
+.tab-row.is-active {
+  --row-state-background: var(--row-active-background);
+}
+
+.drag-selection-surface {
+  position: relative;
+}
+
+.drag-selection-surface.is-marquee-selecting {
+  cursor: crosshair;
+  user-select: none;
+}
+
+.drag-selection-marquee {
+  position: absolute;
+  z-index: 8;
+  border: 1px solid var(--focus);
+  border-radius: 2px;
+  background: var(--row-hover-background);
+  pointer-events: none;
+}
+
+.tree-row.is-dragging,
+.tab-row.is-dragging {
+  height: 0;
+  min-height: 0;
+  overflow: visible;
+  background: transparent;
+  opacity: 1;
+  transition: none;
+}
+
+.tree-row.is-dragging > :not(.tree-drop-placeholder),
+.tab-row.is-dragging > :not(.tree-drop-placeholder) {
+  visibility: hidden;
+}
+
+.tree-row.is-dragging .tree-item-main {
+  cursor: grabbing;
+}
+
+.tree-drop-placeholder {
+  position: absolute;
+  right: 0;
+  left: calc(var(--drop-depth) * var(--tree-indent));
+  z-index: 2;
+  height: 8px;
+  pointer-events: none;
+}
+
+.tree-drop-placeholder.is-before {
+  top: -4px;
+}
+
+.tree-drop-placeholder.is-after {
+  bottom: -4px;
+}
+
+.tree-drop-placeholder::before {
+  position: absolute;
+  top: 3px;
+  right: 0;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  content: "";
+}
+
+.tree-drop-placeholder::after {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--surface-strong);
+  content: "";
+}
+
+.tree-drop-placeholder.is-invalid::before {
+  background: var(--warm);
+}
+
+.tree-drop-placeholder.is-invalid::after {
+  border-color: var(--warm);
+}
+
+.tree-row.drop-inside > .tree-item-surface,
+.tab-folder-row.drop-inside .tree-item-main {
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.tree-row.drop-inside.is-invalid-drop > .tree-item-surface,
+.tab-folder-row.drop-inside.is-invalid-drop .tree-item-main {
+  background: color-mix(in srgb, var(--warm) 12%, transparent);
+  box-shadow: inset 0 0 0 1px var(--warm);
+}
+
+.tree-item-surface {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 34px;
+  border-radius: 5px;
+  background: transparent;
+  transition: background 120ms ease;
+}
+
+.tree-item-main,
+.tab-main {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 34px;
+  gap: 8px;
+  padding: 0 7px;
+  border-radius: 5px;
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+  text-align: left;
+}
+
+.tree-item-main:focus-visible,
+.tab-main:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.tab-folder-content,
+.tab-content {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 34px;
+  border-radius: 6px;
+  background: transparent;
+  transition: background 120ms ease;
+}
+
+.bookmark-space-indicator {
+  display: block;
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border: 1px solid
+    color-mix(in srgb, var(--bookmark-indicator-colour) 72%, transparent);
+  border-radius: 50%;
+  background: var(--bookmark-indicator-colour, var(--space-colour));
+}
+
+.bookmark-folder-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 17px;
+  width: 17px;
+  height: 17px;
+}
+
+.folder-add-button {
+  flex: 0 0 auto;
+}
+
+.tree-row > .create-action-group,
+.tab-folder-content > .create-action-group {
+  margin-left: 5px;
+}
+
+.tree-row .row-icon-button {
+  color: var(--faint);
+}
+
+.tree-row .folder-add-button {
+  color: var(--muted);
+}
+
+.tree-row .tab-folder-close,
+.tree-row .bookmark-close,
+.tab-folder-row .folder-add-button {
+  color: transparent;
+}
+
+.tree-row .tree-item-surface > .bookmark-close,
+.tree-row.tab-folder-row .tab-folder-content > .tab-folder-close,
+.tab-row .tab-content > .tab-close {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.tree-row.tab-folder-row .tab-folder-content > .tab-folder-close:has(+ .tab-folder-dedupe) {
+  margin-right: 2px;
+}
+
+/* A hidden close button gives its room back to the title until the row asks for it. */
+.tree-row:not(:hover, :focus-within) .tree-item-surface > .bookmark-close,
+.tree-row.tab-folder-row:not(:hover, :focus-within) .tab-folder-content > .tab-folder-close,
+.tab-row:not(:hover, :has(:focus-visible)) .tab-content > .tab-close {
+  width: 0;
+  min-width: 0;
+  margin-right: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.tree-row.tab-folder-row .tab-folder-content > .tab-folder-dedupe {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.tree-row:hover .row-icon-button,
+.tree-row:focus-within .row-icon-button,
+.tree-row .row-icon-button[aria-expanded="true"] {
+  color: var(--muted);
+}
+
+.tree-row .row-icon-button:hover,
+.tree-row .row-icon-button:focus-visible,
+.tab-row .row-icon-button:hover,
+.tab-row .row-icon-button:focus-visible {
+  /* The row already carries the fill, so the button answers in ink instead.
+     It must say so here: the row's own hover rule is otherwise more specific. */
+  color: var(--ink);
+  background: transparent;
+}
+
+/* The bookmark close button hovers like the settings button. */
+.tree-row .bookmark-close:hover,
+.tree-row .bookmark-close:focus-visible {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+.bookmark-menu-popover {
+  z-index: 100;
+  display: grid;
+  width: min(174px, calc(100vw - 8px));
+  overflow-y: auto;
+  padding: 5px;
+  border: 1px solid rgba(44, 41, 36, 0.14);
+  border-radius: 7px;
+  background: rgba(250, 249, 245, 0.98);
+  box-shadow: 0 12px 32px rgba(42, 39, 34, 0.18);
+  backdrop-filter: blur(16px);
+  animation: menu-in 120ms ease-out;
+}
+
+.bookmark-menu-popover button {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 31px;
+  gap: 6px;
+  padding: 0 7px;
+  border-radius: 5px;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 580;
+  text-align: left;
+}
+
+.bookmark-menu-popover button:hover,
+.bookmark-menu-popover button:focus-visible {
+  background: rgba(40, 116, 102, 0.1);
+}
+
+.bookmark-menu-popover button svg {
+  color: var(--muted);
+}
+
+.bookmark-picker-popover {
+  width: min(248px, calc(100vw - 8px));
+}
+
+.bookmark-menu-separator {
+  margin: 4px 2px 2px;
+  padding: 6px 5px 2px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 9.5px;
+  font-weight: 620;
+}
+
+.bookmark-menu-item-copy {
+  display: grid;
+  min-width: 0;
+  gap: 1px;
+}
+
+.bookmark-menu-item-copy strong,
+.bookmark-menu-item-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bookmark-menu-item-copy strong {
+  font: inherit;
+}
+
+.bookmark-menu-item-copy small {
+  color: var(--faint);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.tree-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.folder-item {
+  color: #4a4841;
+}
+
+.folder-item > svg {
+  flex: 0 0 auto;
+  color: var(--accent-strong);
+}
+
+.folder-count {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding-top: 3px;
+  color: currentColor;
+  font-size: 7px;
+  font-weight: 750;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.folder-open-tab-indicator {
+  display: grid;
+  place-items: center;
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.folder-open-tab-indicator .bookmark-space-indicator {
+  --bookmark-indicator-colour: var(--bookmark-open-colour, var(--accent-strong));
+}
+
+/* The column, and so the message and the Import button, never outgrow the list. */
+.empty-tree {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  min-height: 72px;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 550;
+  text-align: center;
+}
+
+.empty-tree-message {
+  max-width: 100%;
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+.empty-tree-action {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: 30px;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  background: var(--surface-control);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.empty-tree-action:hover,
+.empty-tree-action:focus-visible {
+  background: var(--surface-hover);
+}
+
+.empty-tree-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.empty-tree-action > svg {
+  flex: none;
+}
+
+.empty-tree-action-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* At the very bottom of the Tabs list, a footnote counts the space's tabs in
+   other windows, as quiet as an empty state and within the rows' content inset. */
+.tabs-other-windows {
+  flex: 0 0 auto;
+  margin: auto 12px 0;
+  padding-top: 4px;
+  color: var(--faint);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.35;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.tabs-section {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.workspace-view-panel {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.tabs-space-layer {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.tabs-space-layer > .tabs-section {
+  min-width: 0;
+}
+
+.view-transition-items {
+  display: contents;
+}
+
+.view-transition-items.is-entering .tree-list > li,
+.view-transition-items.is-exiting .tree-list > li {
+  animation-duration: 180ms;
+  animation-timing-function: cubic-bezier(0.2, 0.75, 0.25, 1);
+  animation-fill-mode: both;
+}
+
+.view-transition-items.is-tabs.is-entering .tree-list > li {
+  animation-name: compact-tabs-in;
+}
+
+.view-transition-items.is-tabs.is-exiting .tree-list > li {
+  animation-name: compact-tabs-out;
+}
+
+.view-transition-items.is-bookmarks.is-entering .tree-list > li {
+  animation-name: compact-bookmarks-in;
+}
+
+.view-transition-items.is-bookmarks.is-exiting .tree-list > li {
+  animation-name: compact-bookmarks-out;
+}
+
+.view-transition-items.is-entering .tree-list > li:nth-child(2) {
+  animation-delay: 18ms;
+}
+
+.view-transition-items.is-entering .tree-list > li:nth-child(3) {
+  animation-delay: 36ms;
+}
+
+.view-transition-items.is-entering .tree-list > li:nth-child(4) {
+  animation-delay: 54ms;
+}
+
+.view-transition-items.is-entering .tree-list > li:nth-child(n + 5) {
+  animation-delay: 72ms;
+}
+
+.view-transition-items.is-exiting .tree-list > li:nth-last-child(2) {
+  animation-delay: 14ms;
+}
+
+.view-transition-items.is-exiting .tree-list > li:nth-last-child(3) {
+  animation-delay: 28ms;
+}
+
+.view-transition-items.is-exiting .tree-list > li:nth-last-child(4) {
+  animation-delay: 42ms;
+}
+
+.view-transition-items.is-exiting .tree-list > li:nth-last-child(n + 5) {
+  animation-delay: 56ms;
+}
+
+.workspace-view-content {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.workspace-view-content.is-split {
+  flex-direction: row;
+  gap: 8px;
+}
+
+.workspace-view-content.is-split > .workspace-view-panel {
+  min-width: 0;
+}
+
+.workspace-view-content.is-split.is-sidebar-left > .tabs-space-layer {
+  order: 2;
+}
+
+.workspace-view-content.is-split.is-sidebar-left > #workspace-panel-bookmarks {
+  order: 1;
+}
+
+.workspace-view-content.is-combined > #workspace-panel-bookmarks {
+  order: 1;
+  flex: 0 0 var(--compact-bookmark-panel-size, 50%);
+}
+
+.workspace-view-content.is-combined > .workspace-panel-splitter {
+  order: 2;
+}
+
+.workspace-view-content.is-combined > .tabs-space-layer {
+  order: 3;
+}
+
+.workspace-view-content.is-combined > .workspace-view-panel {
+  min-height: 0;
+}
+
+.workspace-panel-splitter {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  flex: 0 0 9px;
+  margin-inline: 7px;
+  cursor: row-resize;
+  touch-action: none;
+  user-select: none;
+}
+
+.workspace-panel-splitter::before {
+  width: 100%;
+  height: 1px;
+  border-radius: 1px;
+  background: var(--line-strong);
+  content: "";
+  transition:
+    height 120ms ease,
+    background 120ms ease;
+}
+
+.workspace-panel-splitter:hover::before,
+.workspace-panel-splitter:active::before,
+.workspace-panel-splitter:focus-visible::before {
+  height: 3px;
+  background: var(--accent);
+}
+
+.workspace-panel-splitter:focus-visible {
+  outline: 0;
+}
+
+.workspace-view-toolbar {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  flex: 0 0 auto;
+  min-height: 42px;
+  gap: 5px;
+  padding: 7px 7px 0;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.workspace-view-toolbar.is-combined {
+  align-items: center;
+  justify-content: flex-end;
+  padding: 5px 7px;
+}
+
+.workspace-view-toolbar.is-wide {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 8px;
+  padding: 5px 7px;
+}
+
+.workspace-view-toolbar.is-wide.is-sidebar-left
+  > .workspace-pane-heading:first-child {
+  order: 2;
+}
+
+.workspace-view-toolbar.is-wide.is-sidebar-left
+  > .workspace-pane-heading:nth-child(2) {
+  order: 1;
+}
+
+.workspace-pane-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  height: 31px;
+  padding-left: 7px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.workspace-view-toolbar.is-wide .workspace-view-add {
+  margin-bottom: 0;
+}
+
+.workspace-view-tabs {
+  display: flex;
+  align-items: flex-end;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 34px;
+  gap: 4px;
+}
+
+.workspace-view-tab {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 30px;
+  margin-bottom: -1px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-bottom-color: transparent;
+  border-radius: 8px 8px 0 0;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.workspace-view-tab:hover,
+.workspace-view-tab:focus-visible {
+  color: var(--ink);
+  border-color: var(--line);
+  border-bottom-color: transparent;
+  background: color-mix(in srgb, var(--surface-hover) 44%, transparent);
+}
+
+.workspace-view-tab.is-active {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  border-bottom-color: var(--canvas);
+  background: var(--canvas);
+  box-shadow: none;
+}
+
+.workspace-view-tab.is-over {
+  color: var(--ink);
+  border-color: var(--line);
+  border-bottom-color: transparent;
+  background: color-mix(in srgb, var(--surface-strong) 52%, var(--canvas));
+}
+
+.workspace-view-tab.is-drag-arming::after,
+.global-bookmarks-button.is-drag-arming::after,
+.space-archive-button.is-drag-arming::after,
+.space-pagination-drag-arming,
+.tree-row.is-drag-arming::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 0 30%,
+    color-mix(in srgb, var(--ink) 10%, transparent) 43%,
+    color-mix(in srgb, var(--surface-strong) 88%, white) 50%,
+    color-mix(in srgb, var(--ink) 10%, transparent) 57%,
+    transparent 70% 100%
+  );
+  content: "";
+  pointer-events: none;
+  transform: translateX(-130%);
+  animation-name: workspace-drag-glimmer;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.workspace-view-tab.is-drag-arming::after,
+.global-bookmarks-button.is-drag-arming::after,
+.space-archive-button.is-drag-arming::after,
+.space-pagination-drag-arming {
+  animation-duration: 500ms;
+}
+
+.space-pagination-drag-arming {
+  z-index: 2;
+}
+
+.workspace-stack {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Opaque with the page's own backdrop, under the open shell's tint, so the space beneath never shows through. */
+.workspace-overlay-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(var(--surface-control), var(--surface-control)),
+    var(--canvas-gradient) fixed;
+}
+
+.workspace-overlay-toolbar {
+  justify-content: space-between;
+}
+
+.workspace-overlay-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding-left: 7px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tree-row.is-drag-arming::after {
+  z-index: 1;
+  animation-duration: 2.3s;
+}
+
+.workspace-view-add {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 2px;
+  border-radius: 6px;
+}
+
+.bookmarks-section {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.bookmarks-section .tree-drop-zone,
+.tabs-drop-zone,
+.bookmark-tree-stack {
+  --tree-scroll-padding: 7px;
+  display: flex;
+  flex-direction: column;
+  padding: var(--tree-scroll-padding) 0;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 var(--tree-scroll-padding),
+    #000 calc(100% - var(--tree-scroll-padding)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 var(--tree-scroll-padding),
+    #000 calc(100% - var(--tree-scroll-padding)),
+    transparent 100%
+  );
+}
+
+.bookmarks-section .tree-drop-zone {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.bookmark-tree-stack {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.space-bookmarks-layer > .tree-drop-zone {
+  flex: 0 0 auto;
+  min-height: 0;
+  overflow: visible;
+  padding: 0;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.space-bookmarks-layer {
+  min-width: 0;
+}
+
+.bookmark-tree-stack .tree-root-drop-target {
+  flex: 0 0 18px;
+}
+
+.tabs-drop-zone {
+  flex: 1 1 auto;
+  min-height: 38px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-radius: 7px;
+  transition:
+    background 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.tabs-tree-container {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.bookmark-tree-stack .tree-list,
+.tabs-tree-container .tree-list {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.tabs-drop-zone.is-over {
+  background: rgba(198, 83, 60, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(198, 83, 60, 0.24);
+}
+
+.tabs-list > li {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.bookmarks-section .tree-root-drop-target,
+.tabs-drop-zone > .tree-root-drop-target {
+  flex: 1 0 18px;
+  width: 100%;
+  margin: 2px 0 0;
+}
+
+.space-bookmarks-layer > .tree-drop-zone > .tree-root-drop-target {
+  flex-basis: 37px;
+  min-height: 37px;
+}
+
+.tab-row {
+  cursor: pointer;
+  transition: opacity 120ms ease;
+}
+
+.tab-row.drop-inside .tab-content {
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.tab-split-row {
+  --tree-indent: 16px;
+  position: relative;
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  padding-left: calc(var(--tree-depth) * var(--tree-indent));
+}
+
+/* One frame holds a split's panes, as the browser shows them in one view. */
+.tab-split-panes {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  gap: 2px;
+  padding: 1px;
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.tab-split-panes > .tab-row {
+  flex: 1 1 0;
+  padding-left: 0;
+}
+
+/* A pane dragged out leaves the other filling the row, as leaving the split will. */
+.tab-split-panes > .tab-row.is-dragging {
+  flex: 0 0 0;
+}
+
+/* A pane the drag carries along closes as a carried row does. */
+.tab-split-panes > .tab-row.is-lifted {
+  flex-grow: 0;
+  opacity: 0;
+  transition:
+    flex-grow 240ms cubic-bezier(0.42, 0, 0.58, 1),
+    opacity 160ms cubic-bezier(0.42, 0, 1, 1) 80ms;
+}
+
+.tab-split-dropzone {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  bottom: 2px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 50%;
+  border: 1px dashed var(--accent);
+  border-radius: 6px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  pointer-events: none;
+}
+
+.tab-row:hover .tab-content {
+  background: var(--row-hover-background);
+}
+
+.tab-row.is-active .tab-content {
+  background: var(--row-active-background);
+  box-shadow: none;
+}
+
+.tab-main {
+  flex: 1 1 auto;
+  cursor: pointer;
+}
+
+.tab-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 540;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab-main > svg {
+  flex: 0 0 auto;
+  color: var(--warm);
+}
+
+.tab-close {
+  color: transparent;
+}
+
+.tab-bookmark-indicator {
+  flex: 0 0 30px;
+  width: 30px;
+  height: 34px;
+  margin-left: 5px;
+  transition:
+    color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.tab-bookmark-indicator:hover,
+.tab-bookmark-indicator:focus-visible {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.tab-bookmark-indicator:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
+  outline-offset: -1px;
+}
+
+.tab-bookmark-indicator:disabled {
+  opacity: 0.5;
+}
+
+/* Selection alone is not the user's attention: a batch must not light up every row. */
+.tab-row:not(:hover, .is-active, :has(:focus-visible)) > .tab-bookmark-indicator.is-create {
+  opacity: 0;
+}
+
+:is(.tree-row, .tab-row) :is(
+  .row-icon-button:not(.bookmark-close):not(.tab-close):not(.tab-folder-close),
+  .bookmark-space-link,
+  .tab-bookmark-indicator
+) {
+  height: var(--row-control-height);
+  border: 0;
+  box-shadow: none;
+}
+
+.tree-item-surface > .row-icon-button,
+.tab-content > .row-icon-button,
+.tab-folder-content .row-icon-button {
+  background: transparent;
+}
+
+:is(.tree-row, .tab-row) :is(
+  .row-icon-button,
+  .bookmark-space-link,
+  .tab-bookmark-indicator
+):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.tab-bookmark-icon {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 17px;
+  overflow: visible;
+}
+
+.tab-bookmark-icon-artwork {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  height: calc(1em + 4px);
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1;
+  transform: translate(-50%, -50%);
+}
+
+.tab-bookmark-icon.is-add .tab-bookmark-icon-artwork,
+.tab-bookmark-icon.is-revert .tab-bookmark-icon-artwork {
+  stroke-width: 1.6px;
+}
+
+.tab-bookmark-icon.is-bookmarked .tab-bookmark-icon-artwork,
+.tab-bookmark-icon.is-update .tab-bookmark-icon-artwork {
+  fill: currentColor;
+  stroke: none;
+}
+
+.tab-bookmark-icon.is-open {
+  display: grid;
+  place-items: center;
+}
+
+.tab-bookmark-open-dot {
+  width: 9px;
+  height: 9px;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--bookmark-open-colour, var(--space-colour)) 72%,
+    transparent
+  );
+  border-radius: 50%;
+  background: var(--bookmark-open-colour, var(--space-colour));
+}
+
+.tab-row:hover .tab-close,
+.tab-close:focus-visible {
+  color: var(--muted);
+}
+
+.tabs-drop-hint {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  border: 1px dashed rgba(198, 83, 60, 0.25);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+/* Other sessions follow straight on from this window's tabs. */
+.tabs-drop-zone:has(> .other-sessions) > .tree-root-drop-target {
+  flex-grow: 0;
+}
+
+.other-sessions {
+  display: grid;
+  gap: 2px;
+  margin: 0 5px 7px;
+}
+
+.other-session {
+  border-radius: 7px;
+  transition:
+    background 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.other-session.is-over {
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.other-session-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 7px;
+  padding: 8px 0 4px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 9.5px;
+  font-weight: 650;
+}
+
+.other-session-count {
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.session-tab-row .tab-title {
+  color: var(--muted);
+}
+
+/* Another session's autofolder only folds; its tabs are what drag. */
+.session-folder-row,
+.session-folder-row .tree-item-main {
+  cursor: pointer;
+  touch-action: auto;
+}
+
+.session-folder-row .tree-title {
+  color: var(--muted);
+}
+
+.other-session-empty {
+  margin: 0 7px 6px;
+  color: var(--faint);
+  font-size: 10px;
+}
+
+.bookmark-menu-popover [role="menuitemcheckbox"] strong {
+  white-space: normal;
+}
+
+.bookmark-menu-popover [role="menuitemcheckbox"] .settings-switch {
+  width: 26px;
+  height: 15px;
+  border-radius: 8px;
+}
+
+.bookmark-menu-popover [role="menuitemcheckbox"] .settings-switch span {
+  top: 2px;
+  left: 2px;
+  width: 11px;
+  height: 11px;
+}
+
+.bookmark-menu-popover [role="menuitemcheckbox"][aria-checked="true"] .settings-switch {
+  background: var(--accent);
+}
+
+.bookmark-menu-popover [role="menuitemcheckbox"][aria-checked="true"] .settings-switch span {
+  transform: translateX(11px);
+}
+
+.now-playing-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 0 0 56px;
+  width: 56px;
+  height: 24px;
+  pointer-events: none;
+}
+
+.now-playing-transition {
+  display: flex;
+  align-items: center;
+}
+
+.now-playing {
+  display: grid;
+  grid-template-columns: 28px;
+  align-items: center;
+  height: 24px;
+  overflow: hidden;
+  border-radius: 6px;
+  color: var(--ink);
+  background: var(--surface-control);
+  opacity: 0.8;
+  pointer-events: auto;
+  transition: opacity 180ms ease;
+}
+
+.now-playing.has-control {
+  grid-template-columns: repeat(2, 28px);
+}
+
+.now-playing:hover,
+.now-playing:focus-within {
+  opacity: 1;
+}
+
+.now-playing.is-unavailable,
+.now-playing.is-unavailable:hover,
+.now-playing.is-unavailable:focus-within {
+  opacity: 0.45;
+}
+
+.now-playing.is-disabled,
+.now-playing.is-disabled:hover,
+.now-playing.is-disabled:focus-within {
+  filter: grayscale(1);
+  opacity: 0.35;
+}
+
+.now-playing-source,
+.now-playing-control {
+  display: grid;
+  place-items: center;
+  align-items: center;
+  width: 28px;
+  height: 24px;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+}
+
+.now-playing-control {
+  border-left: 1px solid var(--line-strong);
+  color: var(--muted);
+}
+
+.now-playing-control:disabled {
+  color: color-mix(in srgb, var(--muted) 45%, transparent);
+  background: transparent;
+  cursor: default;
+}
+
+.now-playing-playback-icon {
+  width: 14px;
+  height: 14px;
+  overflow: visible;
+}
+
+.now-playing-playback-icon path {
+  fill: currentColor;
+}
+
+.now-playing-source:hover,
+.now-playing-source:focus-visible,
+.now-playing-control:hover,
+.now-playing-control:focus-visible {
+  background: var(--surface-hover);
+}
+
+.now-playing-source:disabled,
+.now-playing-source:disabled:hover,
+.now-playing-control:disabled:hover {
+  background: transparent;
+  cursor: default;
+}
+
+.now-playing.is-dragging {
+  opacity: 0.35;
+}
+
+.now-playing-source .favicon {
+  flex: 0 0 auto;
+}
+
+.now-playing-source-icon-stage {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  perspective: 48px;
+}
+
+.now-playing-source-icon-cube {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  transform: translateZ(-8px);
+  transform-style: preserve-3d;
+  transition: transform 360ms cubic-bezier(0.5, -0.2, 0.5, 1.2);
+}
+
+.now-playing-source-icon-cube.is-returning {
+  transform: translateZ(-8px) rotateY(90deg);
+}
+
+.now-playing-source-icon-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  backface-visibility: hidden;
+}
+
+.now-playing-source-icon-face.is-media {
+  transform: rotateY(0deg) translateZ(8px);
+}
+
+.now-playing-source-icon-face.is-return {
+  color: var(--muted);
+  transform: rotateY(-90deg) translateZ(8px);
+}
+
+.now-playing-return-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.space-pagination {
+  --space-pagination-inline-inset: 5px;
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 0 minmax(0, 1fr);
+  align-items: center;
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 0 var(--space-pagination-inline-inset);
+  border-top: 1px solid var(--line);
+  background: rgba(237, 235, 228, 0.88);
+  backdrop-filter: blur(15px);
+  transition: grid-template-columns 180ms ease;
+}
+
+.space-pagination:has(.now-playing-transition) {
+  grid-template-columns: 56px minmax(0, 1fr);
+  column-gap: 5px;
+}
+
+.space-pagination-rail {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  height: 26px;
+  overflow: hidden;
+}
+
+.space-pagination-rail-start {
+  justify-content: flex-start;
+  transition:
+    opacity 120ms ease,
+    visibility 120ms ease;
+}
+
+.space-pagination-items {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px;
+  align-items: center;
+  align-self: stretch;
+  min-width: 0;
+  height: auto;
+  gap: 5px;
+  overflow: hidden;
+  transition: gap 180ms ease;
+}
+
+.space-pagination-dots {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+  min-width: 0;
+  gap: inherit;
+  overflow: hidden;
+  transition: opacity 120ms ease;
+}
+
+.space-pagination-dot {
+  --space-dot-colour: var(--group-colour, var(--tab-group-grey));
+  --space-pagination-radius: 3px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 1 auto;
+  width: max-content;
+  min-width: 28px;
+  max-width: var(--space-pagination-item-cap, none);
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  color: var(--space-dot-colour);
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  transition:
+    var(--space-sortable-transition, transform 0ms linear),
+    opacity 120ms ease;
+}
+
+.space-pagination-items.is-space-dragging .space-pagination-dot {
+  transition:
+    var(--space-sortable-transition, transform 0ms linear),
+    width 180ms ease,
+    min-width 180ms ease,
+    max-width 180ms ease,
+    opacity 120ms ease;
+}
+
+.space-pagination-dot-visual,
+.space-drag-overlay {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  height: 24px;
+  overflow: hidden;
+  padding: 0 4px;
+  border: 0;
+  border-radius: var(--space-pagination-radius);
+  color: var(--space-dot-colour);
+  background: transparent;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
+}
+
+.space-pagination-hover-highlight {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--list-hover-background);
+  pointer-events: none;
+}
+
+.space-pagination-dot.is-active .space-pagination-dot-visual {
+  background: var(--list-selected-background);
+}
+
+.space-drag-overlay-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.space-drag-overlay.is-archived {
+  width: auto;
+  max-width: 160px;
+  padding: 0 8px;
+}
+
+.space-pagination-dot-visual::after,
+.space-drag-overlay::after {
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+  left: 2px;
+  height: 2px;
+  border-radius: var(--space-pagination-radius);
+  background: color-mix(in srgb, var(--space-dot-colour) 52%, transparent);
+  content: "";
+  transition:
+    height 120ms ease,
+    background 120ms ease;
+}
+
+.space-pagination-label {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  width: max-content;
+  overflow: hidden;
+  color: var(--space-dot-colour);
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.2;
+  letter-spacing: 0;
+  opacity: 1;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.space-pagination-dot.is-truncated .space-pagination-label,
+.space-drag-overlay.is-truncated .space-pagination-label {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 calc(100% - 10px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 calc(100% - 10px),
+    transparent
+  );
+}
+
+.space-pagination-items.is-dot-mode .space-pagination-dot {
+  flex: 0 0 18px;
+  width: 18px;
+  min-width: 18px;
+  max-width: 18px;
+  font-size: 0;
+}
+
+.space-pagination-items.is-dot-mode .space-pagination-dot-visual,
+.space-drag-overlay.is-dot-mode {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 0;
+}
+
+.space-pagination-items.is-dot-mode .space-pagination-label,
+.space-drag-overlay.is-dot-mode .space-pagination-label {
+  display: none;
+}
+
+.space-pagination-items.is-dot-mode .space-pagination-dot-visual::after,
+.space-drag-overlay.is-dot-mode::after {
+  position: static;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--space-dot-colour);
+  transition:
+    width 150ms ease,
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.space-pagination-items.is-dot-mode .space-pagination-dot:hover .space-pagination-dot-visual::after {
+  filter: saturate(1.18) brightness(0.9);
+  transform: scale(1.35);
+}
+
+.space-pagination-items.is-dot-mode .space-pagination-dot.is-active .space-pagination-dot-visual::after,
+.space-drag-overlay.is-dot-mode.is-active::after {
+  width: 15px;
+  height: 5px;
+  border-radius: 4px;
+}
+
+.space-pagination-items.hide-add-space .add-space-button,
+.space-pagination-items.hide-add-space .space-archive-button {
+  display: none;
+}
+
+.space-pagination-items.hide-add-space {
+  grid-template-columns: minmax(0, 1fr) 0;
+  column-gap: 0;
+}
+
+/* The archive button sits before the dots, as the add button sits after them. */
+.space-pagination-items.has-archive {
+  grid-template-columns: 24px minmax(0, 1fr) 24px;
+}
+
+/* Squashed past Add, the archive button hides with it. */
+.space-pagination-items.has-archive.hide-add-space {
+  grid-template-columns: minmax(0, 1fr) 0;
+}
+
+/* Dots too many for their row stay on it, from its start so the row can scroll to the active one, fading where it clips. */
+.space-pagination-items.is-clipped .space-pagination-dots {
+  justify-content: flex-start;
+  overflow-x: hidden;
+}
+
+.space-pagination-items.is-clipped .space-pagination-dot {
+  flex-shrink: 0;
+}
+
+.space-pagination-dots.clips-start {
+  mask-image: linear-gradient(to right, transparent, #000 14px);
+}
+
+.space-pagination-dots.clips-end {
+  mask-image: linear-gradient(to left, transparent, #000 14px);
+}
+
+.space-pagination-dots.clips-start.clips-end {
+  mask-image: linear-gradient(to right, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+}
+
+.space-pagination-dot:hover .space-pagination-dot-visual::after {
+  background: var(--space-dot-colour);
+}
+
+.space-pagination-dot.is-active {
+  color: var(--space-dot-colour);
+}
+
+.space-pagination-dot.is-active .space-pagination-dot-visual::after,
+.space-drag-overlay.is-active::after {
+  height: 3px;
+  background: var(--space-dot-colour);
+}
+
+.space-pagination-dot.is-dragging {
+  opacity: 0.25;
+}
+
+.space-pagination-dot.is-drop-target .space-pagination-dot-visual {
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--space-dot-colour) 36%, transparent);
+}
+
+.space-pagination-dot.is-drop-target.is-over .space-pagination-dot-visual {
+  background: color-mix(in srgb, var(--space-dot-colour) 16%, var(--surface-control));
+  box-shadow: inset 0 0 0 2px var(--space-dot-colour);
+}
+
+.space-pagination.is-trash-over .space-pagination-rail-start,
+.space-pagination.is-trash-over .space-pagination-dots,
+.space-pagination.is-trash-over .space-archive-button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.space-pagination-dot.is-drop-disabled {
+  --space-dot-colour: var(--faint);
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.space-pagination-dot.is-drop-disabled .space-pagination-dot-visual {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--faint) 22%, transparent);
+}
+
+.space-pagination-action {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 6px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.space-pagination-action:hover,
+.space-pagination-action:focus-visible {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+.add-space-button {
+  margin-left: 0;
+}
+
+.space-pagination-trash-target {
+  display: grid;
+  place-items: center;
+  margin-left: 0;
+  border: 0;
+  color: var(--warm);
+  background: transparent;
+}
+
+.space-pagination-trash-visual {
+  position: absolute;
+  top: 50%;
+  right: var(--space-pagination-inline-inset);
+  left: calc(100% - var(--space-pagination-inline-inset) - 24px);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--warm);
+  background: transparent;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition:
+    left 180ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    background 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
+}
+
+.space-pagination-trash-label {
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  white-space: nowrap;
+  transition:
+    max-width 180ms ease,
+    opacity 120ms ease;
+}
+
+.space-pagination-trash-visual > svg {
+  flex: 0 0 auto;
+}
+
+.space-pagination-trash-target.is-over .space-pagination-trash-visual {
+  border-color: color-mix(in srgb, var(--warm) 58%, transparent);
+  color: var(--warm);
+  background: color-mix(in srgb, var(--warm) 14%, var(--surface-control));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--warm) 24%, transparent);
+}
+
+.space-pagination.is-trash-over .space-pagination-trash-visual {
+  left: var(--space-pagination-inline-inset);
+  gap: 6px;
+}
+
+.space-pagination.is-trash-over .space-pagination-trash-label {
+  max-width: calc(100% - 26px);
+  opacity: 1;
+}
+
+.space-pagination-trash-target:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.space-archive-button {
+  position: relative;
+  overflow: hidden;
+  border: 0;
+}
+
+.space-archive-button.is-active {
+  color: var(--ink);
+}
+
+.space-archive-button.is-over {
+  color: var(--ink);
+  background: rgba(40, 116, 102, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(40, 116, 102, 0.5);
+}
+
+/* Where a space dragged over the pagination would land: a bar on that side of the dot. */
+.space-pagination-dot.is-insert-before::before,
+.space-pagination-dot.is-insert-after::before {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 2px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--accent);
+  content: "";
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.space-pagination-dot.is-insert-before::before {
+  left: 0;
+}
+
+.space-pagination-dot.is-insert-after::before {
+  right: 0;
+}
+
+.space-pagination-dot.is-drop-target.is-insert-before .space-pagination-dot-visual,
+.space-pagination-dot.is-drop-target.is-insert-after .space-pagination-dot-visual {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--space-dot-colour) 36%, transparent);
+}
+
+.archived-space-list {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 7px 0;
+}
+
+.archived-space-list > ul {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.archived-space-list.is-over > ul::after {
+  height: 2px;
+  margin: 2px 8px 0;
+  border-radius: 2px;
+  background: var(--accent);
+  content: "";
+}
+
+.archived-space-empty {
+  margin: 0;
+  padding: 10px 14px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.archived-space-list.is-over .archived-space-empty {
+  color: var(--ink);
+}
+
+.archived-space-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: 6px;
+  color: var(--ink);
+  cursor: grab;
+  font-size: 13px;
+  transition:
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.archived-space-row:hover,
+.archived-space-row:focus-visible {
+  background: var(--row-hover-background);
+  outline: none;
+}
+
+.archived-space-row.is-dragging {
+  opacity: 0.25;
+}
+
+.archived-space-row.is-insert-before::before {
+  position: absolute;
+  top: -1px;
+  right: 8px;
+  left: 8px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  content: "";
+}
+
+.archived-space-swatch {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--space-dot-colour, var(--tab-group-grey));
+}
+
+.archived-space-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tree-workspace {
+  position: relative;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.editor-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(42, 40, 35, 0.2);
+  backdrop-filter: blur(5px);
+  animation: fade-in 120ms ease-out;
+}
+
+.bookmark-editor {
+  width: min(100%, 430px);
+  overflow: hidden;
+  border: 1px solid rgba(43, 41, 36, 0.18);
+  border-radius: 8px;
+  background: #f8f7f2;
+  box-shadow: 0 18px 60px rgba(41, 38, 31, 0.22);
+  animation: palette-in 150ms cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+
+.editor-heading {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 28px;
+  align-items: center;
+  gap: 9px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.editor-heading-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.editor-heading h2,
+.editor-heading p {
+  margin: 0;
+}
+
+.editor-heading h2 {
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.editor-heading p {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9.5px;
+}
+
+.editor-heading > button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 6px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.editor-heading > button:hover {
+  color: var(--ink);
+  background: #efede6;
+}
+
+.bookmark-editor form {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.bookmark-editor label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.bookmark-editor input,
+.bookmark-editor select {
+  width: 100%;
+  height: 36px;
+  min-width: 0;
+  padding: 0 10px;
+  border: 1px solid rgba(45, 43, 37, 0.18);
+  border-radius: 6px;
+  color: var(--ink);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 520;
+}
+
+.bookmark-import-prompt .primary-button:disabled {
+  cursor: default;
+}
+
+.editor-error {
+  margin: -3px 0 0;
+  color: #a13f38;
+  font-size: 10.5px;
+}
+
+.editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+  padding-top: 2px;
+}
+
+.editor-actions button {
+  min-height: 32px;
+  padding: 0 11px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 10.5px;
+  font-weight: 650;
+}
+
+.secondary-button {
+  border: 1px solid var(--line);
+  background: transparent;
+}
+
+.primary-button {
+  color: #fff;
+  background: var(--accent);
+}
+
+.primary-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.space-delete-body {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.space-delete-body p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.drag-overlay {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  overflow: visible;
+  border: 1px solid rgba(40, 116, 102, 0.3);
+  border-radius: 8px;
+  color: var(--accent-strong);
+  background: #f5faf8;
+  box-shadow: 0 10px 28px rgba(38, 55, 51, 0.18);
+  pointer-events: none;
+}
+
+.shared-drag-stand-in {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.space-drag-overlay {
+  --space-dot-colour: var(--group-colour, var(--tab-group-grey));
+  --space-pagination-radius: 3px;
+  box-sizing: border-box;
+  flex: none;
+  border: 1px solid var(--space-dot-colour);
+  background: var(--space-pagination-opaque-background);
+  font-size: 11px;
+  pointer-events: none;
+  transition:
+    color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+/* The preview sits on the pointer, over the edge where the space would land, so the bar shows through it. */
+.space-drag-overlay.is-over-dot {
+  opacity: 0.4;
+}
+
+.drag-add-badge,
+.drag-delete-badge,
+.drag-forbidden-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--surface-strong);
+  border-radius: 50%;
+  color: #fff;
+  background: var(--accent);
+  box-shadow: 0 2px 6px rgba(38, 55, 51, 0.22);
+  pointer-events: none;
+}
+
+.drag-delete-badge {
+  background: var(--warm);
+}
+
+.drag-forbidden-badge {
+  background: #68716f;
+}
+
+.drag-count-badge {
+  position: absolute;
+  right: -7px;
+  bottom: -7px;
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border: 2px solid var(--surface-strong);
+  border-radius: 10px;
+  color: #fff;
+  background: var(--accent-strong);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(38, 55, 51, 0.22);
+  pointer-events: none;
+}
+
+.loading-shell,
+.error-shell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  gap: 12px;
+  padding: 24px;
+  color: var(--ink);
+}
+
+.loading-lines {
+  display: grid;
+  width: min(220px, 70vw);
+  gap: 8px;
+}
+
+.loading-lines span {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(63, 60, 52, 0.1);
+  animation: loading-pulse 1.2s ease-in-out infinite alternate;
+}
+
+.loading-lines span:nth-child(2) {
+  width: 78%;
+  animation-delay: 120ms;
+}
+
+.loading-lines span:nth-child(3) {
+  width: 62%;
+  animation-delay: 240ms;
+}
+
+.error-shell h1 {
+  margin: 2px 0 0;
+  font-size: 18px;
+}
+
+.error-shell p {
+  max-width: 280px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+@keyframes workspace-drag-glimmer {
+  to {
+    transform: translateX(130%);
+  }
+}
+
+@keyframes compact-tabs-in {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
+@keyframes compact-tabs-out {
+  to {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
+@keyframes compact-bookmarks-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
+
+@keyframes compact-bookmarks-out {
+  to {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.985);
+  }
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes loading-pulse {
+  to {
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 300px) {
+  .topbar {
+    padding-inline: 10px;
+  }
+
+  .favourites-section {
+    --favourites-padding-inline: 10px;
+  }
+
+  .favourites-grid {
+    gap: 6px;
+  }
+
+  .favourite-title {
+    font-size: 9px;
+  }
+}
+
+@media (width < 240px) {
+  .tree-row,
+  .tab-row,
+  .tab-split-row,
+  .tree-drop-placeholder {
+    --tree-indent: 0px;
+  }
+}
+
+/* The header keeps room for the space title: Search steps aside first, then Settings.
+   useWorkspaceLayout mirrors these breakpoints, closing each when the sidebar narrows past it. Search still opens by shortcut. */
+@media (width < 225px) {
+  .search-command-shell:not(.is-open) {
+    display: none;
+  }
+
+  .topbar-actions:not(.is-search-open) {
+    padding-right: 0;
+  }
+}
+
+@media (width < 190px) {
+  .settings-button {
+    display: none;
+  }
+}
+
+/* Only the favourites and the spaces bar fit. useWorkspaceLayout mirrors this breakpoint.
+   The favourites stack in one column of full-width tiles, each named under its icon,
+   washed in its space's colour and joined to its neighbours in the same space. */
+@media (width < 150px) {
+  .favourites-grid {
+    --favourites-row-gap: 6px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--favourites-row-gap);
+  }
+
+  .favourite-slot {
+    height: 50px;
+    aspect-ratio: auto;
+  }
+
+  .favourite-tile {
+    --tile-space-wash: color-mix(in srgb, var(--tile-space-colour) 14%, transparent);
+    gap: 4px;
+    padding: 0 5px;
+  }
+
+  .favourite-title {
+    display: block;
+    max-height: none;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+
+  .favourites-grid .favourite-tile.has-space {
+    background: var(--tile-space-wash);
+    box-shadow: none;
+  }
+
+  .favourites-grid .favourite-tile-wrap:hover .favourite-tile.has-space:not(.is-active),
+  .favourites-grid .favourite-slot.is-hovered .favourite-tile.has-space:not(.is-active) {
+    background: color-mix(in srgb, var(--tile-space-colour) 20%, transparent);
+  }
+
+  .favourites-grid .favourite-tile.is-active.has-space {
+    background: color-mix(in srgb, var(--tile-space-colour) 30%, var(--surface-hover));
+  }
+
+  /* The wash shows the space, so the line under the icon would repeat it. */
+  .favourite-tile.is-open::after,
+  .favourite-tile.is-recent.has-space::after {
+    display: none;
+  }
+
+  .favourite-slot.joins-previous .favourite-tile {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .favourite-slot.joins-next .favourite-tile {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  /* Bridges the row gap to the tile above, outside this tile's 1px border. */
+  .favourite-slot.joins-previous .favourite-tile::before {
+    position: absolute;
+    top: calc(-1px - var(--favourites-row-gap));
+    right: -1px;
+    left: -1px;
+    height: var(--favourites-row-gap);
+    background: var(--tile-space-wash);
+    content: "";
+    pointer-events: none;
+    transition: background 150ms ease;
+  }
+
+  .global-bookmarks-slot,
+  .tree-workspace > .tree-section {
+    display: none;
+  }
+
+  .tree-workspace > .space-pagination {
+    margin-top: auto;
+  }
+
+  /* The header keeps to the space's title in compact text. */
+  .topbar {
+    --search-shell-gutter: 10px;
+    min-height: 0;
+    padding: 0;
+    border-bottom: 0;
+    background: transparent;
+    backdrop-filter: none;
+  }
+
+  .topbar-space-title {
+    padding: 2px 5px;
+  }
+
+  .topbar-space-title .space-title-input {
+    height: 30px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .topbar.has-search {
+    min-height: 52px;
+    padding: 7px 5px;
+    border-bottom: 1px solid var(--line);
+    background: var(--topbar);
+    backdrop-filter: blur(18px);
+  }
+
+  .topbar.is-settings {
+    min-height: 44px;
+    padding: 5px;
+    background: var(--topbar);
+    backdrop-filter: blur(18px);
+  }
+
+  /* A timed message takes the header as the title does. */
+  .topbar:not(.has-search):has(.countdown-notice) {
+    min-height: 34px;
+    padding: 2px 5px;
+  }
+}
+
+@media (max-width: 189px) {
+  .settings-page {
+    padding-inline: 8px;
+  }
+
+  .space-pagination {
+    padding-inline: 5px;
+  }
+
+  .space-pagination-items {
+    gap: 2px;
+  }
+
+  /* Tight enough for the whole label at the narrowest list, 150px wide. */
+  .empty-tree-action {
+    gap: 4px;
+    padding: 0 6px;
+  }
+}
+
+@media (max-width: 99px) {
+  .settings-page {
+    padding-inline: 4px;
+  }
+
+  .settings-section {
+    padding-inline: 0;
+  }
+
+  .topbar-actions {
+    display: none;
+  }
+
+  /* Too narrow for a message, so the space keeps its title. */
+  .topbar:not(.has-search):has(.countdown-notice) .topbar-space-title {
+    display: block;
+  }
+
+  .topbar.is-settings:has(.countdown-notice) .settings-topbar {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .topbar.is-settings:has(.countdown-notice) .settings-topbar h1 {
+    display: block;
+  }
+
+  .topbar.has-search .topbar-actions {
+    display: flex;
+    width: 100%;
+  }
+
+  .favourites-section {
+    --favourites-padding-bottom: 6px;
+    --favourites-padding-inline: 5px;
+    padding-top: 8px;
+  }
+
+  .favourites-grid {
+    min-height: 0;
+  }
+
+  .editor-backdrop {
+    padding: 3px;
+  }
+
+  .editor-heading {
+    grid-template-columns: minmax(0, 1fr) 28px;
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .editor-heading-icon,
+  .editor-heading p {
+    display: none;
+  }
+
+  .bookmark-editor form,
+  .space-delete-body {
+    min-width: 0;
+    padding: 8px 6px 6px;
+    overflow: hidden;
+  }
+
+  .bookmark-editor form label,
+  .bookmark-editor form input,
+  .bookmark-editor form select,
+  .editor-actions {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 49px) {
+  .settings-page {
+    padding-inline: 1px;
+  }
+
+  .settings-topbar {
+    gap: 2px;
+  }
+
+  .settings-topbar .icon-button {
+    flex-basis: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .settings-topbar h1 {
+    font-size: 10px;
+  }
+
+  .topbar.has-search {
+    padding: 4px 2px;
+  }
+
+  .bookmark-menu-popover {
+    width: calc(100vw - 4px);
+    padding: 2px;
+  }
+
+  .bookmark-menu-popover button {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    min-height: 28px;
+    gap: 0;
+    padding: 0;
+  }
+
+  .bookmark-menu-popover button span,
+  .bookmark-menu-popover button kbd {
+    display: none;
+  }
+
+  .space-pagination {
+    --space-pagination-inline-inset: 2px;
+  }
+
+  .space-pagination:has(.now-playing-transition) {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .space-pagination-items {
+    gap: 1px;
+  }
+
+  .add-space-button {
+    width: 18px;
+    height: 20px;
+  }
+
+  .editor-heading h2 {
+    font-size: 10px;
+  }
+
+  .editor-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .space-delete-prompt .editor-actions {
+    flex-direction: column;
+  }
+
+  .space-delete-body p {
+    font-size: 9.5px;
+  }
+
+  .editor-actions button {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding-inline: 3px;
+    overflow: hidden;
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f0f3f2;
+    background: #182125;
+    --canvas: #182125;
+    --canvas-deep: #11181b;
+    --surface: rgba(37, 45, 48, 0.74);
+    --surface-strong: #242c2f;
+    --surface-control: rgba(255, 255, 255, 0.07);
+    --surface-hover: rgba(255, 255, 255, 0.12);
+    --ink: #f0f3f2;
+    --muted: #adb8bb;
+    --faint: #7e8d91;
+    --line: rgba(240, 245, 246, 0.13);
+    --line-strong: rgba(240, 245, 246, 0.24);
+    --accent: #83afc0;
+    --accent-soft: rgba(91, 140, 159, 0.24);
+    --accent-strong: #b2d2dd;
+    --warm: #df8178;
+    --focus: #8cc1d4;
+    --topbar: rgba(24, 33, 37, 0.9);
+    --grid-line: rgba(235, 244, 246, 0.025);
+    --overlay: rgba(4, 7, 8, 0.48);
+    --shadow: rgba(0, 0, 0, 0.38);
+    --space-pagination-opaque-background: var(--canvas);
+    --list-hover-background: var(--surface-control);
+    --tab-group-grey: #84817e;
+    --tab-group-blue: #69a1fa;
+    --tab-group-red: #cf87da;
+    --tab-group-yellow: #c1a256;
+    --tab-group-green: #4a89ba;
+    --tab-group-pink: #ee5fb7;
+    --tab-group-purple: #b696ff;
+    --tab-group-cyan: #4cb4b7;
+    --tab-group-orange: #df8e64;
+  }
+
+  .favourite-title,
+  .folder-item {
+    color: var(--ink);
+  }
+
+  .settings-slider input::-webkit-slider-thumb {
+    background: var(--ink);
+  }
+
+  .settings-slider input::-moz-range-thumb {
+    background: var(--ink);
+  }
+
+  .section-add-button:hover,
+  .section-add-button:focus-visible {
+    background: var(--surface-control);
+  }
+
+  .tab-folder-row.drop-inside .tab-folder-content {
+    background: var(--accent-soft);
+  }
+
+  .tab-folder-row.drop-inside.is-invalid-drop .tab-folder-content {
+    background: color-mix(in srgb, var(--warm) 12%, transparent);
+  }
+
+  .favourite-tile {
+    background: var(--surface-control);
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+
+  .favourite-tile-wrap:hover .favourite-tile,
+  .favourite-slot.is-hovered .favourite-tile {
+    background: var(--surface-hover);
+    box-shadow: 0 5px 14px var(--shadow);
+  }
+
+  .favourite-tile.is-open {
+    background: var(--surface-hover);
+  }
+
+  .favourite-tile.is-active:is(.is-pinned, .is-recent) {
+    background: color-mix(in srgb, var(--tile-space-colour) 30%, var(--surface-hover));
+  }
+
+  .favourite-placeholder {
+    border-color: var(--line);
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .favourite-tile.is-recent {
+    background: rgba(255, 255, 255, 0.02);
+    box-shadow: none;
+  }
+
+  .global-bookmarks-button {
+    border-color: var(--line);
+  }
+
+  .global-bookmarks-button:hover,
+  .global-bookmarks-button:focus-visible {
+    border-color: color-mix(in srgb, var(--ink) 24%, transparent);
+    background: var(--surface-hover);
+    box-shadow: 0 5px 14px var(--shadow);
+  }
+
+  .global-bookmarks-button.is-active {
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .bookmark-menu-popover,
+  .bookmark-editor {
+    border-color: var(--line);
+    background: var(--surface-strong);
+    box-shadow: 0 18px 60px var(--shadow);
+  }
+
+  .bookmark-menu-popover button:hover,
+  .bookmark-menu-popover button:focus-visible,
+  .editor-heading > button:hover {
+    background: var(--surface-hover);
+  }
+
+  .bookmark-editor input,
+  .bookmark-editor select {
+    border-color: var(--line);
+    color: var(--ink);
+    background: var(--surface-control);
+  }
+
+  .space-pagination {
+    background: color-mix(in srgb, var(--canvas) 88%, transparent);
+  }
+
+  .space-pagination-marker {
+    background: var(--faint);
+  }
+
+  .editor-backdrop {
+    background: var(--overlay);
+  }
+
+  .drag-overlay {
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    color: var(--accent-strong);
+    background: var(--surface-strong);
+    box-shadow: 0 10px 28px var(--shadow);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

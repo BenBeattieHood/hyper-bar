@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="hyper-mark-gradient"
+                    x1="28"
+                    y1="28"
+                    x2="94"
+                    y2="100"
+                    gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#187C70" />
+      <stop offset="0.32" stop-color="#327FC4" />
+      <stop offset="0.62" stop-color="#B84F91" />
+      <stop offset="0.84" stop-color="#DF963F" />
+      <stop offset="1" stop-color="#187C70" />
+    </linearGradient>
+  </defs>
+  <rect x="6"
+        y="6"
+        width="116"
+        height="116"
+        rx="29"
+        fill="#FFFFFF"
+        stroke="#D6E2DF"
+        stroke-width="2" />
+  <text x="61"
+        y="94"
+        fill="url(#hyper-mark-gradient)"
+        font-family="'STIX Two Math', 'Cambria Math', 'Times New Roman', serif"
+        font-size="82"
+        text-anchor="middle">𝒉</text>
+</svg>

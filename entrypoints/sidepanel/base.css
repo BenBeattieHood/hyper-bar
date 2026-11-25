@@ -1,0 +1,131 @@
+/*
+ * The light palette, resets and Hyper mark shared by the sidebar (style.css) and
+ * the new tab page (newtab/style.css). Each page adds its own tokens and dark palette.
+ */
+:root {
+  color: #25292a;
+  background: #e8ecee;
+  color-scheme: light dark;
+  font-family: "Avenir Next", "Segoe UI Variable", "Trebuchet MS", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --canvas: #e8ecee;
+  --canvas-deep: #dce3e6;
+  --surface-strong: #f8faf9;
+  --ink: #25292a;
+  --muted: #697378;
+  --faint: #8b969a;
+  --line: rgba(35, 45, 48, 0.14);
+  --line-strong: rgba(35, 45, 48, 0.24);
+  --accent: #5c8497;
+  --accent-soft: #d7e5eb;
+  --accent-strong: #385f71;
+  --warm: #c35f58;
+  --focus: #467f99;
+  --shadow: rgba(28, 36, 39, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-width: 0;
+  min-height: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+button,
+input {
+  color: inherit;
+  font: inherit;
+  letter-spacing: 0;
+}
+
+button {
+  border: 0;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* The Hyper mark: the sidebar's .brand-mark and the new tab's .newtab-brand. */
+.brand-mark,
+.newtab-brand {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  overflow: hidden;
+  border: 1px solid rgba(30, 81, 72, 0.26);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.brand-mark::before,
+.newtab-brand::before {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  content: "𝒉";
+  color: transparent;
+  background-clip: text;
+  font-family: "STIX Two Math", "Cambria Math", "Times New Roman", serif;
+  font-size: 27px;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-background-clip: text;
+}
+
+/* The mark's turning colours, also used by the line under a search the new tab is loading. */
+.brand-mark::before,
+.newtab-brand::before,
+.hyper-mark-gradient {
+  --hyper-mark-angle: 150deg;
+  background-image: conic-gradient(
+    from var(--hyper-mark-angle) at 100% 75%,
+    #187c70 0%,
+    #327fc4 20%,
+    #b84f91 40%,
+    #df963f 60%,
+    #df963f 80%,
+    #187c70 100%
+  );
+}
+
+.newtab-brand::before {
+  padding-top: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .brand-mark::before,
+  .newtab-brand::before,
+  .hyper-mark-gradient {
+    animation: hyper-mark-gradient-spin 40s linear infinite;
+  }
+}
+
+@property --hyper-mark-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 150deg;
+}
+
+@keyframes hyper-mark-gradient-spin {
+  from { --hyper-mark-angle: 150deg; }
+  to { --hyper-mark-angle: 510deg; }
+}

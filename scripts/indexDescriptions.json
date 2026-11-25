@@ -1,0 +1,4501 @@
+{
+  "entrypoints/lib/async.ts::createCoalescedAsyncRunner": {
+    "description": "Wraps a task so calls during a run share it and trigger one rerun afterwards, rethrowing the first error once the runs settle.",
+    "responsibilities": [
+      "f2e96297",
+      "fe64096c",
+      "29b6fc40"
+    ]
+  },
+  "entrypoints/lib/async.ts::runConcurrentOperations": {
+    "description": "Runs an operation on every item concurrently and, once all settle, throws an AggregateError with the given message if any failed.",
+    "responsibilities": [
+      "69950469",
+      "36ec1ea6"
+    ]
+  },
+  "entrypoints/lib/async.ts::withNamedAsyncLock": {
+    "description": "Runs a task while holding the named Web Lock, so contexts sharing the name run it one at a time, or runs it directly without lock support.",
+    "responsibilities": [
+      "31d6f4db",
+      "0e725ce7"
+    ]
+  },
+  "entrypoints/lib/autoTabFolders.ts::autoTabFolderId": {
+    "description": "The virtual folder ID for an auto tab folder key, prefixed so it never collides with a bookmark ID.",
+    "responsibilities": [
+      "282b3424"
+    ]
+  },
+  "entrypoints/lib/autoTabFolders.ts::autoTabFolderIdentity": {
+    "description": "The auto folder key and title a tab groups under: its hostname without www, else its URL protocol, else a shared Other tabs folder.",
+    "responsibilities": [
+      "e17e1b34",
+      "45057a9d"
+    ]
+  },
+  "entrypoints/lib/autoTabFolders.ts::isAutoTabFolderId": {
+    "description": "Whether an ID names a virtual auto tab folder rather than a real bookmark node.",
+    "responsibilities": [
+      "9e758b78"
+    ]
+  },
+  "entrypoints/lib/autoTabFolders.ts::settleAutoTabFolderIdentities": {
+    "description": "Each tab's auto folder identity by tab ID, keeping a loading tab's previous identity so folders do not jump while pages load.",
+    "responsibilities": [
+      "2c1084f2",
+      "aa97b368"
+    ]
+  },
+  "entrypoints/lib/backingCleanup.ts::createBackingCleanup": {
+    "description": "Removes tab backing bookmarks no other live tab claims, journalling failed removals so they are retried on the next tab event or worker start.",
+    "responsibilities": [
+      "31d677ab",
+      "82c61592",
+      "8d9fa368"
+    ]
+  },
+  "entrypoints/lib/backingCleanupJournal.ts::parseLocation": {
+    "description": "A stored pending cleanup entry validated as a tab backing location, or undefined when any required field is missing or malformed.",
+    "responsibilities": [
+      "c0804aca"
+    ]
+  },
+  "entrypoints/lib/bookmarkImport.ts::bookmarkImportSourceIsWithin": {
+    "description": "Whether the import source folder is the given root or one of its descendants, used to refuse importing Hyper's own folders.",
+    "responsibilities": [
+      "5fb5dc87"
+    ]
+  },
+  "entrypoints/lib/bookmarkImport.ts::importBookmarkFolder": {
+    "description": "Copies a bookmark folder's bookmarks and subfolders under a destination, skipping separators and excluded nodes, and removes the partial copy if it fails.",
+    "responsibilities": [
+      "23929b2e",
+      "91306a7f",
+      "fedf729e",
+      "18286814"
+    ]
+  },
+  "entrypoints/lib/bookmarkImport.ts::runExclusiveBookmarkImport": {
+    "description": "Runs an import while marking its source folder pending, rejecting a second import of the same folder and reporting the active import count.",
+    "responsibilities": [
+      "e1c07a3b",
+      "e21f2113",
+      "18cf087a"
+    ]
+  },
+  "entrypoints/lib/bookmarkOperations.ts::createBookmarkFolder": {
+    "description": "Creates a folder titled New folder under the given parent bookmark folder.",
+    "responsibilities": [
+      "714409af"
+    ]
+  },
+  "entrypoints/lib/bookmarkOperations.ts::updateBookmarkUrl": {
+    "description": "Changes a bookmark's URL, failing when the bookmark no longer exists or is a folder.",
+    "responsibilities": [
+      "dc7c58a7"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::archivedSpaces": {
+    "description": "The spaces marked archived, which a window hides from pagination until they return.",
+    "responsibilities": [
+      "843a704d"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::arrangeFavouriteSlots": {
+    "description": "The favourites bar's slots, placing bookmarks at their recorded slots first and filling the remaining gaps in order with the rest.",
+    "responsibilities": [
+      "31235753"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bestTabFaviconUrl": {
+    "description": "The favicon of the active tab among the tabs, else of the first tab that has one, or undefined.",
+    "responsibilities": [
+      "037f4886"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkableTabUrl": {
+    "description": "A tab's URL when it can be bookmarked, or null for missing, unparseable, extension, and browser internal pages.",
+    "responsibilities": [
+      "f017dda9"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkFolderIds": {
+    "description": "The IDs of every folder in the given nodes and their nested folders, depth first.",
+    "responsibilities": [
+      "24b03a0c"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkFolderIdsContainingUrls": {
+    "description": "The IDs of folders that directly or through a subfolder hold a bookmark for any of the given pages, so they can be expanded.",
+    "responsibilities": [
+      "18fa1b81",
+      "e3d73637"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkFolderOptions": {
+    "description": "Every folder outside the excluded roots as a choice with its visible title and slash-joined path, skipping the browser's invisible root.",
+    "responsibilities": [
+      "1168d520",
+      "3255151e",
+      "fedf729e"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkNodeIdForPage": {
+    "description": "The ID of the bookmark for a page, preferring the selected node when it matches, else the first match in the tree.",
+    "responsibilities": [
+      "18fa1b81",
+      "e4ad083a"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkNodesHaveUrl": {
+    "description": "Whether any of the nodes is a bookmark for the same page as the URL.",
+    "responsibilities": [
+      "18fa1b81"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkTabStatus": {
+    "description": "The open tabs for a bookmark's page, and whether they are all sleeping or any is active.",
+    "responsibilities": [
+      "41d8823d",
+      "cc25a9e7"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkTitleFollowingPageTitle": {
+    "description": "A bookmark's raw title updated to the page's new title, or undefined for folders, custom names, blank titles, or no change.",
+    "responsibilities": [
+      "851916eb",
+      "92a528b6"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkTitleUpdatesFollowingPageTitle": {
+    "description": "The title updates for every bookmark in the tree on the given page, so bookmarks without custom names follow the page's title.",
+    "responsibilities": [
+      "18fa1b81",
+      "851916eb"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkTitleWithCustomName": {
+    "description": "A node's raw title renamed to the given visible title and marked as a custom name, so page title updates leave it alone.",
+    "responsibilities": [
+      "46ec2802"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::bookmarkTitleWithFavouriteSlot": {
+    "description": "A favourite's title recording the given bar slot, or with its slot removed when none is given.",
+    "responsibilities": [
+      "21ccf7d4"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::buildNodeMap": {
+    "description": "Every node in the tree by its ID, for constant-time lookups.",
+    "responsibilities": [
+      "0a2ca6fb"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::collectUniqueBookmarkUrls": {
+    "description": "The URLs of every bookmark under a node, keeping only the first bookmark for each page.",
+    "responsibilities": [
+      "3c689317",
+      "40e1e247"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::containsNode": {
+    "description": "Whether the node with the ID is a descendant of the given node.",
+    "responsibilities": [
+      "5fb5dc87"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::customBookmarkTitleMatches": {
+    "description": "Whether a node carries a custom name equal to the given title once trimmed.",
+    "responsibilities": [
+      "ce1148f4"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::deriveSpaces": {
+    "description": "The spaces described by Hyper's folders in the bookmark tree, or none when the structure is missing.",
+    "responsibilities": [
+      "a904bfe3",
+      "5c729832"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::deriveSpaceTabs": {
+    "description": "The current window's tabs belonging to the active space, by its tab group or recorded space IDs, sorted by tab index.",
+    "responsibilities": [
+      "53cd0f05",
+      "0f235bee",
+      "b5ff6b3c"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::deriveWindowSpaceTabTree": {
+    "description": "The active space's tabs folder ID and its tab folders and live tab backings, dropping backings of tabs no longer open.",
+    "responsibilities": [
+      "b6323c03",
+      "22775c4e"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::descendantCount": {
+    "description": "The number of bookmarks inside a folder at any depth, not counting the folders.",
+    "responsibilities": [
+      "5f878489"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::descendantItemCount": {
+    "description": "The number of bookmarks and folders inside a node at any depth.",
+    "responsibilities": [
+      "d50cbf18"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::favouriteSlot": {
+    "description": "The favourites bar slot a bookmark's title assigns it, or undefined when unset or beyond the bar's last slot.",
+    "responsibilities": [
+      "58904304",
+      "1b1e4691"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::favouriteSlotsFromStructure": {
+    "description": "The arranged favourites bar slots from the structure's favourites folder, all empty without a structure.",
+    "responsibilities": [
+      "31235753"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::filterBookmarkTree": {
+    "description": "The tree pruned to bookmarks and folders whose visible title or URL contains the query, keeping folders that hold matches.",
+    "responsibilities": [
+      "1e2948cd",
+      "3255151e",
+      "e3d73637"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::findBookmarkBar": {
+    "description": "The browser's bookmarks bar folder, found by its usual ID, a toolbar ID or title, else the first root container.",
+    "responsibilities": [
+      "69b2225a"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::findBookmarkPathByUrl": {
+    "description": "The chain of nodes from the given roots down to the first bookmark for the URL's page, or null when none matches.",
+    "responsibilities": [
+      "18fa1b81",
+      "1932ebcc"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::findEquivalentVisibleBookmark": {
+    "description": "The first saved bookmark among the nodes for the same page as the URL, ignoring tab backings, or undefined.",
+    "responsibilities": [
+      "18fa1b81",
+      "b29bf3f2"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::findHyperBookmarkStructure": {
+    "description": "The hyper root with its favourites, spaces, and optional global bookmarks folders, or null when the root or a required folder is missing.",
+    "responsibilities": [
+      "5c729832"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::foremostTabInWindow": {
+    "description": "The active tab of the window when that window is focused, otherwise undefined.",
+    "responsibilities": [
+      "81486647"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::hyperRecord": {
+    "description": "The hyper record inside parsed title metadata, or an empty record when it is absent or not an object.",
+    "responsibilities": [
+      "8cd1f47c"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::indexTabsByPageIdentity": {
+    "description": "The tabs grouped by the identity of the page each one shows, skipping tabs without one.",
+    "responsibilities": [
+      "354555e8"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::indexTabSpacesByPageIdentity": {
+    "description": "The IDs of the spaces each page is open in, by page identity, from the tabs and their recorded spaces.",
+    "responsibilities": [
+      "a6c967ea"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isBookmark": {
+    "description": "Whether a node is a bookmark with a URL rather than a folder.",
+    "responsibilities": [
+      "ffba0856"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isBookmarkFolder": {
+    "description": "Whether a node is a folder: it has no URL and is not a separator.",
+    "responsibilities": [
+      "ffed1e78"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isBookmarkSeparator": {
+    "description": "Whether a bookmark node is a browser separator rather than a bookmark or folder.",
+    "responsibilities": [
+      "9ea8ee15"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isFolderTitled": {
+    "description": "Whether a node is a folder whose visible title is exactly the given title.",
+    "responsibilities": [
+      "ce056a68",
+      "3255151e"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isLocalBookmarkFolder": {
+    "description": "Whether a node is an ordinary bookmark folder rather than a space tabs, space bookmarks, tab, or legacy window folder.",
+    "responsibilities": [
+      "f9e49ed5"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isLocalBookmarkNode": {
+    "description": "Whether a node is a saved bookmark or ordinary folder owned by a space, rather than a tab backing or structural folder.",
+    "responsibilities": [
+      "b29bf3f2",
+      "f9e49ed5"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isSpaceBookmarksFolder": {
+    "description": "Whether a node is a space's marked bookmarks folder, which holds the space's saved bookmarks.",
+    "responsibilities": [
+      "40b686a5"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isSpaceTabsFolder": {
+    "description": "Whether a node is a space's marked tabs folder, which holds the space's tab backings.",
+    "responsibilities": [
+      "dbb5650d"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isTabBackingBookmark": {
+    "description": "Whether a node is a bookmark marked as backing an open tab rather than a saved bookmark.",
+    "responsibilities": [
+      "b29bf3f2"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isTabFolder": {
+    "description": "Whether a node is a folder marked as a user tab folder inside a space's tabs tree.",
+    "responsibilities": [
+      "42e5860c"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::isTabSleeping": {
+    "description": "Whether a tab is discarded or frozen by the browser to save resources.",
+    "responsibilities": [
+      "6eb35081"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::lastActiveTabTokensByWindow": {
+    "description": "The per-window record of last active tab tokens on a space folder's title, or undefined when it has none.",
+    "responsibilities": [
+      "67bfa230"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::nestedTabBackings": {
+    "description": "Every tab backing among the nodes, flattened out of tab folders and legacy window folders.",
+    "responsibilities": [
+      "f717aa06"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::pageIsForemostInSpace": {
+    "description": "Whether the URL's page is the foremost page and the given space is the foremost space.",
+    "responsibilities": [
+      "efa7bb99",
+      "fbf5573f"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::parseBookmarkTitle": {
+    "description": "Splits a raw bookmark title into its visible title and the trailing JSON metadata object Hyper appends, or empty metadata when there is none.",
+    "responsibilities": [
+      "6039dfa5",
+      "3255151e"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::planFavouriteSlotReplacement": {
+    "description": "The title updates that put a favourite in a slot, pinning the others where they show and unslotting any favourite it displaces.",
+    "responsibilities": [
+      "21ccf7d4",
+      "04b90940"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::preferredActiveSpaceId": {
+    "description": "The space a window should show: the stored space if it still exists, else the current one, else the first space, or null without spaces.",
+    "responsibilities": [
+      "c56d65ca"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::preferredSpaceForPage": {
+    "description": "The space opening a page should use: the space it is already open in, preferring the active one, else the active space.",
+    "responsibilities": [
+      "b23a5f39"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::serializeBookmarkTitle": {
+    "description": "A raw bookmark title with the metadata appended as compact JSON, dropping undefined values and empty nested records.",
+    "responsibilities": [
+      "30038383"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::spaceBookmarkTitleWithArchived": {
+    "description": "A space folder's title marked archived, or with the archived flag removed when restoring it.",
+    "responsibilities": [
+      "217509fb"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::spaceBookmarkTitleWithLastActiveTabToken": {
+    "description": "A space folder's title recording the token of its last active tab, both overall and for the given window.",
+    "responsibilities": [
+      "dbde6c7e"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::spaceBookmarkTitleWithMigratedLastActiveTabWindowIds": {
+    "description": "A space folder's title with per-window last active tab tokens rekeyed from previous to current window IDs, unchanged if nothing moved.",
+    "responsibilities": [
+      "af68c0b7"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::spaceHasTabUrl": {
+    "description": "Whether a space has an open tab for the URL's page, using the page identity index when given, else the space's tab backings.",
+    "responsibilities": [
+      "3ff2be5b"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::spaceLastActiveTabToken": {
+    "description": "The token of the tab last active in a space, for the given window when recorded, else the space's window-independent token.",
+    "responsibilities": [
+      "67bfa230"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::spacesFromStructure": {
+    "description": "Each space folder as a Space with its archived flag, colour, bookmarks root, and children of tab backings followed by saved bookmarks.",
+    "responsibilities": [
+      "a904bfe3"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::splitViewFolderBookmarkTitle": {
+    "description": "The raw title for a new split view folder, marked both as a tab folder and as holding a split view.",
+    "responsibilities": [
+      "23ea6e9a",
+      "dc62f0af"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::storedFavouriteSlot": {
+    "description": "The non-negative integer favourite slot a bookmark's title records, even beyond the bar, or undefined when it has none.",
+    "responsibilities": [
+      "58904304"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabBackingBookmarkLink": {
+    "description": "The linked and declined bookmark IDs a tab backing's title records, omitting whichever are absent.",
+    "responsibilities": [
+      "b8cf4bc9"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabBackingBookmarkTitle": {
+    "description": "A tab backing's raw title for its page, keeping any custom name and recording index, token, space, window, and installation ownership.",
+    "responsibilities": [
+      "851916eb",
+      "ea6b1a10"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabBackingIndex": {
+    "description": "The tab index a tab backing's title records, or undefined when it has none.",
+    "responsibilities": [
+      "d67bed13"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabBackingInstallationId": {
+    "description": "The ID of the browser installation that owns a tab backing, as its title records, or undefined.",
+    "responsibilities": [
+      "c449268e"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabBackings": {
+    "description": "The tab backing bookmarks among a space's children, excluding its saved bookmarks.",
+    "responsibilities": [
+      "f717aa06",
+      "b29bf3f2"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabBackingSpaceId": {
+    "description": "The ID of the space a tab backing's title says it belongs to, or undefined when unrecorded.",
+    "responsibilities": [
+      "a4108dd7"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabBackingTitleWithBookmarkLink": {
+    "description": "A tab backing's title with its linked and declined bookmark IDs replaced, removing either one left undefined.",
+    "responsibilities": [
+      "ebb6f1c1"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabBackingTitleWithName": {
+    "description": "A tab backing's title showing the user's custom name, keeping the page's own title in metadata to return to.",
+    "responsibilities": [
+      "46ec2802",
+      "6a4e14f5"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabBackingToken": {
+    "description": "The stable tab token a tab backing's title records, or undefined when it has none.",
+    "responsibilities": [
+      "8ea9f79b"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabBackingWindowId": {
+    "description": "The window ID a tab backing's title records, or undefined while the backing is parked without a window.",
+    "responsibilities": [
+      "52200b03"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabFolderBookmarkTitle": {
+    "description": "A tab folder's raw title showing the trimmed title, marked as a tab folder and keeping any existing title metadata.",
+    "responsibilities": [
+      "23ea6e9a",
+      "ac99d8c9"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::tabSpaceId": {
+    "description": "The space a tab belongs to: its recorded space, else the space owning its tab group, else the active space for the active group.",
+    "responsibilities": [
+      "0f235bee"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::visibleBookmarkTitle": {
+    "description": "A node's title as users see it, without the metadata Hyper stores in the bookmark title.",
+    "responsibilities": [
+      "3255151e"
+    ]
+  },
+  "entrypoints/lib/bookmarks.ts::withoutBookmarkNode": {
+    "description": "The tree with the node removed wherever it appears, returning the original arrays untouched when it is absent.",
+    "responsibilities": [
+      "9e3dff88",
+      "2a6d3ab7"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::allTabBackings": {
+    "description": "Every tab backing in every space's tab tree, in space and tree order.",
+    "responsibilities": [
+      "f717aa06"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::backingHasCanonicalLocation": {
+    "description": "Whether a backing records the given space and sits in that space's tab tree, through tab folders only.",
+    "responsibilities": [
+      "b9d0c258",
+      "74b813ff"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::backingHasLocalCanonicalLocation": {
+    "description": "Whether a backing belongs to this installation, records the given window if any, and sits in the space's tab tree.",
+    "responsibilities": [
+      "d1afa7d7",
+      "74b813ff"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::backingIsAdoptableExactCandidate": {
+    "description": "Whether a tab's previously recorded backing still matches its token and space and sits locally in place, so the tab can reclaim it.",
+    "responsibilities": [
+      "b1ce22c0",
+      "b9d0c258",
+      "d1afa7d7",
+      "74b813ff"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::besideTreeNode": {
+    "description": "The parent and index just before or just after a tab tree node, or undefined when it has no position.",
+    "responsibilities": [
+      "ecb55c90"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::createTabFolder": {
+    "description": "Creates a tab folder with the trimmed title in a space's tabs folder or a valid tab folder within it, rejecting blank titles.",
+    "responsibilities": [
+      "7b8e7da9",
+      "74b813ff",
+      "e55d5e21"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::ensureHyperBookmarkStructure": {
+    "description": "Hyper's repaired bookmark structure, sharing one repair among concurrent callers so the folders are never created twice.",
+    "responsibilities": [
+      "664cb3d9",
+      "f2e96297"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::ensureSpaceBookmarksFolder": {
+    "description": "A space's marked bookmarks folder, created or repaired when needed, which holds its saved bookmarks.",
+    "responsibilities": [
+      "98db1193"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::ensureSpaceFolder": {
+    "description": "The tabs or bookmarks folder for a space after repairing the structure, failing when the space no longer exists.",
+    "responsibilities": [
+      "664cb3d9",
+      "98db1193"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::ensureSpaceFolderForNode": {
+    "description": "A space's single tabs or bookmarks folder, created or merged as needed and retitled so its metadata marks its role and space.",
+    "responsibilities": [
+      "98db1193",
+      "d8c9206f",
+      "188ad964"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::ensureSpaceTabsFolder": {
+    "description": "A space's marked tabs folder, created or repaired when needed, which holds its tab backings and tab folders.",
+    "responsibilities": [
+      "98db1193"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::ensureTabBackingBookmark": {
+    "description": "Finds or creates the bookmark backing a tab in its space, reclaiming its previous or parked backing, and returns where it is kept.",
+    "responsibilities": [
+      "8f4c7e1c",
+      "b1ce22c0"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::ensureUniqueFolder": {
+    "description": "The single child folder of a parent with the given visible title, created when missing and with duplicates merged into it.",
+    "responsibilities": [
+      "209384f8",
+      "d8c9206f",
+      "ce056a68",
+      "3255151e"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::ensureUniqueMatchingFolder": {
+    "description": "The single child folder of a parent matching the predicate, creating it when missing and merging duplicates, or throwing the error message.",
+    "responsibilities": [
+      "209384f8",
+      "d8c9206f"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::findSpaceTabsFolders": {
+    "description": "A space's tabs folders without repairing anything, or none when the structure is missing or the ID is not a space folder.",
+    "responsibilities": [
+      "5c729832",
+      "359c8805"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::hasParkedTabBackings": {
+    "description": "Whether a space has parked backings waiting to be restored when it opens in a window.",
+    "responsibilities": [
+      "199d1627"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::installationId": {
+    "description": "This browser installation's ID from local storage, inherited from backings in open windows or newly created once, under a lock.",
+    "responsibilities": [
+      "8b86f8b9",
+      "911482b3",
+      "31d6f4db"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::installationStartedAt": {
+    "description": "When this installation began, read from local storage or estimated from its oldest backing and then stored.",
+    "responsibilities": [
+      "7ef779bb"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::keptBacking": {
+    "description": "A tab backing with its URL and the space whose tab tree holds it, failing when it is no longer kept in a space.",
+    "responsibilities": [
+      "0eeafebf",
+      "74b813ff"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::localTabBackingPagesByWindow": {
+    "description": "The page identities this installation's window-assigned backings hold, grouped by window ID.",
+    "responsibilities": [
+      "d1afa7d7",
+      "16f41a1f"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::mergeDuplicateFolders": {
+    "description": "Moves the contents of duplicate folders into the first one and removes the emptied duplicates, returning the kept folder or undefined.",
+    "responsibilities": [
+      "d8c9206f"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::migrateTabBackingWindowIds": {
+    "description": "Rekeys this installation's backings and spaces' last active tabs from previous to current window IDs after a restart, returning the migrated backing IDs.",
+    "responsibilities": [
+      "af68c0b7",
+      "d1afa7d7"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::moveTabTreeNode": {
+    "description": "Moves a local tab backing or tab folder within a space's tab tree, validating the index, both locations, and that a folder never enters itself.",
+    "responsibilities": [
+      "702685c7",
+      "74b813ff",
+      "88b33e71"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::openWindowBackingPageCounts": {
+    "description": "How many of this installation's backings in still-open windows hold each page, by page identity.",
+    "responsibilities": [
+      "d1afa7d7",
+      "8677dd25"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::parkedTabBackings": {
+    "description": "A space's local backings without an open window, plus windowless ones a replaced installation left for pages not already backed here.",
+    "responsibilities": [
+      "199d1627",
+      "d1afa7d7",
+      "244248d9"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::reconcileTabBackingFolders": {
+    "description": "Clears this installation's backings no live tab holds, parking those of closed windows and removing those of open ones, unless interrupted.",
+    "responsibilities": [
+      "31d677ab",
+      "d1afa7d7",
+      "6d591a23",
+      "96675aae"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::removeEmptyMetadataSuffixes": {
+    "description": "Strips metadata suffixes that serialize to nothing from a node's title and, recursively, from every node beneath it.",
+    "responsibilities": [
+      "69decd09"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::removeFolderIfEmpty": {
+    "description": "Removes a bookmark folder only when it has no children, answering whether it was removed and treating failures as not removed.",
+    "responsibilities": [
+      "0a396d3e",
+      "d222b193"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::removeProvisionalBookmarkFolder": {
+    "description": "Removes a newly created folder only while it still has the expected title and no children, answering whether it was removed.",
+    "responsibilities": [
+      "0a396d3e",
+      "09a9071b"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::removeTabBackingBookmark": {
+    "description": "Removes a tab's backing only when it still matches the recorded location, by exact ID or else by token or page in the space.",
+    "responsibilities": [
+      "497a5df4",
+      "b9d0c258",
+      "00a434c5"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::renameTabFolder": {
+    "description": "Renames a tab folder that sits in a space's tab tree to the trimmed title, keeping its metadata and rejecting blank titles.",
+    "responsibilities": [
+      "b4c56314",
+      "74b813ff",
+      "e55d5e21",
+      "ac99d8c9"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::repairHyperBookmarkStructure": {
+    "description": "Creates or repairs Hyper's root, favourites, spaces, and bookmarks folders, a first space, and each space's folders, then returns the structure.",
+    "responsibilities": [
+      "664cb3d9",
+      "98db1193",
+      "a34f2d7b"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::retitleTabBackingWindow": {
+    "description": "Rewrites a backing's title to record the given space, window, and this installation, updating it only when the title changes.",
+    "responsibilities": [
+      "ea6b1a10",
+      "92a528b6"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::saveHyperPreferences": {
+    "description": "Saves the given preferences onto the hyper root folder's title, queued behind any earlier preference write.",
+    "responsibilities": [
+      "9dc1b2b4",
+      "34f8d978"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::spaceHasCanonicalAncestry": {
+    "description": "Whether the ID names a folder that sits directly in Hyper's spaces folder.",
+    "responsibilities": [
+      "0114ff28"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::spaceTabsFolders": {
+    "description": "The marked tabs folders directly inside a space folder.",
+    "responsibilities": [
+      "359c8805"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::tabBackingMatchesLocation": {
+    "description": "Whether a node is the tab backing with the location's ID and, when given, its token and space.",
+    "responsibilities": [
+      "b9d0c258"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::tabFolderHasCanonicalLocation": {
+    "description": "Whether a node is a tab folder sitting, through tab folders only, inside the given space's tabs folder.",
+    "responsibilities": [
+      "74b813ff"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::tabTreePlace": {
+    "description": "The parent and index in a space's tab tree for a new backing placed after one backing or between two neighbouring ones.",
+    "responsibilities": [
+      "ecb55c90",
+      "0caf6f19"
+    ]
+  },
+  "entrypoints/lib/bookmarkStorage.ts::windowTabBackings": {
+    "description": "The backings this installation keeps for a window in a space's tab tree.",
+    "responsibilities": [
+      "f717aa06",
+      "d1afa7d7"
+    ]
+  },
+  "entrypoints/lib/bookmarkTitleSync.ts::syncBookmarkTitlesFollowingPage": {
+    "description": "Updates Hyper's saved bookmarks for a page to its new title, unless the title is a placeholder or the tab's custom or linked name.",
+    "responsibilities": [
+      "851916eb",
+      "2fe25519",
+      "31b892b8"
+    ]
+  },
+  "entrypoints/lib/bookmarkUndo.ts::createTree": {
+    "description": "Recreates a deleted bookmark node and its descendants under a parent, recording each original ID's new copy for undo.",
+    "responsibilities": [
+      "23929b2e",
+      "05627ae5"
+    ]
+  },
+  "entrypoints/lib/browserCommandCapabilities.ts::readBrowserCommandCapabilities": {
+    "description": "Which optional tab, window, session, split view, and zoom commands the running browser's extension API supports.",
+    "responsibilities": [
+      "b3205d4f"
+    ]
+  },
+  "entrypoints/lib/browserCommandIntentHandlers.ts::createBrowserCommandIntentHandlers": {
+    "description": "The intent handlers for window, history, reload, restore, pin, zoom, and fullscreen commands, each queued as a browser mutation.",
+    "responsibilities": [
+      "a8191fcc",
+      "06f37a7d"
+    ]
+  },
+  "entrypoints/lib/browserCommandIntentHandlers.ts::nextZoom": {
+    "description": "The next zoom factor for zooming in or out by a tenth within 0.25 and 5, or 1 on reset.",
+    "responsibilities": [
+      "8abe6a2b",
+      "1104dc26"
+    ]
+  },
+  "entrypoints/lib/browserCommands.ts::adjacentTab": {
+    "description": "The tab before or after the active one in its window's strip order, wrapping around at either end.",
+    "responsibilities": [
+      "f32e6da8"
+    ]
+  },
+  "entrypoints/lib/browserCommands.ts::browserCommandSearchCommands": {
+    "description": "The browser commands the capabilities allow, without their run callbacks, for Search to list and match.",
+    "responsibilities": [
+      "e9f12d2d",
+      "adff9235",
+      "4335377c"
+    ]
+  },
+  "entrypoints/lib/browserCommands.ts::navigate": {
+    "description": "A command run that moves the active tab back or forward in its history.",
+    "responsibilities": [
+      "4c3d7f1e",
+      "5febc22f",
+      "9badb053"
+    ]
+  },
+  "entrypoints/lib/browserCommands.ts::submit": {
+    "description": "A command run that submits the fixed intent, regardless of the active tab.",
+    "responsibilities": [
+      "4c3d7f1e",
+      "1a56d583"
+    ]
+  },
+  "entrypoints/lib/browserCommands.ts::submitForTab": {
+    "description": "A command run that submits the intent built from the active tab, failing when there is none.",
+    "responsibilities": [
+      "4c3d7f1e",
+      "5febc22f",
+      "1a56d583"
+    ]
+  },
+  "entrypoints/lib/browserCommands.ts::switchTab": {
+    "description": "A command run that activates the tab before or after the active one in its window, wrapping around.",
+    "responsibilities": [
+      "4c3d7f1e",
+      "f32e6da8",
+      "2b7ece74"
+    ]
+  },
+  "entrypoints/lib/browserCommands.ts::tabId": {
+    "description": "A command run that submits the given detach, duplicate, or reload intent for the active tab.",
+    "responsibilities": [
+      "4c3d7f1e",
+      "5febc22f",
+      "1a56d583"
+    ]
+  },
+  "entrypoints/lib/browserCommands.ts::writeClipboard": {
+    "description": "Writes text to the clipboard, failing when clipboard access is unavailable.",
+    "responsibilities": [
+      "92d2233a"
+    ]
+  },
+  "entrypoints/lib/browserCommands.ts::zoom": {
+    "description": "A command run that zooms the active tab in, out, or back to its default.",
+    "responsibilities": [
+      "4c3d7f1e",
+      "5febc22f",
+      "cdc7fcd1"
+    ]
+  },
+  "entrypoints/lib/browserSearch.ts::searchWithDefaultEngine": {
+    "description": "Searches the query in a tab with the browser's default engine, reporting a missing engine or an unavailable search API as errors.",
+    "responsibilities": [
+      "8ce86de6"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::commandScore": {
+    "description": "Ranks a command against a normalised query by label, keyword and detail matches, with lower scores better and infinity for no match.",
+    "responsibilities": [
+      "60bd4710",
+      "c7b633a8"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::explicitUrl": {
+    "description": "Parses typed text as an HTTP(S) URL when it has a scheme or looks like a host, localhost or IP address, otherwise undefined.",
+    "responsibilities": [
+      "65ce2c50",
+      "27d3dc5e"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::formatHistoryVisitDate": {
+    "description": "Formats a history visit time as weekday, days ago and 24-hour time, or undefined when the timestamp is missing or invalid.",
+    "responsibilities": [
+      "ddd35c67"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::isDirectSearchShortcut": {
+    "description": "Whether a key press is Enter with Alt, Ctrl or Meta held, which sends the query straight to a web search.",
+    "responsibilities": [
+      "98e7d61e",
+      "5b1e25b2"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::matchingCommands": {
+    "description": "The commands matching a query, best score first and in original order on ties, capped at the limit or the first commands when empty.",
+    "responsibilities": [
+      "dd57bc88",
+      "6a4227fd",
+      "956d970f"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::navigationTarget": {
+    "description": "The Search bar target for a query, going to it when it reads as a URL and otherwise searching the web for it.",
+    "responsibilities": [
+      "65ce2c50",
+      "7d642f7e",
+      "e5346a52"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::pageMatchQuality": {
+    "description": "The best match quality of a query across a page result's title, detail, URL and content, treating a URL match as a word match.",
+    "responsibilities": [
+      "c7b633a8"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::selectedResultIndex": {
+    "description": "The index of the result with the selected ID, falling back to the first result when nothing is selected or the selection is gone.",
+    "responsibilities": [
+      "d0f2e60f"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::shouldPrioritiseWebSearch": {
+    "description": "Whether web search should rank first, true when no command matches and every tab or bookmark result only weakly contains the query.",
+    "responsibilities": [
+      "84c0a18a"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::textMatchQuality": {
+    "description": "Scores how well text matches a normalised query, from 4 for an exact match down to 0 for no match.",
+    "responsibilities": [
+      "d1507d53"
+    ]
+  },
+  "entrypoints/lib/commandBar.ts::webSearchTarget": {
+    "description": "A web search target labelled with the trimmed query, or undefined when the query is blank.",
+    "responsibilities": [
+      "e5346a52"
+    ]
+  },
+  "entrypoints/lib/crossSpaceDuplicates.ts::isWebPage": {
+    "description": "Whether a page identity is an HTTP, HTTPS or file address, the only pages counted as cross-space duplicates.",
+    "responsibilities": [
+      "27d3dc5e"
+    ]
+  },
+  "entrypoints/lib/duplicateController.ts::allowsDuplicate": {
+    "description": "Whether tabs of this origin may stay open as duplicates, true for background links, browser duplicates and externally opened tabs.",
+    "responsibilities": [
+      "c310aa8d"
+    ]
+  },
+  "entrypoints/lib/duplicateController.ts::createDuplicateController": {
+    "description": "Creates the controller that tracks candidate tab loads by navigation commits and offers to close a tab duplicating another in its window.",
+    "responsibilities": [
+      "dbe238b2",
+      "14c2c650"
+    ]
+  },
+  "entrypoints/lib/duplicateController.ts::newTabOrigin": {
+    "description": "Classifies how a new tab came to exist, such as Hyper, duplicate, restored, link or external, from its creation facts and opener.",
+    "responsibilities": [
+      "70886f8d"
+    ]
+  },
+  "entrypoints/lib/groupOwnership.ts::fromSpaceGroupIdsByWindow": {
+    "description": "Expands group IDs keyed by window and space back into a list of group ownerships.",
+    "responsibilities": [
+      "890502e0"
+    ]
+  },
+  "entrypoints/lib/groupOwnership.ts::groupIdForSpace": {
+    "description": "The tab group ID owned by this space in this window, or undefined when it owns none.",
+    "responsibilities": [
+      "9599521a"
+    ]
+  },
+  "entrypoints/lib/groupOwnership.ts::groupIdsForWindow": {
+    "description": "The group IDs owned in one window, keyed by the space that owns each group.",
+    "responsibilities": [
+      "eedf7be6"
+    ]
+  },
+  "entrypoints/lib/groupOwnership.ts::groupOwnerships": {
+    "description": "Every group ownership in the registry as a list.",
+    "responsibilities": [
+      "890502e0"
+    ]
+  },
+  "entrypoints/lib/groupOwnership.ts::ownershipForGroup": {
+    "description": "The window and space that own this tab group, or undefined when Hyper has not adopted it.",
+    "responsibilities": [
+      "a02cd219"
+    ]
+  },
+  "entrypoints/lib/groupOwnership.ts::spaceKey": {
+    "description": "The registry key joining a window ID and space ID, so each space in each window owns at most one group.",
+    "responsibilities": [
+      "c2f7fd10"
+    ]
+  },
+  "entrypoints/lib/groupOwnership.ts::toRegistry": {
+    "description": "Builds a group ownership registry indexed both by group ID and by window and space.",
+    "responsibilities": [
+      "d62627cd"
+    ]
+  },
+  "entrypoints/lib/groupOwnership.ts::toSpaceGroupIdsByWindow": {
+    "description": "Flattens the registry into group IDs keyed by window ID and then space ID.",
+    "responsibilities": [
+      "eedf7be6"
+    ]
+  },
+  "entrypoints/lib/groupOwnership.ts::unadoptGroup": {
+    "description": "A new registry without the ownership of this tab group, leaving the group unowned by any space.",
+    "responsibilities": [
+      "2a29886b"
+    ]
+  },
+  "entrypoints/lib/inPageSidebarController.ts::tabIds": {
+    "description": "The IDs of the given tabs, skipping tabs without an ID.",
+    "responsibilities": [
+      "da642a09"
+    ]
+  },
+  "entrypoints/lib/inPageSidebarProtocol.ts::isInPageSidebarRequest": {
+    "description": "Whether a message is an in-page sidebar request to open, query, or resize with a valid width.",
+    "responsibilities": [
+      "11b8ad4c",
+      "4a577812"
+    ]
+  },
+  "entrypoints/lib/inPageSidebarProtocol.ts::isInPageSidebarState": {
+    "description": "Whether a message is a well-formed in-page sidebar state with an availability flag and optional URL and width.",
+    "responsibilities": [
+      "d34b4bea",
+      "4a577812"
+    ]
+  },
+  "entrypoints/lib/lastActiveTab.ts::rememberActiveTab": {
+    "description": "Records an active, owned, non-incognito tab as its space's last active tab by updating the token in the space bookmark title.",
+    "responsibilities": [
+      "dbde6c7e",
+      "9bfa2db4"
+    ]
+  },
+  "entrypoints/lib/mediaAccessOffers.ts::nowPlaying": {
+    "description": "The tab whose media is now playing or retained in this window according to the model snapshot, or undefined.",
+    "responsibilities": [
+      "c5d4508a"
+    ]
+  },
+  "entrypoints/lib/mediaAccessOffers.ts::parseOfferedSites": {
+    "description": "Reads stored offered sites as a record of site to finite number, dropping invalid entries and defaulting to empty.",
+    "responsibilities": [
+      "fbe80456",
+      "0e71461a"
+    ]
+  },
+  "entrypoints/lib/mediaCommands.ts::definitionFor": {
+    "description": "The media command definition named by a prefixed command ID, or undefined for IDs that are not known media commands.",
+    "responsibilities": [
+      "11fc0c20"
+    ]
+  },
+  "entrypoints/lib/mediaCommands.ts::mediaCommandActions": {
+    "description": "The Search command actions for the media commands available in this context, wired to the given handlers.",
+    "responsibilities": [
+      "e9f12d2d",
+      "4335377c"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::canControlTabMedia": {
+    "description": "Whether Hyper can reach tab media through either content script messaging or script injection.",
+    "responsibilities": [
+      "d29855c2",
+      "b3205d4f"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::inspectFrameMedia": {
+    "description": "Finds the frame's playing media element, or else a started paused one, and returns its index and state, or null.",
+    "responsibilities": [
+      "abc9362c",
+      "c5845845"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::inspectTabMedia": {
+    "description": "Inspects every frame of a tab for media by messaging then script injection, reporting whether the tab answered and its target.",
+    "responsibilities": [
+      "a93cf281",
+      "d29855c2"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::isFrameMediaState": {
+    "description": "Whether a frame's reply is a media state with an element index and a paused or playing state.",
+    "responsibilities": [
+      "e174d3e2"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::isMediaControlMessage": {
+    "description": "Whether a message is a media control inspect request or a set-playback request with an element index and state.",
+    "responsibilities": [
+      "4e993f1b"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::isMediaPlaybackChangedMessage": {
+    "description": "Whether a message reports that a page's media playback changed to paused or playing.",
+    "responsibilities": [
+      "5d4b6b57"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::messagingApi": {
+    "description": "Wraps browser tab messaging and frame listing for media control, or undefined when tab messaging is unavailable.",
+    "responsibilities": [
+      "69d57768",
+      "b3205d4f"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::pausePlayingTabMedia": {
+    "description": "Pauses media in any of these tabs that is currently playing, ignoring tabs that fail.",
+    "responsibilities": [
+      "32935303",
+      "d222b193"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::selectMediaControlTarget": {
+    "description": "The tab's media control target from frame results, preferring a playing frame over a paused one, or undefined.",
+    "responsibilities": [
+      "c5845845"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::setFrameMediaPlayback": {
+    "description": "Plays or pauses the frame's media element at an index and returns its resulting state, or null when it is gone or ended.",
+    "responsibilities": [
+      "1c810731"
+    ]
+  },
+  "entrypoints/lib/mediaControl.ts::setTabMediaPlayback": {
+    "description": "Plays or pauses the targeted media element by messaging, falling back to script injection, and returns the updated target.",
+    "responsibilities": [
+      "1c810731",
+      "d29855c2"
+    ]
+  },
+  "entrypoints/lib/mediaController.ts::stateEquals": {
+    "description": "Whether two tab media states match on tab, frame, element, playback state, navigation version and URL.",
+    "responsibilities": [
+      "6675f837"
+    ]
+  },
+  "entrypoints/lib/mediaState.ts::canInspectTabMedia": {
+    "description": "Whether a tab can be inspected for media, needing an ID, a loaded non-incognito tab and an HTTP(S) URL.",
+    "responsibilities": [
+      "88f56d77",
+      "9bfa2db4",
+      "27d3dc5e"
+    ]
+  },
+  "entrypoints/lib/mediaState.ts::currentMediaRetainedTabIds": {
+    "description": "The retained media tab per window, keeping only tabs that still exist there and are not incognito.",
+    "responsibilities": [
+      "56a679fe",
+      "58a7961f",
+      "9bfa2db4"
+    ]
+  },
+  "entrypoints/lib/mediaState.ts::currentTabMediaStates": {
+    "description": "The media states that still match their tab's current URL and navigation version, dropping stale ones.",
+    "responsibilities": [
+      "6399b9ab"
+    ]
+  },
+  "entrypoints/lib/mediaState.ts::mediaTargetForWindow": {
+    "description": "The media state to control in a window, preferring the retained tab, then a playing tab, then a paused one.",
+    "responsibilities": [
+      "c5d4508a",
+      "c5845845"
+    ]
+  },
+  "entrypoints/lib/mediaState.ts::tabMediaStateMatchesTab": {
+    "description": "Whether a recorded media state still belongs to this tab at its current URL and navigation version.",
+    "responsibilities": [
+      "6399b9ab"
+    ]
+  },
+  "entrypoints/lib/mediaState.ts::tabMediaUrl": {
+    "description": "The tab's URL when it is an HTTP(S) page whose media Hyper may inspect, otherwise undefined.",
+    "responsibilities": [
+      "88f56d77",
+      "27d3dc5e"
+    ]
+  },
+  "entrypoints/lib/model.ts::createHyperModelStore": {
+    "description": "Creates a Jotai store holding the model materialised at revision 0 from the initial sources.",
+    "responsibilities": [
+      "2f04bd34",
+      "2e35c408"
+    ]
+  },
+  "entrypoints/lib/model.ts::deriveHyperBookmarkModel": {
+    "description": "Derives spaces, favourites, bookmarks, tab backings and structure root IDs from the browser bookmark tree.",
+    "responsibilities": [
+      "6e3ffb4d",
+      "a904bfe3",
+      "f717aa06"
+    ]
+  },
+  "entrypoints/lib/model.ts::deriveProjection": {
+    "description": "Derives structure health, tab dispositions, tab bookmark links, names and titles from the browser sources and bookmark model.",
+    "responsibilities": [
+      "3b6b7324",
+      "f6a65827",
+      "84d02bf1",
+      "6ab3e50a"
+    ]
+  },
+  "entrypoints/lib/model.ts::materialiseHyperModel": {
+    "description": "Builds a complete model snapshot at a revision from the sources, command statuses and their derived bookmark model and projection.",
+    "responsibilities": [
+      "2f04bd34"
+    ]
+  },
+  "entrypoints/lib/model.ts::modelTabTitles": {
+    "description": "The tab's custom name and page title from the snapshot, or empty when the tab is gone or shows a different page.",
+    "responsibilities": [
+      "393ae477"
+    ]
+  },
+  "entrypoints/lib/modelActions.ts::beginCommand": {
+    "description": "Records a command as pending, rejecting a reused command ID or a client already at its pending command limit.",
+    "responsibilities": [
+      "2c4cb20b",
+      "e21f2113",
+      "ad306593"
+    ]
+  },
+  "entrypoints/lib/modelActions.ts::closeTabsViolations": {
+    "description": "Lists what closing tabs left wrong, such as tabs still open, removed backings still present, or retained backings unclaimed.",
+    "responsibilities": [
+      "d4d0890e"
+    ]
+  },
+  "entrypoints/lib/modelActions.ts::deleteSpaceViolations": {
+    "description": "Lists what a space deletion left behind, such as its root folder, owned tabs, or released groups still live or mapped.",
+    "responsibilities": [
+      "0535ad3d"
+    ]
+  },
+  "entrypoints/lib/modelActions.ts::settleCommand": {
+    "description": "Marks a pending command succeeded or failed at a revision with its result or failure, ignoring unknown or settled commands.",
+    "responsibilities": [
+      "ca9b0b7e"
+    ]
+  },
+  "entrypoints/lib/modelClient.ts::defaultConnect": {
+    "description": "Opens a runtime port with this name to the background model.",
+    "responsibilities": [
+      "eb294fcc"
+    ]
+  },
+  "entrypoints/lib/modelClient.ts::defaultSchedule": {
+    "description": "Runs a callback after a delay with setTimeout and returns a function that cancels it.",
+    "responsibilities": [
+      "f86af225"
+    ]
+  },
+  "entrypoints/lib/modelGuards.ts::bookmarkTarget": {
+    "description": "The ledger target key for a bookmark ID.",
+    "responsibilities": [
+      "f67500c8"
+    ]
+  },
+  "entrypoints/lib/modelGuards.ts::createEffectFence": {
+    "description": "Creates a fence that stops a command's effects once an external change supersedes any of its targets, recording expected changes per step.",
+    "responsibilities": [
+      "f81a35c6",
+      "d3c7edd3"
+    ]
+  },
+  "entrypoints/lib/modelGuards.ts::createTargetLedger": {
+    "description": "Creates the ledger that tells Hyper's expected changes from external ones, bumping a target's generation on each external change.",
+    "responsibilities": [
+      "d3c7edd3",
+      "cec6c771"
+    ]
+  },
+  "entrypoints/lib/modelGuards.ts::groupTarget": {
+    "description": "The ledger target key for a tab group ID.",
+    "responsibilities": [
+      "f67500c8"
+    ]
+  },
+  "entrypoints/lib/modelGuards.ts::spaceTarget": {
+    "description": "The ledger target key for a space ID.",
+    "responsibilities": [
+      "f67500c8"
+    ]
+  },
+  "entrypoints/lib/modelGuards.ts::tabTarget": {
+    "description": "The ledger target key for a tab ID.",
+    "responsibilities": [
+      "f67500c8"
+    ]
+  },
+  "entrypoints/lib/modelGuards.ts::windowTarget": {
+    "description": "The ledger target key for a window ID.",
+    "responsibilities": [
+      "f67500c8"
+    ]
+  },
+  "entrypoints/lib/modelIngress.ts::envelope": {
+    "description": "Wraps an observed payload with its ID, ingress name, source, time and the ingress's route for the model.",
+    "responsibilities": [
+      "51045e28",
+      "31d0107e"
+    ]
+  },
+  "entrypoints/lib/modelIngress.ts::ingressRoute": {
+    "description": "The route an ingress event takes into the model, as listed in the ingress inventory.",
+    "responsibilities": [
+      "31d0107e"
+    ]
+  },
+  "entrypoints/lib/modelIngress.ts::isModelStorageArea": {
+    "description": "Whether a storage area's changes feed the model, per the storage.onChanged ingress inventory entry.",
+    "responsibilities": [
+      "31d0107e",
+      "445cca86"
+    ]
+  },
+  "entrypoints/lib/modelIntegrity.ts::assessStructureHealth": {
+    "description": "Classifies the Hyper bookmark folders as unreadable, absent, ambiguous, incomplete or healthy, listing duplicate or missing roles.",
+    "responsibilities": [
+      "f6a65827"
+    ]
+  },
+  "entrypoints/lib/modelIntegrity.ts::classifyBackingRelocation": {
+    "description": "Whether a moved tab backing was released, retained in its space, or reassigned to the space owning its new tabs folder.",
+    "responsibilities": [
+      "ca66fb8f",
+      "0eeafebf"
+    ]
+  },
+  "entrypoints/lib/modelIntegrity.ts::isModelUsable": {
+    "description": "Whether the bookmark structure is healthy or merely incomplete, so the model can still be used.",
+    "responsibilities": [
+      "e5009257"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::bounded": {
+    "description": "Wraps a string reader so it throws when the value is longer than the maximum length.",
+    "responsibilities": [
+      "27ec8855"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::field": {
+    "description": "The named field of an intent payload, throwing when the payload is not an object.",
+    "responsibilities": [
+      "d4fe91ad"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::oneOf": {
+    "description": "A reader for a string field that must be one of the given values, throwing otherwise.",
+    "responsibilities": [
+      "d4fe91ad",
+      "70d244b1"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::optional": {
+    "description": "Wraps a reader so a missing field reads as undefined instead of failing.",
+    "responsibilities": [
+      "94fa2afd"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::orDefault": {
+    "description": "Wraps an optional reader so a missing field reads as the fallback value.",
+    "responsibilities": [
+      "94fa2afd"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::parseCreateBookmarkPayload": {
+    "description": "Parses a create bookmark intent payload, rejecting one that names both a tab and a page.",
+    "responsibilities": [
+      "ca8baaed",
+      "bb4eb74f"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::parseMoveSessionTabPayload": {
+    "description": "Parses a move session tab intent payload, rejecting a bookmark destination unless the source is another session's backed tab.",
+    "responsibilities": [
+      "2310c74a"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::parseMoveTabsPayload": {
+    "description": "Parses a move tabs intent payload naming its tabs either by tab IDs or by a shared drag, but not both.",
+    "responsibilities": [
+      "ee6c1701",
+      "bb4eb74f"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::parseRestoreClosedTabPayload": {
+    "description": "Parses a restore closed tab intent payload, keeping its session ID only when one is given.",
+    "responsibilities": [
+      "4f2eca46"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::parseSetSpaceArchivedPayload": {
+    "description": "Parses a set space archived intent payload, rejecting one that places a space before itself.",
+    "responsibilities": [
+      "1342ea90"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::parseSplitTabPayload": {
+    "description": "Parses a split tab intent payload that pairs the tab with exactly one of another tab or a page URL.",
+    "responsibilities": [
+      "191d50a6",
+      "bb4eb74f"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::requireBoolean": {
+    "description": "The named boolean flag from an intent payload, throwing when it is not a boolean.",
+    "responsibilities": [
+      "d4fe91ad",
+      "147b79a7"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::requireIds": {
+    "description": "Reads a non-empty list of non-empty string IDs from an intent payload, throwing otherwise.",
+    "responsibilities": [
+      "d4fe91ad",
+      "9b9326c5"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::requireIndex": {
+    "description": "The named whole, non-negative number from an intent payload, throwing for any other value.",
+    "responsibilities": [
+      "d4fe91ad",
+      "ab7ab5c7"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::requireNumber": {
+    "description": "The named finite number from an intent payload, throwing when it is missing or not a finite number.",
+    "responsibilities": [
+      "d4fe91ad",
+      "0e71461a"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::requireNumbers": {
+    "description": "The named list of finite numbers from an intent payload, throwing when it is not such a list.",
+    "responsibilities": [
+      "d4fe91ad",
+      "0e71461a"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::requireSearchResultId": {
+    "description": "Reads a bounded search result ID, throwing unless it starts with a known result prefix followed by more text.",
+    "responsibilities": [
+      "d4fe91ad",
+      "27ec8855",
+      "6e939c87"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::requireString": {
+    "description": "The named non-empty string from an intent payload, throwing when it is missing, empty or not a string.",
+    "responsibilities": [
+      "d4fe91ad",
+      "9b9326c5"
+    ]
+  },
+  "entrypoints/lib/modelIntentPayloads.ts::setTabFolderTargets": {
+    "description": "The ledger targets a tab folder create, move or other operation touches, covering its folders, moved nodes and space.",
+    "responsibilities": [
+      "97995fdd"
+    ]
+  },
+  "entrypoints/lib/modelIntents.ts::isPromiseLike": {
+    "description": "Whether a value has a then method, so an intent handler's result can be awaited.",
+    "responsibilities": [
+      "455dfc2d"
+    ]
+  },
+  "entrypoints/lib/modelPort.ts::canSubmitHyperModelIntent": {
+    "description": "Whether a client role may submit an intent kind, limiting page search to its allowed kinds and no remote tab activation.",
+    "responsibilities": [
+      "4e4540ee"
+    ]
+  },
+  "entrypoints/lib/modelPort.ts::projectHyperModelForClient": {
+    "description": "Projects the model for one window's sidebar or new tab client, limiting tab data to that window, or undefined for abnormal windows.",
+    "responsibilities": [
+      "7ee02fb7",
+      "e8ba3323"
+    ]
+  },
+  "entrypoints/lib/modelPort.ts::remoteSpacePresenceForClient": {
+    "description": "Maps a window's tabs and visible bookmarks to the spaces in other normal windows that have the same page open.",
+    "responsibilities": [
+      "9e6b3858",
+      "a6c967ea",
+      "e8ba3323"
+    ]
+  },
+  "entrypoints/lib/modelPort.ts::resolveHyperModelPortRole": {
+    "description": "The role a connecting port may take, checking protocol version, sender page, window and in-page sidebar token, or undefined to refuse.",
+    "responsibilities": [
+      "368b6dd5",
+      "e9b434e8"
+    ]
+  },
+  "entrypoints/lib/modelPort.ts::sameExtensionPage": {
+    "description": "Whether a sender URL has the same origin and path as the expected extension page, ignoring query and hash.",
+    "responsibilities": [
+      "e9b434e8"
+    ]
+  },
+  "entrypoints/lib/modelProtocol.ts::createDeliveryCursor": {
+    "description": "Creates a cursor that keeps one model revision in flight per client, queueing the newest revision until the client acknowledges.",
+    "responsibilities": [
+      "88da64f1"
+    ]
+  },
+  "entrypoints/lib/modelProtocol.ts::isActionKind": {
+    "description": "Whether a value names a known model intent kind.",
+    "responsibilities": [
+      "f956def4"
+    ]
+  },
+  "entrypoints/lib/modelProtocol.ts::isBoundedString": {
+    "description": "Whether a value is a string no longer than the maximum length.",
+    "responsibilities": [
+      "27ec8855"
+    ]
+  },
+  "entrypoints/lib/modelProtocol.ts::isRole": {
+    "description": "Whether a value is a known model client role: newtab, page-search or sidebar.",
+    "responsibilities": [
+      "b9df7fdc"
+    ]
+  },
+  "entrypoints/lib/modelProtocol.ts::isSearchCommand": {
+    "description": "Whether a value is a well-formed Search command with bounded ID, label, detail, icon, shortcut and keywords and an optional tab ID.",
+    "responsibilities": [
+      "7c5f9ed5",
+      "27ec8855"
+    ]
+  },
+  "entrypoints/lib/modelSources.ts::createBrowserModelSourcesReader": {
+    "description": "Creates a reader that gathers fresh browser observations and runtime metadata as the model sources.",
+    "responsibilities": [
+      "26fe7041",
+      "ad0da39f"
+    ]
+  },
+  "entrypoints/lib/modelSources.ts::readBrowserObservation": {
+    "description": "Reads bookmarks, tabs, windows, focus, tab groups and recently closed tabs from the browser, merging in native tab statuses.",
+    "responsibilities": [
+      "26fe7041",
+      "37b79fa1",
+      "46f5f22b"
+    ]
+  },
+  "entrypoints/lib/modelSources.ts::readRuntimeMetadata": {
+    "description": "Reads tab ownerships, active spaces, group ownership, preferences and other runtime metadata from storage and signals for the model.",
+    "responsibilities": [
+      "ad0da39f"
+    ]
+  },
+  "entrypoints/lib/musicSites.ts::isMusicSite": {
+    "description": "Whether a URL is an HTTP(S) page on Amazon Music or a known music host or its subdomain.",
+    "responsibilities": [
+      "5043725f",
+      "27d3dc5e"
+    ]
+  },
+  "entrypoints/lib/navigationDedupe.ts::tabShows": {
+    "description": "Whether the tab's current URL is the same navigation target as the given URL.",
+    "responsibilities": [
+      "100755bb"
+    ]
+  },
+  "entrypoints/lib/operationJournal.ts::abandonDurableOperation": {
+    "description": "Marks a live journaled operation abandoned in the verifying phase, recording when and why recovery gave up.",
+    "responsibilities": [
+      "f2495bc7"
+    ]
+  },
+  "entrypoints/lib/operationJournal.ts::advanceDurableOperation": {
+    "description": "Moves a live journaled operation to a later phase with optional proof or payload updates, throwing if it was abandoned or is missing.",
+    "responsibilities": [
+      "f32b0ed4"
+    ]
+  },
+  "entrypoints/lib/operationJournal.ts::beginDurableOperation": {
+    "description": "Journals a prepared operation before its first effect, refusing duplicates of a live idempotency key or too many live operations.",
+    "responsibilities": [
+      "35c60a2e",
+      "e21f2113",
+      "ad306593"
+    ]
+  },
+  "entrypoints/lib/operationJournal.ts::completeDurableOperation": {
+    "description": "Removes a finished operation from the durable journal so it is no longer recovered.",
+    "responsibilities": [
+      "84916fce"
+    ]
+  },
+  "entrypoints/lib/operationJournal.ts::isAbandonedOperation": {
+    "description": "Whether a journaled operation has been abandoned rather than still awaiting recovery.",
+    "responsibilities": [
+      "fa4c7663"
+    ]
+  },
+  "entrypoints/lib/operationJournal.ts::isOperationKind": {
+    "description": "Whether a stored value names one of the known durable operation kinds, such as space deletion or tab moves.",
+    "responsibilities": [
+      "ba5c7e45"
+    ]
+  },
+  "entrypoints/lib/operationJournal.ts::isOperationPhase": {
+    "description": "Whether a stored value is a valid durable operation phase: prepared, effect-applied or verifying.",
+    "responsibilities": [
+      "0f324bd2"
+    ]
+  },
+  "entrypoints/lib/operationJournal.ts::isStringRecord": {
+    "description": "Whether a value is a record whose entries are all strings, numbers or booleans, as completion proofs require.",
+    "responsibilities": [
+      "38c4a24d"
+    ]
+  },
+  "entrypoints/lib/operationJournal.ts::parseOperation": {
+    "description": "The live or abandoned durable operation a stored journal entry describes, or undefined when any field is malformed.",
+    "responsibilities": [
+      "301ed446"
+    ]
+  },
+  "entrypoints/lib/pageShortcut.ts::isPageOpenShortcut": {
+    "description": "Whether a key event matches the page Search shortcut that opens the Search overlay.",
+    "responsibilities": [
+      "026796b1"
+    ]
+  },
+  "entrypoints/lib/pageShortcut.ts::parseSearchOverlaySource": {
+    "description": "The source tab and window a Search overlay URL was opened for, or undefined when it is not a valid overlay URL.",
+    "responsibilities": [
+      "5378c8b4"
+    ]
+  },
+  "entrypoints/lib/pageShortcut.ts::searchOverlayUrl": {
+    "description": "The new tab page URL that opens the Search overlay for the given source tab and window.",
+    "responsibilities": [
+      "64c0a06e"
+    ]
+  },
+  "entrypoints/lib/preferences.ts::clampRounded": {
+    "description": "A clamp that rounds a number and bounds it to the given inclusive range for numeric preferences.",
+    "responsibilities": [
+      "1104dc26"
+    ]
+  },
+  "entrypoints/lib/preferences.ts::hyperRootTitleWithPreferences": {
+    "description": "The Hyper root bookmark title rewritten to store its saved preferences merged with the given changes.",
+    "responsibilities": [
+      "9dc1b2b4"
+    ]
+  },
+  "entrypoints/lib/preferences.ts::isPreferenceKey": {
+    "description": "Whether a value names one of the known Hyper preference keys.",
+    "responsibilities": [
+      "e3d9905f"
+    ]
+  },
+  "entrypoints/lib/preferences.ts::parsePreferencePayload": {
+    "description": "The single preference change an intent payload carries, throwing when its key or value is invalid.",
+    "responsibilities": [
+      "6023a9c8",
+      "e3d9905f"
+    ]
+  },
+  "entrypoints/lib/preferences.ts::preferencesFromHyperRoot": {
+    "description": "The full preferences for this profile, with defaults filled in wherever the Hyper root title saves none.",
+    "responsibilities": [
+      "a4a4a688",
+      "983a818d"
+    ]
+  },
+  "entrypoints/lib/preferences.ts::readBoolean": {
+    "description": "The value when it is a boolean, or undefined so invalid boolean preferences are ignored.",
+    "responsibilities": [
+      "147b79a7"
+    ]
+  },
+  "entrypoints/lib/preferences.ts::readNumber": {
+    "description": "A reader that returns a finite number passed through the given clamp, or undefined for anything else.",
+    "responsibilities": [
+      "0e71461a",
+      "1104dc26"
+    ]
+  },
+  "entrypoints/lib/preferences.ts::savedHyperPreferences": {
+    "description": "The valid preferences saved in the Hyper root bookmark title, ignoring unknown keys and invalid values.",
+    "responsibilities": [
+      "a4a4a688",
+      "e3d9905f"
+    ]
+  },
+  "entrypoints/lib/recentlyClosed.ts::readRecentlyClosedTabs": {
+    "description": "Reads recently closed tabs from the sessions API, returning an empty list when the API is missing or fails.",
+    "responsibilities": [
+      "37b79fa1",
+      "d222b193"
+    ]
+  },
+  "entrypoints/lib/recentlyClosed.ts::recentlyClosedTabsFromSessions": {
+    "description": "The bookmarkable, non-incognito recently closed tabs from browser sessions, capped at the display limit with titles falling back to URLs.",
+    "responsibilities": [
+      "37b79fa1",
+      "f017dda9",
+      "9bfa2db4",
+      "956d970f",
+      "a3510bbb"
+    ]
+  },
+  "entrypoints/lib/remoteTab.ts::sourcePage": {
+    "description": "The page identity of the bookmark or tab a remote tab request refers to in this window, or undefined when unavailable.",
+    "responsibilities": [
+      "e1151bf4",
+      "ce98e97b"
+    ]
+  },
+  "entrypoints/lib/remoteTab.ts::visibleBookmarks": {
+    "description": "The bookmarks a window can see: its active space's local bookmarks followed by the global bookmarks.",
+    "responsibilities": [
+      "c8e1c66c"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::activateRemoteTab": {
+    "description": "Focuses a verified remote tab in its own window on behalf of the requesting window.",
+    "responsibilities": [
+      "2b7ece74",
+      "9f69d9cc",
+      "3a123887"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::completeOwnership": {
+    "description": "The tab ownership narrowed to one with backing, token, URL and window all present, or undefined when any is missing.",
+    "responsibilities": [
+      "6fbfcede"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::completeOwnershipFromPayload": {
+    "description": "The complete tab ownership stored in an operation payload, or undefined when the payload is malformed or incomplete.",
+    "responsibilities": [
+      "6fbfcede",
+      "9b330d57"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::freshRemoteTarget": {
+    "description": "The requested remote tab re-read from the browser and fenced, throwing if its windows, page or ownership changed since the snapshot.",
+    "responsibilities": [
+      "3a123887",
+      "f81a35c6"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::inWindow": {
+    "description": "Whether the tab exists, is not incognito and sits in the given window.",
+    "responsibilities": [
+      "58a7961f",
+      "9bfa2db4"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::isNormalWindowWithId": {
+    "description": "Whether the window exists with the expected ID and is a normal browser window.",
+    "responsibilities": [
+      "e8ba3323"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::moveOperation": {
+    "description": "The durable journal entry describing a remote tab move between windows, with proof and ownership needed for recovery.",
+    "responsibilities": [
+      "35c60a2e",
+      "20253967"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::moveRemoteTabToWindow": {
+    "description": "Moves a verified remote tab into the requesting window under a durable operation, persisting and verifying its new ownership.",
+    "responsibilities": [
+      "11f47ac1",
+      "3a123887",
+      "35c60a2e",
+      "0c4677e0"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::recoverMovedTabToWindowOperation": {
+    "description": "Resolves an interrupted tab move as completed, rolled back or abandoned by checking where the tab is and who owns it.",
+    "responsibilities": [
+      "d26e8a61"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::recoveryProof": {
+    "description": "The validated windows, tab and ownerships a journaled tab move recorded, or undefined when the proof is inconsistent.",
+    "responsibilities": [
+      "20253967"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::requestedTarget": {
+    "description": "The remote tab a request resolves to in the snapshot, throwing when it is unavailable or ambiguous.",
+    "responsibilities": [
+      "3a123887"
+    ]
+  },
+  "entrypoints/lib/remoteTabOperations.ts::showsPage": {
+    "description": "Whether the tab is a non-incognito tab in the given window currently showing the given page identity.",
+    "responsibilities": [
+      "58a7961f",
+      "9bfa2db4",
+      "efa7bb99"
+    ]
+  },
+  "entrypoints/lib/restoredTabBackings.ts::indexDistance": {
+    "description": "How far a restored tab's index is from a backing's recorded index, or the largest integer when the backing has none.",
+    "responsibilities": [
+      "5803c3f8"
+    ]
+  },
+  "entrypoints/lib/scriptingAccess.ts::chromeScripting": {
+    "description": "The Chrome scripting API when executeScript is available, or undefined in browsers without it.",
+    "responsibilities": [
+      "b3205d4f"
+    ]
+  },
+  "entrypoints/lib/search.ts::buildSearchItems": {
+    "description": "The searchable items built from favourites, bookmarks, folders, tabs and history, enriched with page content, titles, folders and spaces.",
+    "responsibilities": [
+      "08cf99b3"
+    ]
+  },
+  "entrypoints/lib/search.ts::highlightedTextSegments": {
+    "description": "The text split into matched and unmatched segments for every non-overlapping occurrence of the query or its words.",
+    "responsibilities": [
+      "ddee7cd8",
+      "bde2b119"
+    ]
+  },
+  "entrypoints/lib/search.ts::orderedFuzzyMatch": {
+    "description": "Whether every query character appears in the value in order, after both are normalised for fuzzy matching.",
+    "responsibilities": [
+      "5c9ea87c",
+      "aa7f8571"
+    ]
+  },
+  "entrypoints/lib/search.ts::queryTerms": {
+    "description": "The whole trimmed query and its words, deduplicated case-insensitively and ordered longest first for highlighting.",
+    "responsibilities": [
+      "bde2b119"
+    ]
+  },
+  "entrypoints/lib/search.ts::urlSearchPresentation": {
+    "description": "How to show a URL in results, recentred with an ellipsis or origin prefix when its first match sits far in.",
+    "responsibilities": [
+      "df36a809"
+    ]
+  },
+  "entrypoints/lib/search.ts::wordStartMatchQuality": {
+    "description": "How well the trimmed query matches the start of a word in the value, case-insensitively, or 0 for an empty query.",
+    "responsibilities": [
+      "d1507d53",
+      "9ddc066c"
+    ]
+  },
+  "entrypoints/lib/searchController.ts::historySearchStartTime": {
+    "description": "The timestamp 180 days ago, the earliest visit history searches read.",
+    "responsibilities": [
+      "5e8def6b"
+    ]
+  },
+  "entrypoints/lib/searchController.ts::removeHistoryUrls": {
+    "description": "The history items without those whose URL was removed, keeping the same array when none matched.",
+    "responsibilities": [
+      "43d03576",
+      "2a6d3ab7"
+    ]
+  },
+  "entrypoints/lib/searchController.ts::retitleHistoryItems": {
+    "description": "The history items with the new title applied to every entry for this URL, keeping the same array when nothing changed.",
+    "responsibilities": [
+      "6ff25113",
+      "2a6d3ab7"
+    ]
+  },
+  "entrypoints/lib/searchController.ts::upsertHistoryItems": {
+    "description": "The history items with additions inserted or replaced by ID, keeping the same array when nothing actually changed.",
+    "responsibilities": [
+      "c5aefc55",
+      "2a6d3ab7"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::boundedPreferenceId": {
+    "description": "The preference ID unchanged when short enough, otherwise truncated with a 64-bit FNV hash suffix to fit the stored length limit.",
+    "responsibilities": [
+      "99cace51",
+      "e3c578e2"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::chosenScore": {
+    "description": "The score earned by past selections of this result for the current query, or 0 when never chosen.",
+    "responsibilities": [
+      "d8a3608a"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::commandWordStartQuality": {
+    "description": "The best word-start match quality of the term across a command's label, keywords and shortcut.",
+    "responsibilities": [
+      "c7b633a8",
+      "9ddc066c"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::historyFreshness": {
+    "description": "A freshness weight for a history visit that decays with age over days, or 0 when never visited.",
+    "responsibilities": [
+      "c15a6a38"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::historyMatch": {
+    "description": "How well a history entry matches the term, favouring title word starts, then URL matches, then any substring.",
+    "responsibilities": [
+      "d1507d53",
+      "c7b633a8",
+      "9ddc066c"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::itemPreferenceId": {
+    "description": "The cached, bounded selection preference ID for an item, keyed by its kind and page identity or ID.",
+    "responsibilities": [
+      "99cace51",
+      "d2d0a8d8"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::itemRecord": {
+    "description": "The cached search record wrapping an item, so each item keeps one canonical record identity.",
+    "responsibilities": [
+      "a06749fb",
+      "d2d0a8d8"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::itemsSummary": {
+    "description": "The cached summary of an item list: records by key, tab and bookmark pages, latest history visits, and folder-free records.",
+    "responsibilities": [
+      "657f3f36",
+      "d2d0a8d8"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::pageNavigation": {
+    "description": "A Go to navigation target for an HTTP or HTTPS URL, or undefined for other or unparseable URLs.",
+    "responsibilities": [
+      "7d642f7e",
+      "27d3dc5e"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::preferredRecentItem": {
+    "description": "The better of two items for the same page, preferring tabs, then favourites, then bookmarks, then history.",
+    "responsibilities": [
+      "40e1e247",
+      "bac180c0"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::projectedItem": {
+    "description": "The item relabelled as current or other workspace relative to the active space, or unchanged when it has no space.",
+    "responsibilities": [
+      "c103abd0"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::recordAccuracy": {
+    "description": "The best match quality of the term across a record's label, detail, keywords, shortcut, URL or content.",
+    "responsibilities": [
+      "c7b633a8"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::recordFuzzyMatch": {
+    "description": "Whether the term fuzzily matches, in order, any text field of a command or item record.",
+    "responsibilities": [
+      "5c9ea87c"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::recordText": {
+    "description": "The combined searchable text of a command or item record, cached per item.",
+    "responsibilities": [
+      "01609f8b",
+      "d2d0a8d8"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::recordTitle": {
+    "description": "The display title of a record, the command label or the item title, used to break ranking ties.",
+    "responsibilities": [
+      "9a6919f3",
+      "6a4227fd"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::searchResultPreferenceId": {
+    "description": "The stable ID under which a chosen command, navigation or item result is remembered in selection history.",
+    "responsibilities": [
+      "99cace51"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::serialiseSearchCommands": {
+    "description": "The command actions without their run callbacks, so they can be sent over the port as search commands.",
+    "responsibilities": [
+      "adff9235"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::SharedSearchIndex.searchRequest": {
+    "description": "The ranked results for a query, boosted by selection history, with a navigation result placed where it belongs when requested.",
+    "responsibilities": [
+      "dd57bc88",
+      "d8a3608a",
+      "8c956ab2"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::startsWordIn": {
+    "description": "Whether the word begins a word in any of the given lowercased values.",
+    "responsibilities": [
+      "9ddc066c"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::tabWorkspaceSource": {
+    "description": "Whether a tab item belongs to the active space, another space, or neither, from its space, open spaces or source.",
+    "responsibilities": [
+      "c103abd0"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::tierScore": {
+    "description": "The ranking score for a result tier, scaled exponentially by tier and blended with match quality above a floor.",
+    "responsibilities": [
+      "51bb3545"
+    ]
+  },
+  "entrypoints/lib/searchIndex.ts::visitRecency": {
+    "description": "The recency band a last visit falls into, higher for more recent visits and 0 when unvisited or too old.",
+    "responsibilities": [
+      "c15a6a38"
+    ]
+  },
+  "entrypoints/lib/searchProjection.ts::sameSearchItem": {
+    "description": "Whether two search items have the same keys and equal values, so unchanged items can be reused.",
+    "responsibilities": [
+      "7b8a9e21"
+    ]
+  },
+  "entrypoints/lib/searchProjection.ts::sameValue": {
+    "description": "Whether two values are identical or are objects with the same JSON serialisation.",
+    "responsibilities": [
+      "7b8a9e21"
+    ]
+  },
+  "entrypoints/lib/searchSelection.ts::isSelection": {
+    "description": "Whether a value is a valid stored selection with a positive safe-integer count and finite last-used time.",
+    "responsibilities": [
+      "0b69e01c"
+    ]
+  },
+  "entrypoints/lib/searchSelection.ts::ownValue": {
+    "description": "The record's own value for this key, ignoring inherited properties, or undefined when absent.",
+    "responsibilities": [
+      "cbd98332"
+    ]
+  },
+  "entrypoints/lib/searchSelection.ts::parseSearchSelectionHistory": {
+    "description": "The valid selection history from stored data, dropping bad queries, IDs and selections and keeping only the latest entries.",
+    "responsibilities": [
+      "600b2559",
+      "956d970f"
+    ]
+  },
+  "entrypoints/lib/searchSelection.ts::recordFromEntries": {
+    "description": "A plain record built from key and value entries, typed for selection history.",
+    "responsibilities": [
+      "b04cd8ca"
+    ]
+  },
+  "entrypoints/lib/searchSelection.ts::recordSearchSelection": {
+    "description": "The selection history with one more choice of this result for this query, bounded to the latest queries and selections.",
+    "responsibilities": [
+      "c629db06",
+      "956d970f"
+    ]
+  },
+  "entrypoints/lib/searchText.ts::get SearchItemText.urlLetters": {
+    "description": "The item URL reduced to its search letters, computed lazily and cached, or empty when it has no URL.",
+    "responsibilities": [
+      "1957515a",
+      "d2d0a8d8"
+    ]
+  },
+  "entrypoints/lib/searchText.ts::isWordCharacter": {
+    "description": "Whether a character is an ASCII letter or digit, or a Unicode word character beyond ASCII.",
+    "responsibilities": [
+      "7434110f"
+    ]
+  },
+  "entrypoints/lib/searchText.ts::searchItemText": {
+    "description": "The cached normalised text for a search item, created on first use.",
+    "responsibilities": [
+      "01609f8b",
+      "d2d0a8d8"
+    ]
+  },
+  "entrypoints/lib/searchText.ts::searchTerm": {
+    "description": "The normalised forms of a query used for matching: lowercased text, fuzzy characters, letters only and distinct words.",
+    "responsibilities": [
+      "0aaf542b",
+      "aa7f8571",
+      "1957515a",
+      "bde2b119"
+    ]
+  },
+  "entrypoints/lib/sharedDrag.ts::createSharedDragController": {
+    "description": "The controller that lets one sidebar offer a verified drag to other windows and exposes its tabs to the drop target.",
+    "responsibilities": [
+      "e5e6655e"
+    ]
+  },
+  "entrypoints/lib/sharedDrag.ts::projectSharedDrag": {
+    "description": "The drag another window offered, with tab details hidden, or null when there is none or it started here.",
+    "responsibilities": [
+      "d33ac039"
+    ]
+  },
+  "entrypoints/lib/shortcuts.ts::alt": {
+    "description": "A key binding for Alt plus the key, optionally with Shift.",
+    "responsibilities": [
+      "9507e70e"
+    ]
+  },
+  "entrypoints/lib/shortcuts.ts::browserKey": {
+    "description": "A browser-owned shortcut definition bound to a browser command with the given label and key binding.",
+    "responsibilities": [
+      "574c67a3"
+    ]
+  },
+  "entrypoints/lib/shortcuts.ts::keyCode": {
+    "description": "The physical KeyboardEvent code for a letter, digit or punctuation key, or undefined when unknown.",
+    "responsibilities": [
+      "663d259c"
+    ]
+  },
+  "entrypoints/lib/shortcuts.ts::keyLabel": {
+    "description": "The display label for a key on this platform, uppercased for single characters or mapped for named keys.",
+    "responsibilities": [
+      "c29a6b54"
+    ]
+  },
+  "entrypoints/lib/shortcuts.ts::mod": {
+    "description": "A key binding for the platform modifier plus the key, optionally with Shift.",
+    "responsibilities": [
+      "9507e70e",
+      "0a8844ec"
+    ]
+  },
+  "entrypoints/lib/shortcuts.ts::shortcutLabel": {
+    "description": "The display label of a shortcut's key binding on the given platform.",
+    "responsibilities": [
+      "c29a6b54"
+    ]
+  },
+  "entrypoints/lib/sidebarOpener.ts::enableActionToggle": {
+    "description": "Stops the side panel opening on toolbar clicks so Hyper can toggle it itself, when the browser supports that setting.",
+    "responsibilities": [
+      "7951e8fd",
+      "b3205d4f"
+    ]
+  },
+  "entrypoints/lib/sidebarOpener.ts::runtimeBrowser": {
+    "description": "The browser global typed with the optional action, sidebar and side panel APIs that differ between browsers.",
+    "responsibilities": [
+      "9e9dcdc7"
+    ]
+  },
+  "entrypoints/lib/spaceArchive.ts::mutationLock": {
+    "description": "The lock name that serialises mutations of one space.",
+    "responsibilities": [
+      "595dddd1"
+    ]
+  },
+  "entrypoints/lib/spaceArchive.ts::readSpaces": {
+    "description": "The current spaces and the Spaces folder ID, ensuring the Hyper bookmark structure exists first.",
+    "responsibilities": [
+      "a904bfe3",
+      "664cb3d9"
+    ]
+  },
+  "entrypoints/lib/spaceDeletion.ts::bookmarkParentIds": {
+    "description": "A map from every bookmark ID in the trees to its parent ID, empty for roots.",
+    "responsibilities": [
+      "91ff0a47"
+    ]
+  },
+  "entrypoints/lib/spaceDeletion.ts::deleteSpacePostconditionViolations": {
+    "description": "The reasons a space deletion is not yet complete, checked against live bookmarks, tabs, groups and session mappings.",
+    "responsibilities": [
+      "0535ad3d"
+    ]
+  },
+  "entrypoints/lib/spaceDeletion.ts::liveGroupIds": {
+    "description": "The IDs of native tab groups that currently contain at least one of the given tabs.",
+    "responsibilities": [
+      "e409993a"
+    ]
+  },
+  "entrypoints/lib/spaceDeletion.ts::ownedTabIdsForSpace": {
+    "description": "The IDs of non-incognito tabs whose ownership claims the given space.",
+    "responsibilities": [
+      "53cd0f05",
+      "9bfa2db4"
+    ]
+  },
+  "entrypoints/lib/spaceDeletion.ts::provisionalSpaceInfrastructureIds": {
+    "description": "The empty infrastructure folder IDs of a still-provisional space with the expected title, or undefined when it holds anything else.",
+    "responsibilities": [
+      "09a9071b"
+    ]
+  },
+  "entrypoints/lib/spaceDeletion.ts::recoverDeletedSpaceOperation": {
+    "description": "Resolves an interrupted space deletion, abandoning it while the space, an owned tab or a group mapping still remains.",
+    "responsibilities": [
+      "d26e8a61",
+      "0535ad3d"
+    ]
+  },
+  "entrypoints/lib/spaceDeletion.ts::spaceGroupMappingsForSpace": {
+    "description": "The stored native group mappings for the given space across all windows, with their session keys.",
+    "responsibilities": [
+      "f4eb35a4"
+    ]
+  },
+  "entrypoints/lib/spaceDeletionController.ts::spaceTabIds": {
+    "description": "The IDs of live tabs owned by the given space, querying all tabs when none are supplied.",
+    "responsibilities": [
+      "53cd0f05",
+      "6a278095"
+    ]
+  },
+  "entrypoints/lib/spaceDuplication.ts::duplicateOperationId": {
+    "description": "The duplicate operation ID stored in a bookmark title's Hyper metadata, or undefined when absent.",
+    "responsibilities": [
+      "40a83d12"
+    ]
+  },
+  "entrypoints/lib/spaceGroupColours.ts::parseSynced": {
+    "description": "The valid group ID to colour entries from stored data, dropping non-integer IDs and unknown colours.",
+    "responsibilities": [
+      "3308ae48",
+      "bd620086"
+    ]
+  },
+  "entrypoints/lib/spaceGroupStore.ts::forgetSpaceGroup": {
+    "description": "Removes the stored native tab group mapping for a space in a window.",
+    "responsibilities": [
+      "2a29886b"
+    ]
+  },
+  "entrypoints/lib/spaceGroupStore.ts::forgetWindowSpaceGroups": {
+    "description": "Removes every stored space group mapping for a window, typically once that window has closed.",
+    "responsibilities": [
+      "2a29886b",
+      "eb706882"
+    ]
+  },
+  "entrypoints/lib/spaceGroupStore.ts::parseSpaceGroupKey": {
+    "description": "The space and window a space group storage key refers to, or undefined when the key is malformed.",
+    "responsibilities": [
+      "dd909a86"
+    ]
+  },
+  "entrypoints/lib/spaceGroupStore.ts::rememberSpaceGroup": {
+    "description": "Stores in session storage which native tab group holds a space in a window.",
+    "responsibilities": [
+      "fd2ef56c"
+    ]
+  },
+  "entrypoints/lib/spaceGroupStore.ts::spaceGroupId": {
+    "description": "The native tab group ID remembered for a space in a window, or undefined when none is stored.",
+    "responsibilities": [
+      "9599521a"
+    ]
+  },
+  "entrypoints/lib/spaceGroupStore.ts::spaceGroupKey": {
+    "description": "The session storage key that maps a space in a window to its native tab group.",
+    "responsibilities": [
+      "c2f7fd10",
+      "2e5cd17c"
+    ]
+  },
+  "entrypoints/lib/spaceSwitch.ts::wait": {
+    "description": "A promise that resolves after the given number of milliseconds.",
+    "responsibilities": [
+      "0afa5bb5"
+    ]
+  },
+  "entrypoints/lib/spaceWindowMaintenance.ts::isBusy": {
+    "description": "Whether a pending command targets this window or, when given, this space.",
+    "responsibilities": [
+      "1833659d",
+      "7b3b44ef"
+    ]
+  },
+  "entrypoints/lib/spaceWindowMaintenance.ts::pendingTargets": {
+    "description": "The targets of every command still pending in the snapshot, so maintenance can avoid touching them.",
+    "responsibilities": [
+      "7b3b44ef"
+    ]
+  },
+  "entrypoints/lib/splitViewController.ts::createSplitViewController": {
+    "description": "The controller that splits tabs side by side, stores each split as a bookmark folder and keeps both in sync.",
+    "responsibilities": [
+      "2b3526dd",
+      "b262fad4",
+      "a85700df"
+    ]
+  },
+  "entrypoints/lib/splitViewController.ts::splitViewFolders": {
+    "description": "Every split view folder stored under each space's tabs folder, with its folder ID and space ID.",
+    "responsibilities": [
+      "dff0e1da"
+    ]
+  },
+  "entrypoints/lib/splitViewController.ts::splitViewTabsApi": {
+    "description": "The browser tabs API for side by side split views when createSplit and unsplit exist, or undefined otherwise.",
+    "responsibilities": [
+      "b3205d4f"
+    ]
+  },
+  "entrypoints/lib/tabBookmarkLink.ts::deriveTabBookmarkState": {
+    "description": "Derives each tab's bookmark link, name, kept page title and display title from its ownership, backing and its space's linkable bookmarks.",
+    "responsibilities": [
+      "6ab3e50a"
+    ]
+  },
+  "entrypoints/lib/tabBookmarkLink.ts::indexLinkableBookmarks": {
+    "description": "Indexes the bookmarks a space's tabs can link to by id and by normalised page, visiting the space's own first, then favourites, then global bookmarks.",
+    "responsibilities": [
+      "f880ddd8"
+    ]
+  },
+  "entrypoints/lib/tabBookmarkLink.ts::tabNameText": {
+    "description": "The text a tab name shows: its title, with a trailing asterisk once the tab has drifted from its bookmark's exact page.",
+    "responsibilities": [
+      "3f0951ba",
+      "43258447"
+    ]
+  },
+  "entrypoints/lib/tabContent.ts::currentTabContents": {
+    "description": "The captured page-text snapshots still valid for their tabs, keeping only those whose URL and navigation version match the tab now.",
+    "responsibilities": [
+      "6399b9ab"
+    ]
+  },
+  "entrypoints/lib/tabContent.ts::tabContentRefreshIds": {
+    "description": "The IDs of live HTTP(S) tabs whose page text has no snapshot matching their current URL and navigation version, so need capturing again.",
+    "responsibilities": [
+      "d2e90e3f",
+      "6399b9ab",
+      "27d3dc5e"
+    ]
+  },
+  "entrypoints/lib/tabContentCapture.ts::isCapturedTabContent": {
+    "description": "Whether a script result is a captured page with a string URL and string text, guarding values returned from the page.",
+    "responsibilities": [
+      "96733bb6"
+    ]
+  },
+  "entrypoints/lib/tabDisposition.ts::classifyOwnedTab": {
+    "description": "Classifies a tab with recorded ownership as owned, loose because another tab claims its backing or its space is gone, or pending recovery.",
+    "responsibilities": [
+      "879f7429"
+    ]
+  },
+  "entrypoints/lib/tabDisposition.ts::classifyTab": {
+    "description": "Resolves one observed tab to its disposition: ignored for private, unidentified or unsupported windows, owned or in transit, or loose.",
+    "responsibilities": [
+      "84d02bf1",
+      "e8ba3323",
+      "9bfa2db4"
+    ]
+  },
+  "entrypoints/lib/tabDisposition.ts::resolveBacking": {
+    "description": "The backing location an ownership names, or undefined when it has no backing or a recycled bookmark id carries a different token.",
+    "responsibilities": [
+      "4337aaa1",
+      "b9d0c258"
+    ]
+  },
+  "entrypoints/lib/tabDisposition.ts::tabDispositionsById": {
+    "description": "Maps each identified tab's ID to its disposition from a list of classified tab entries.",
+    "responsibilities": [
+      "04ca0801"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::findHyperGroupForSpace": {
+    "description": "The group whose title marks it as this space's, preferring the given group IDs in order, else the first match.",
+    "responsibilities": [
+      "39733e6e",
+      "f598737a"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::findHyperGroupsForSpace": {
+    "description": "Every group whose Hyper title encodes this space's position.",
+    "responsibilities": [
+      "39733e6e"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::hyperGroupOrdinal": {
+    "description": "The one-based space position a Hyper group title encodes, tolerating case, spacing and h variants, or undefined for any other title.",
+    "responsibilities": [
+      "2535cd72"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::hyperGroupTitle": {
+    "description": "The title Hyper gives a space's tab group: a script h followed by the space's one-based position in superscript digits.",
+    "responsibilities": [
+      "8ae77a36"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::isTabGroupColour": {
+    "description": "Whether a value is one of the colours a browser tab group can take, guarding colours read from storage or payloads.",
+    "responsibilities": [
+      "bd620086"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::liveGroupPositions": {
+    "description": "Maps each tab group present in the tabs to the lowest tab-strip index any of its tabs holds.",
+    "responsibilities": [
+      "e409993a",
+      "7d663ec9"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::ownedTabGroupOrder": {
+    "description": "The distinct owned group IDs still present in the tab strip, sorted by where each group starts.",
+    "responsibilities": [
+      "e409993a",
+      "7d663ec9",
+      "a45d6a9b"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::resolveHyperGroupForSpace": {
+    "description": "The group a space owns when it still exists, else a recovered unclaimed group titled for the space, flagged as recovered.",
+    "responsibilities": [
+      "9599521a",
+      "39733e6e",
+      "e6ca9349"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::spaceBookmarkMovesForOrder": {
+    "description": "The sequence of space folder moves, with bookmark-API indices, that turns the current space order into the wanted order.",
+    "responsibilities": [
+      "f28eee57"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::spaceOrderMatchingTabGroups": {
+    "description": "The space order with grouped spaces rearranged to follow their groups' tab-strip positions, leaving ungrouped spaces in their slots.",
+    "responsibilities": [
+      "2c596680"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::tabActivationCanSelectSpace": {
+    "description": "Whether an activated tab in this window sits in the given group of the same window, so its activation may select that group's space.",
+    "responsibilities": [
+      "9d15b274"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::tabGroupApi": {
+    "description": "The tab group calls Hyper's group placement needs, wrapped from the browser's tabGroups and tabs APIs, or undefined when any is missing.",
+    "responsibilities": [
+      "69d57768",
+      "b3205d4f"
+    ]
+  },
+  "entrypoints/lib/tabGroups.ts::withHyperGroupLock": {
+    "description": "Runs an operation under a per-window Web Lock so Hyper's tab group edits in one window never interleave, or directly without locks.",
+    "responsibilities": [
+      "31d6f4db",
+      "0e725ce7"
+    ]
+  },
+  "entrypoints/lib/tabIntentHandlers.ts::newTabPageReplacedBy": {
+    "description": "The new tab page's own tab ID when a new tab page client acts on a different tab, so that page can be replaced.",
+    "responsibilities": [
+      "95a05bab"
+    ]
+  },
+  "entrypoints/lib/tabIntentHandlers.ts::remoteTabTargets": {
+    "description": "The effect targets a remote tab operation touches: its source tab or bookmark, the destination space and the client's window.",
+    "responsibilities": [
+      "97995fdd"
+    ]
+  },
+  "entrypoints/lib/tabIntentHandlers.ts::requireEffectFence": {
+    "description": "The effect fence a remote tab operation runs under, throwing when the handler was called outside the model effect lane.",
+    "responsibilities": [
+      "f81a35c6"
+    ]
+  },
+  "entrypoints/lib/tabIntentHandlers.ts::targetTabId": {
+    "description": "The tab an intent targets: the payload's tab, else the sending client's own tab, throwing when neither is known.",
+    "responsibilities": [
+      "d894b403"
+    ]
+  },
+  "entrypoints/lib/tabOwnership.ts::createTabOwnershipWriter": {
+    "description": "An ownership writer bound to a callback that runs after each write persists, so callers can react to stored ownership.",
+    "responsibilities": [
+      "0c4677e0",
+      "32ba09b5"
+    ]
+  },
+  "entrypoints/lib/tabOwnership.ts::getTabOwnership": {
+    "description": "The space, window and backing ownership recorded for a tab, read from its session value store.",
+    "responsibilities": [
+      "e4ab4103"
+    ]
+  },
+  "entrypoints/lib/tabOwnership.ts::getTabSpaceId": {
+    "description": "The ID of the space a tab's recorded ownership names, or undefined when it has none.",
+    "responsibilities": [
+      "6585091c"
+    ]
+  },
+  "entrypoints/lib/tabOwnership.ts::loadTabOwnerships": {
+    "description": "The recorded ownership of every given tab as a record keyed by tab ID, read in one batch.",
+    "responsibilities": [
+      "e4ab4103"
+    ]
+  },
+  "entrypoints/lib/tabOwnership.ts::loadTabSpaceIds": {
+    "description": "Maps each given tab's ID to the space ID its recorded ownership names, omitting tabs with no ownership.",
+    "responsibilities": [
+      "6585091c"
+    ]
+  },
+  "entrypoints/lib/tabOwnership.ts::parseOwnership": {
+    "description": "Parses a stored tab ownership, accepting a legacy bare space ID string and keeping only correctly typed optional fields, else undefined.",
+    "responsibilities": [
+      "9b330d57"
+    ]
+  },
+  "entrypoints/lib/tabOwnership.ts::removeTabSpaceId": {
+    "description": "Forgets a tab's recorded ownership by removing its session value.",
+    "responsibilities": [
+      "a3bbdf3f"
+    ]
+  },
+  "entrypoints/lib/tabOwnership.ts::setTabOwnership": {
+    "description": "Records a tab's ownership in its session value store, then calls the optional callback once it has persisted.",
+    "responsibilities": [
+      "0c4677e0",
+      "32ba09b5"
+    ]
+  },
+  "entrypoints/lib/tabOwnership.ts::setTabSpaceId": {
+    "description": "Moves a tab's recorded ownership to another space while keeping its other recorded fields.",
+    "responsibilities": [
+      "dc569544"
+    ]
+  },
+  "entrypoints/lib/tabOwnership.ts::tabsOwnedBySpace": {
+    "description": "The tabs whose recorded ownership names this space.",
+    "responsibilities": [
+      "53cd0f05"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::advanceTabGeneration": {
+    "description": "Bumps and returns a tab's lifecycle generation, so work started against an older generation can tell it is stale.",
+    "responsibilities": [
+      "cec6c771"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::bareAddress": {
+    "description": "An address lowercased, decoded and stripped of scheme, leading www and trailing slash, for comparing placeholder titles with URLs.",
+    "responsibilities": [
+      "89644ebd",
+      "2fe25519"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::bookmarkTitleForTab": {
+    "description": "The title to give a bookmark for a tab: its title when it may sync, else the URL.",
+    "responsibilities": [
+      "8647574d",
+      "a3510bbb"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::canCloseOtherTab": {
+    "description": "Whether a tab may close under Close other tabs: identified, not the kept tab, in that window, and neither pinned nor active.",
+    "responsibilities": [
+      "3bdbe9da",
+      "58a7961f",
+      "0ef97ef1"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::canSyncBookmarkTitleFromTab": {
+    "description": "Whether a tab's title may be written to a bookmark, which is never so for private tabs.",
+    "responsibilities": [
+      "8647574d",
+      "9bfa2db4"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::cleanupRestoredTabsInWindow": {
+    "description": "Removes still-current blank tabs left by a restore in a window, first creating a replacement tab when they are all the window holds.",
+    "responsibilities": [
+      "1c9b813a",
+      "b06e97fc",
+      "b5bd9c1e",
+      "3576dca4"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::closeTabOrWindow": {
+    "description": "Closes a tab, or its whole window when it is the last tab there, and throws if the tab is still open afterwards.",
+    "responsibilities": [
+      "b06e97fc",
+      "20b94112",
+      "d4d0890e"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::closeTabsConcurrently": {
+    "description": "Closes each distinct tab at once through the given closer, waiting for all before rethrowing the first failure.",
+    "responsibilities": [
+      "b06e97fc",
+      "69950469",
+      "29b6fc40"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::comparablePageUrl": {
+    "description": "A lowercase URL without query, fragment or trailing slash, used to recognise new tab and blank pages.",
+    "responsibilities": [
+      "89644ebd",
+      "3576dca4"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::findReusableTab": {
+    "description": "A tab in the same browsing context, and window when scoped, already showing this page, preferring the active then a live tab.",
+    "responsibilities": [
+      "41d8823d",
+      "158c67b8",
+      "76214d75"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::findTabTargetSpace": {
+    "description": "The space a tab goes to: the fallback space, else its current one, else the active space when unmatched tabs join it.",
+    "responsibilities": [
+      "cf398dfa"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::focusTabInWindow": {
+    "description": "Activates a tab and focuses its window when it differs, restoring the previous active tab and reporting false when focus is no longer allowed.",
+    "responsibilities": [
+      "2b7ece74",
+      "9f69d9cc",
+      "8030b8f9"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::isBlankTabPage": {
+    "description": "Whether an address is Hyper's new tab page or a browser blank or new tab page.",
+    "responsibilities": [
+      "3576dca4"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::isCurrentSpaceRestoreCandidate": {
+    "description": "Whether a tab is still a restore candidate: in the window, chosen or in the restored group, and neither pinned nor private.",
+    "responsibilities": [
+      "0098db61",
+      "58a7961f",
+      "0ef97ef1",
+      "9bfa2db4"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::isHistoryNavigationCommit": {
+    "description": "Whether a navigation commit is a back or forward navigation in this tab's top frame.",
+    "responsibilities": [
+      "609014cd"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::moveTabsPreservingActive": {
+    "description": "Moves tabs to an index in a window under the optional effect fence, then reactivates the previously active tab unless the user changed it.",
+    "responsibilities": [
+      "11f47ac1",
+      "f81a35c6",
+      "8030b8f9"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::pendingTabOperationIsCurrent": {
+    "description": "Whether a pending tab operation is still the one registered under its ID and every tab it captured keeps its generation.",
+    "responsibilities": [
+      "88958593",
+      "1ebeba34"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::recentOpenTabs": {
+    "description": "The window's most recently accessed inactive tabs outside Hyper's own pages, newest first and limited in number.",
+    "responsibilities": [
+      "a04d7748",
+      "956d970f"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::resolveSpaceRestoreGroup": {
+    "description": "Finds a space's restored tab group, waiting for the browser to bring it back when recovering, and reports whether the restore can proceed.",
+    "responsibilities": [
+      "9358876c"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::restoredTabCleanupPlan": {
+    "description": "Which restored blank candidate tabs can be removed, and whether a replacement tab is needed so the window is not left empty.",
+    "responsibilities": [
+      "1c9b813a",
+      "b5bd9c1e",
+      "3576dca4"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::sameNavigationUrl": {
+    "description": "Whether two addresses parse to the same exact URL, falling back to string equality when either is not a valid URL.",
+    "responsibilities": [
+      "100755bb"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::spaceRestoreCandidates": {
+    "description": "The window's tabs a space restore may take: those in the restored group, else those the space owns plus unowned unpinned ones when claiming.",
+    "responsibilities": [
+      "0098db61",
+      "53cd0f05",
+      "0ef97ef1"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::spaceTabActivationTarget": {
+    "description": "The tab to activate when showing a space: the active one when preferred, else the token's tab, else a live tab, else the first.",
+    "responsibilities": [
+      "44187e8b",
+      "76214d75"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::tabDisplayTitle": {
+    "description": "The title shown for a tab: its trimmed title, else its pending or current URL, else the fallback text.",
+    "responsibilities": [
+      "2ecd6854",
+      "a3510bbb",
+      "8f1091b6",
+      "35dcb740"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::tabDisplayUrl": {
+    "description": "The address shown for a tab: the one it is loading, else the one it shows, else an empty string.",
+    "responsibilities": [
+      "8f1091b6"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::tabGenerationsAreCurrent": {
+    "description": "Whether every listed tab still has the generation captured when work began, meaning none has changed since.",
+    "responsibilities": [
+      "88958593"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::tabsInBrowsingContext": {
+    "description": "The tabs in the same private or normal browsing context, so tabs are never matched across incognito boundaries.",
+    "responsibilities": [
+      "158c67b8"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::tabSnapshotKey": {
+    "description": "A string key of each tab's ID, group, discarded state and URL in ID order, so polls can tell when the tab set changes.",
+    "responsibilities": [
+      "327f75a1"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::tabVisibleBookmarkState": {
+    "description": "Whether a tab shows no bookmark, its bookmark, or a bookmark it could update because the tab has navigated to another URL.",
+    "responsibilities": [
+      "604dd7b4",
+      "43258447"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::tabWithBackingToken": {
+    "description": "The tab whose recorded ownership carries this backing token, or undefined when no token is given or none matches.",
+    "responsibilities": [
+      "7ea54647"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::waitForRestoredTabGroup": {
+    "description": "Polls the tabs until a restored group is found, the timeout passes, the wait is cancelled or nothing is still awaited.",
+    "responsibilities": [
+      "9358876c",
+      "9fd1ebe7",
+      "96675aae"
+    ]
+  },
+  "entrypoints/lib/tabs.ts::waitForStableTabSnapshot": {
+    "description": "Polls the tabs until their snapshot stays unchanged for a quiet period, then returns the latest tabs, also stopping on timeout or cancellation.",
+    "responsibilities": [
+      "077f4370",
+      "9fd1ebe7",
+      "96675aae",
+      "327f75a1"
+    ]
+  },
+  "entrypoints/lib/tabStatus.ts::tabStatusAnnouncementIsCurrent": {
+    "description": "Whether an announced loading or complete status still matches the tab's current status, so a stale announcement is skipped.",
+    "responsibilities": [
+      "fb3f0e55"
+    ]
+  },
+  "entrypoints/lib/tabStripOrder.ts::byIndex": {
+    "description": "Orders tabs by their position in the tab strip.",
+    "responsibilities": [
+      "b5ff6b3c"
+    ]
+  },
+  "entrypoints/lib/tabStripOrderController.ts::spaceStrips": {
+    "description": "Each distinct window and space pair holding owned, non-private tabs, whose tab strip order Hyper keeps in sync.",
+    "responsibilities": [
+      "340cc148",
+      "9bfa2db4"
+    ]
+  },
+  "entrypoints/lib/tabStripOrderController.ts::syncing": {
+    "description": "Whether the preference to keep the tab strip in each space's Tabs list order is on.",
+    "responsibilities": [
+      "e6556cd0"
+    ]
+  },
+  "entrypoints/lib/tabTitlePresenter.ts::isWebPage": {
+    "description": "Whether a tab is a live, non-private HTTP(S) page whose document title Hyper can change.",
+    "responsibilities": [
+      "915d4a7a",
+      "27d3dc5e",
+      "9bfa2db4"
+    ]
+  },
+  "entrypoints/lib/testBookmarkTree.ts::testFolder": {
+    "description": "A bookmark folder node with these children, as getSubTree answers it, for tests.",
+    "responsibilities": [
+      "cd5e7483"
+    ]
+  },
+  "entrypoints/lib/testFixtures.ts::testTab": {
+    "description": "A complete browser tab for tests, with neutral defaults in window 1 overridden by the given fields.",
+    "responsibilities": [
+      "31a910f2"
+    ]
+  },
+  "entrypoints/lib/timedMessages.ts::boundedText": {
+    "description": "Trims a message and cuts it to the maximum length with a trailing ellipsis so a message never grows too long.",
+    "responsibilities": [
+      "e3c578e2"
+    ]
+  },
+  "entrypoints/lib/timedMessages.ts::parseShowMessagePayload": {
+    "description": "Parses a show message intent's payload into bounded text and a known tone, throwing for empty text or an unknown tone.",
+    "responsibilities": [
+      "9bce3d79",
+      "e3c578e2"
+    ]
+  },
+  "entrypoints/lib/urlIdentity.ts::memoised": {
+    "description": "Answers a URL parse from the cache, parsing and caching misses, clearing the cache when full and skipping very long addresses.",
+    "responsibilities": [
+      "d2d0a8d8",
+      "e106a4ec"
+    ]
+  },
+  "entrypoints/lib/urlIdentity.ts::normaliseUrl": {
+    "description": "An address without its fragment or trailing slashes, memoised, used to match a tab or bookmark to its exact page.",
+    "responsibilities": [
+      "89644ebd",
+      "d2d0a8d8"
+    ]
+  },
+  "entrypoints/lib/urlIdentity.ts::pageIdentity": {
+    "description": "An address's page identity, memoised: its normalised form without the query except where the query names the page.",
+    "responsibilities": [
+      "e1151bf4",
+      "d2d0a8d8"
+    ]
+  },
+  "entrypoints/lib/urlIdentity.ts::parseNormalisedUrl": {
+    "description": "Parses an address without its fragment and, for web pages, trailing slashes, falling back to the trimmed text for invalid URLs.",
+    "responsibilities": [
+      "89644ebd"
+    ]
+  },
+  "entrypoints/lib/urlIdentity.ts::parsePageIdentity": {
+    "description": "A normalised address without its query for web pages, keeping it for Google searches and GitHub filtered lists where it names the page.",
+    "responsibilities": [
+      "e1151bf4"
+    ]
+  },
+  "entrypoints/lib/urlIdentity.ts::tabPageIdentity": {
+    "description": "The page identity of the address a tab is loading or shows.",
+    "responsibilities": [
+      "e1151bf4",
+      "8f1091b6"
+    ]
+  },
+  "entrypoints/lib/urlIdentity.ts::urlDomain": {
+    "description": "An address's lowercase host without a leading www, or null when it has none or does not parse.",
+    "responsibilities": [
+      "e17e1b34"
+    ]
+  },
+  "entrypoints/lib/urlIdentity.ts::urlsRepresentSamePage": {
+    "description": "Whether two addresses share a page identity, so they count as the same page despite fragments or most queries.",
+    "responsibilities": [
+      "efa7bb99"
+    ]
+  },
+  "entrypoints/lib/urlIdentity.ts::urlsShareDomain": {
+    "description": "Whether two addresses have the same domain, ignoring a leading www.",
+    "responsibilities": [
+      "e17e1b34"
+    ]
+  },
+  "entrypoints/lib/windowState.ts::activeSpaceKey": {
+    "description": "The session storage key under which a window's active space ID is kept.",
+    "responsibilities": [
+      "d21d201d"
+    ]
+  },
+  "entrypoints/lib/windowState.ts::createWindowActiveSpaceWriter": {
+    "description": "An active space writer bound to a callback that runs after each write persists.",
+    "responsibilities": [
+      "27ae6394",
+      "32ba09b5"
+    ]
+  },
+  "entrypoints/lib/windowState.ts::getWindowActiveSpaceId": {
+    "description": "The ID of the space a window last showed, read from its session value store.",
+    "responsibilities": [
+      "c0b67ff6"
+    ]
+  },
+  "entrypoints/lib/windowState.ts::isActiveSpaceKey": {
+    "description": "Whether a storage key holds an active space, for this window or, without one, any window, including legacy keys.",
+    "responsibilities": [
+      "6dcda251"
+    ]
+  },
+  "entrypoints/lib/windowState.ts::normalWindowIds": {
+    "description": "The IDs of the normal, non-incognito windows among these, the only ones Hyper shows spaces in.",
+    "responsibilities": [
+      "e8ba3323",
+      "9bfa2db4"
+    ]
+  },
+  "entrypoints/lib/windowState.ts::reconcileWindowActiveSpaceIds": {
+    "description": "Removes legacy local active space keys and session active space entries for windows that are no longer open.",
+    "responsibilities": [
+      "eb706882",
+      "9910e2aa"
+    ]
+  },
+  "entrypoints/lib/windowState.ts::removeWindowActiveSpaceId": {
+    "description": "Forgets the active space recorded for a window.",
+    "responsibilities": [
+      "41c0599d"
+    ]
+  },
+  "entrypoints/lib/windowState.ts::setWindowActiveSpaceId": {
+    "description": "Records the space a window shows in its session value store, then calls the optional callback once it has persisted.",
+    "responsibilities": [
+      "27ae6394",
+      "32ba09b5"
+    ]
+  },
+  "entrypoints/lib/workspaceIntentHandlers.ts::createWorkspaceIntentHandlers": {
+    "description": "Builds the intent handlers for spaces, bookmarks, favourites, preferences, tab folders and tab renames or duplicates, queueing each mutation and offering undo where it applies.",
+    "responsibilities": [
+      "68ab5606",
+      "06f37a7d",
+      "16dde9de"
+    ]
+  },
+  "entrypoints/newtab/App.tsx::announceNewTabShown": {
+    "description": "Tells the background that a new tab page is showing, ignoring the failure when no listener is there to receive it.",
+    "responsibilities": [
+      "fea63aa1",
+      "d222b193"
+    ]
+  },
+  "entrypoints/newtab/App.tsx::isOverlaySurround": {
+    "description": "Whether an event target is an element outside every overlay surface, so a press there counts as the surrounding backdrop.",
+    "responsibilities": [
+      "949b5d65",
+      "2bfdf624"
+    ]
+  },
+  "entrypoints/newtab/lib/inspiration.ts::randomInspiration": {
+    "description": "A randomly chosen inspiration line for the new tab page, picked with the given random source so tests can fix it.",
+    "responsibilities": [
+      "c71bc241"
+    ]
+  },
+  "entrypoints/newtab/lib/newTabData.ts::projectNewTabData": {
+    "description": "The new tab page's data from the model projection, keeping only shown spaces and resolving the active space and current tab.",
+    "responsibilities": [
+      "670d4141",
+      "843a704d"
+    ]
+  },
+  "entrypoints/newtab/main.tsx::setDarkPageOverlay": {
+    "description": "Toggles the root class that styles the Search overlay for a page with a dark background.",
+    "responsibilities": [
+      "e6b2405b"
+    ]
+  },
+  "entrypoints/page-shortcut.content.ts::compositeColor": {
+    "description": "The colour that results from laying a possibly translucent foreground colour over a background colour, using source-over alpha blending.",
+    "responsibilities": [
+      "364a7b5c"
+    ]
+  },
+  "entrypoints/page-shortcut.content.ts::pageHasDarkBackground": {
+    "description": "Whether the page looks dark, judged from its composited root and body backgrounds, or from light text over a background image.",
+    "responsibilities": [
+      "7765b384",
+      "364a7b5c"
+    ]
+  },
+  "entrypoints/page-shortcut.content.ts::relativeLuminance": {
+    "description": "The WCAG relative luminance of a sampled colour, from linearised sRGB channels, used to judge whether a page looks dark.",
+    "responsibilities": [
+      "3cc36c28"
+    ]
+  },
+  "entrypoints/page-shortcut.content.ts::sampleCssColor": {
+    "description": "The red, green, blue and alpha channels of a CSS colour value, read by painting it onto a one-pixel canvas.",
+    "responsibilities": [
+      "c7bc6fe6"
+    ]
+  },
+  "entrypoints/sidepanel/components/AppErrorBoundary.tsx::AppErrorBoundary.componentDidCatch": {
+    "description": "Logs the render error with the boundary's label and component stack to the console for debugging.",
+    "responsibilities": [
+      "70224439"
+    ]
+  },
+  "entrypoints/sidepanel/components/AppErrorBoundary.tsx::AppErrorBoundary.getDerivedStateFromError": {
+    "description": "Records the thrown error's message in state so the boundary renders its fallback instead of the broken children.",
+    "responsibilities": [
+      "7a22d7e9"
+    ]
+  },
+  "entrypoints/sidepanel/components/AppErrorBoundary.tsx::AppErrorBoundary.render": {
+    "description": "The children while nothing has failed, otherwise an alert naming what stopped responding, the error message and a Reload button.",
+    "responsibilities": [
+      "6cc93c4b"
+    ]
+  },
+  "entrypoints/sidepanel/components/BookmarkEditor.tsx::editorHeading": {
+    "description": "The editor's heading text, naming what is being created, whether a space is being renamed or copied, or which bookmark kind is edited.",
+    "responsibilities": [
+      "b80761b9"
+    ]
+  },
+  "entrypoints/sidepanel/components/BookmarkSyncButton.tsx::primaryModifierPressed": {
+    "description": "Whether Ctrl or Cmd was held during the event, the platform's primary modifier for the sync button's alternate action.",
+    "responsibilities": [
+      "5b1e25b2",
+      "0a8844ec"
+    ]
+  },
+  "entrypoints/sidepanel/components/BookmarkTree.tsx::bookmarkRowTitle": {
+    "description": "The title a bookmark tree row shows: its visible title, else its URL, else Untitled folder.",
+    "responsibilities": [
+      "3255151e",
+      "a3510bbb",
+      "35dcb740"
+    ]
+  },
+  "entrypoints/sidepanel/components/CommandBar.tsx::commandBarResult": {
+    "description": "The command bar row for a shared search result, with its selection details, or undefined when its command cannot be resolved.",
+    "responsibilities": [
+      "c3efc104"
+    ]
+  },
+  "entrypoints/sidepanel/components/CommandBar.tsx::historyIconSources": {
+    "description": "The favicon URLs to try for a Search result, the tab's own icon if the extension may load it, then the browser's cached favicon.",
+    "responsibilities": [
+      "7101df57",
+      "9b70bb5b"
+    ]
+  },
+  "entrypoints/sidepanel/components/CommandBar.tsx::resultId": {
+    "description": "A DOM-safe element ID for a command bar result, used to link the listbox option for assistive technology.",
+    "responsibilities": [
+      "114f4594"
+    ]
+  },
+  "entrypoints/sidepanel/components/Favicon.tsx::accessibleFaviconSource": {
+    "description": "The favicon URL unless it belongs to another extension, whose resources this extension cannot load, in which case undefined.",
+    "responsibilities": [
+      "9b70bb5b"
+    ]
+  },
+  "entrypoints/sidepanel/components/Favicon.tsx::faviconAudioStateForTabs": {
+    "description": "Playing if any of the tabs is playing audio, else paused if any is paused, else undefined, for a favicon's audio badge.",
+    "responsibilities": [
+      "5eaf46a6",
+      "c5845845"
+    ]
+  },
+  "entrypoints/sidepanel/components/Favicon.tsx::faviconLoadingForTabs": {
+    "description": "Whether any of the given tabs is still loading, so the favicon shows a loading indicator.",
+    "responsibilities": [
+      "3a4ed6c2"
+    ]
+  },
+  "entrypoints/sidepanel/components/Favicon.tsx::initialFor": {
+    "description": "The uppercase first letter of the title, else of the URL's hostname, else a question mark, for a placeholder favicon.",
+    "responsibilities": [
+      "0ea302dd"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouriteGroupList.tsx::groupEntryKey": {
+    "description": "A unique key for a grouped tile's list entry, from its tab ID or favourite bookmark ID.",
+    "responsibilities": [
+      "21adcba3"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouriteGroupList.tsx::tileIn": {
+    "description": "The favourite tile element in the grid's slot with this ID, or null when that slot is not rendered.",
+    "responsibilities": [
+      "7b511a60"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouritesGrid.tsx::favouriteItem": {
+    "description": "The selectable drag item for a favourite tile, with its bookmark ID, display title and slot index.",
+    "responsibilities": [
+      "001e132b"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouritesGrid.tsx::favouriteTitle": {
+    "description": "The name a favourite tile shows: the bookmark's visible title, else its URL, else Untitled bookmark.",
+    "responsibilities": [
+      "3255151e",
+      "a3510bbb",
+      "35dcb740"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouritesGrid.tsx::groupLabel": {
+    "description": "The accessible label for a grouped tile, naming its domain, item count and kind, and whether it holds the current page.",
+    "responsibilities": [
+      "fafe8bbc"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouritesGrid.tsx::groupTileProps": {
+    "description": "The ARIA popup and expanded attributes for a grouped tile, or none when the tile is not a group.",
+    "responsibilities": [
+      "f661c1d7"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouritesGrid.tsx::recentTitle": {
+    "description": "The name a recent tab tile shows, the tab's tracked title if known, else its display title.",
+    "responsibilities": [
+      "2ecd6854",
+      "61fc085e"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouritesGrid.tsx::slotGroup": {
+    "description": "The domain group a favourite bar slot shows, or undefined for an empty or ungrouped slot.",
+    "responsibilities": [
+      "bcb9988c"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouritesGrid.tsx::slotKey": {
+    "description": "A stable React key for a favourite bar slot, from its favourite ID, recent group or tab, or empty slot index.",
+    "responsibilities": [
+      "21adcba3"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouritesGrid.tsx::tabItem": {
+    "description": "The selectable drag item for a recent tab tile, recording its tab, window, position and whether it can be bookmarked.",
+    "responsibilities": [
+      "c35b1046",
+      "f017dda9"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouritesGrid.tsx::tileSpaceStyle": {
+    "description": "A style setting the tile's space colour variable when the tile belongs to a coloured space, else undefined.",
+    "responsibilities": [
+      "a8a32623"
+    ]
+  },
+  "entrypoints/sidepanel/components/FavouritesGrid.tsx::uniqueIds": {
+    "description": "The given tab IDs with duplicates removed, keeping first-seen order.",
+    "responsibilities": [
+      "22dcb3bb"
+    ]
+  },
+  "entrypoints/sidepanel/components/GlobalBookmarksPanel.tsx::circle": {
+    "description": "A CSS circle clip-path of this radius at the reveal's centre, for the global bookmarks panel's reveal animation.",
+    "responsibilities": [
+      "b25379f0"
+    ]
+  },
+  "entrypoints/sidepanel/components/GlobalBookmarksPanel.tsx::measureReveal": {
+    "description": "The reveal circle's centre at the panel's toggle button and the radius needed to reach the stack's farthest corner.",
+    "responsibilities": [
+      "3ca41482"
+    ]
+  },
+  "entrypoints/sidepanel/components/InlineItemTitle.tsx::titleClickIntervalStartsEditing": {
+    "description": "Whether a second click on a title came between 200 and 800 milliseconds after the previous one, a slow double click that starts renaming.",
+    "responsibilities": [
+      "c253d8e8"
+    ]
+  },
+  "entrypoints/sidepanel/components/OtherSessions.tsx::pasteMenu": {
+    "description": "The paste menu entries for another session, or a disabled paste with an explanation when that session predates installation IDs.",
+    "responsibilities": [
+      "f0558e8a",
+      "3880411c"
+    ]
+  },
+  "entrypoints/sidepanel/components/SettingsSlider.tsx::shareStyle": {
+    "description": "A style setting the slider's share CSS variable, which positions its filled track and thumb.",
+    "responsibilities": [
+      "73553ac8"
+    ]
+  },
+  "entrypoints/sidepanel/components/SortableTree.tsx::staticTreeSortingStrategy": {
+    "description": "A sorting strategy that never shifts rows during a drag, so the tree stays still while the drop indicator moves.",
+    "responsibilities": [
+      "10497769"
+    ]
+  },
+  "entrypoints/sidepanel/components/SpaceArchivePanel.tsx::groupColour": {
+    "description": "A style setting the group colour variable to the space's colour, for an archived space's row.",
+    "responsibilities": [
+      "a8a32623"
+    ]
+  },
+  "entrypoints/sidepanel/components/SpaceDeletePrompt.tsx::spaceDeletionQuestion": {
+    "description": "The question asked before deleting a space that holds bookmarks, offering to move them to the default space.",
+    "responsibilities": [
+      "c0256ae1"
+    ]
+  },
+  "entrypoints/sidepanel/components/SpacePagination.tsx::horizontalPointerEdge": {
+    "description": "Which half of the pointed-at element, left or right, the pointer is over.",
+    "responsibilities": [
+      "93aba69e"
+    ]
+  },
+  "entrypoints/sidepanel/components/SpacePagination.tsx::paginationTrashLabel": {
+    "description": "The trash target's label for the dragged item, saying whether it closes tabs or deletes spaces, folders or bookmarks, and how many.",
+    "responsibilities": [
+      "52b14616"
+    ]
+  },
+  "entrypoints/sidepanel/components/SpacePagination.tsx::updateSpacePaginationLayout": {
+    "description": "Fits the space pagination to its width, switching to dots, hiding the add button, or capping and truncating label widths as needed.",
+    "responsibilities": [
+      "81593f38"
+    ]
+  },
+  "entrypoints/sidepanel/components/TimedMessageNotice.tsx::fullText": {
+    "description": "The timed message's text followed by its detail on a new line when it has one.",
+    "responsibilities": [
+      "1813dd77"
+    ]
+  },
+  "entrypoints/sidepanel/hooks/useActiveTabReveal.ts::rowSelector": {
+    "description": "The CSS selector for a node's row in the tabs pane or the bookmark tree, used to scroll the active tab into view.",
+    "responsibilities": [
+      "bffb85ff"
+    ]
+  },
+  "entrypoints/sidepanel/hooks/useGlobalBookmarkTree.ts::collectIds": {
+    "description": "The IDs of every node in the bookmark trees, collected recursively into the given set.",
+    "responsibilities": [
+      "e85d5174"
+    ]
+  },
+  "entrypoints/sidepanel/hooks/useItemActions.tsx::described": {
+    "description": "The quoted title of a single selected item, or the item count when several are selected, for action messages.",
+    "responsibilities": [
+      "dc2a33f4"
+    ]
+  },
+  "entrypoints/sidepanel/hooks/useMarqueeSelection.ts::rectanglesIntersect": {
+    "description": "Whether two rectangles overlap or touch, used to find rows inside the marquee selection.",
+    "responsibilities": [
+      "a12c2d9b"
+    ]
+  },
+  "entrypoints/sidepanel/hooks/useSidebarShortcuts.ts::focusedBookmark": {
+    "description": "The bookmark whose row holds keyboard focus, or undefined when focus is not on a bookmark row.",
+    "responsibilities": [
+      "25e77689"
+    ]
+  },
+  "entrypoints/sidepanel/hooks/useWorkspaceDrop.ts::sortableIndex": {
+    "description": "The sortable index carried in a drag item's data, or undefined when it has none.",
+    "responsibilities": [
+      "3f10f743"
+    ]
+  },
+  "entrypoints/sidepanel/lib/activeTabReveal.ts::everyItem": {
+    "description": "Every item in the tree flattened as if all folders were expanded, so any row can be found.",
+    "responsibilities": [
+      "2ef6c848"
+    ]
+  },
+  "entrypoints/sidepanel/lib/backingOperations.ts::activateTabOptimistically": {
+    "description": "The tabs with this tab marked active and the others in its window inactive, shown before the browser confirms.",
+    "responsibilities": [
+      "2b7ece74",
+      "eaee2173"
+    ]
+  },
+  "entrypoints/sidepanel/lib/backingOperations.ts::detachBookmarkNode": {
+    "description": "The tree without the given node, plus the detached node and its former parent and index, or the tree unchanged when absent.",
+    "responsibilities": [
+      "9e3dff88",
+      "2a6d3ab7",
+      "c86b3379"
+    ]
+  },
+  "entrypoints/sidepanel/lib/backingOperations.ts::insertBookmarkNode": {
+    "description": "The tree with the node inserted at a clamped index under the given parent, and whether that parent was found.",
+    "responsibilities": [
+      "4ba67cf1",
+      "1104dc26"
+    ]
+  },
+  "entrypoints/sidepanel/lib/backingOperations.ts::moveBookmarkOptimistically": {
+    "description": "The tree with the bookmark moved to its destination, adjusting the index for a move within the same parent, shown before the browser confirms.",
+    "responsibilities": [
+      "3ba6590a",
+      "80eaf685",
+      "eaee2173"
+    ]
+  },
+  "entrypoints/sidepanel/lib/backingOperations.ts::moveTabsOptimistically": {
+    "description": "The tabs with the given ones moved into a window at an index and every affected window's indexes renumbered, shown before the browser confirms.",
+    "responsibilities": [
+      "11f47ac1",
+      "c26c8282",
+      "eaee2173"
+    ]
+  },
+  "entrypoints/sidepanel/lib/backingOperations.ts::normalizeBookmarkSiblings": {
+    "description": "The sibling nodes with their parent ID set and indexes renumbered to match their order.",
+    "responsibilities": [
+      "c26c8282"
+    ]
+  },
+  "entrypoints/sidepanel/lib/backingOperations.ts::removeBookmarkOptimistically": {
+    "description": "The tree without the given bookmark node, or the tree unchanged when it is not found, shown before the browser confirms.",
+    "responsibilities": [
+      "9e3dff88",
+      "2a6d3ab7",
+      "eaee2173"
+    ]
+  },
+  "entrypoints/sidepanel/lib/backingOperations.ts::removeTabsOptimistically": {
+    "description": "The tabs without the removed ones, with the remaining tabs' indexes shifted down in each affected window, shown before the browser confirms.",
+    "responsibilities": [
+      "c8403ae7",
+      "c26c8282",
+      "eaee2173"
+    ]
+  },
+  "entrypoints/sidepanel/lib/backingOperations.ts::updateBookmarkOptimistically": {
+    "description": "The tree with the bookmark's title and URL replaced, copying only the path to it, shown before the browser confirms.",
+    "responsibilities": [
+      "054bf50c",
+      "eaee2173"
+    ]
+  },
+  "entrypoints/sidepanel/lib/buildMismatch.ts::hasBuildMismatch": {
+    "description": "Whether the background has been found running a different build from this page.",
+    "responsibilities": [
+      "642b15f0"
+    ]
+  },
+  "entrypoints/sidepanel/lib/buildMismatch.ts::reportBuildMismatch": {
+    "description": "Records once that the background runs a different build from this page, warning in the console and notifying listeners.",
+    "responsibilities": [
+      "b1c64022"
+    ]
+  },
+  "entrypoints/sidepanel/lib/buildMismatch.ts::subscribeBuildMismatch": {
+    "description": "Adds a listener called when a build mismatch is reported, returning a function that removes it.",
+    "responsibilities": [
+      "1efd3486"
+    ]
+  },
+  "entrypoints/sidepanel/lib/clipboardItems.ts::bookmarkEntry": {
+    "description": "The clipboard entry for a bookmark, or a folder with its children copied recursively, keeping IDs, metadata and the favourite flag.",
+    "responsibilities": [
+      "33036ae0"
+    ]
+  },
+  "entrypoints/sidepanel/lib/clipboardItems.ts::bookmarkFolderDrop": {
+    "description": "The drop request for pasting items into a bookmark folder, refusing a folder into itself or an unbookmarkable tab.",
+    "responsibilities": [
+      "5795015c",
+      "88b33e71",
+      "f017dda9"
+    ]
+  },
+  "entrypoints/sidepanel/lib/clipboardItems.ts::everyNode": {
+    "description": "Every node in the tree flattened as if all folders were expanded, so copied items can be found anywhere.",
+    "responsibilities": [
+      "2ef6c848"
+    ]
+  },
+  "entrypoints/sidepanel/lib/clipboardItems.ts::folderPlace": {
+    "description": "A folder's place in the tree together with its visible title, or Untitled folder, for a drop target.",
+    "responsibilities": [
+      "f3714d1c",
+      "3255151e",
+      "35dcb740"
+    ]
+  },
+  "entrypoints/sidepanel/lib/clipboardItems.ts::hyperClipboard": {
+    "description": "The Hyper clipboard payload for a copy or cut of the selected items, tagged with this installation and window.",
+    "responsibilities": [
+      "3682774b"
+    ]
+  },
+  "entrypoints/sidepanel/lib/clipboardItems.ts::tabEntry": {
+    "description": "The clipboard entry for an open tab, with its title, URL, tab ID and any backing bookmark's ID and metadata.",
+    "responsibilities": [
+      "84919c11"
+    ]
+  },
+  "entrypoints/sidepanel/lib/clipboardItems.ts::tabFolderDrop": {
+    "description": "The drop request for pasting items into a tab folder, refusing a tab folder into itself or its descendants.",
+    "responsibilities": [
+      "701be2f2",
+      "88b33e71"
+    ]
+  },
+  "entrypoints/sidepanel/lib/clipboardItems.ts::tabTreeEntry": {
+    "description": "The clipboard entry for a tab tree node, a tab from its open tab or backing bookmark, or a tab folder with its children.",
+    "responsibilities": [
+      "63fb904a",
+      "84919c11"
+    ]
+  },
+  "entrypoints/sidepanel/lib/clipboardItems.ts::withMetadata": {
+    "description": "The Hyper metadata parsed from a bookmark's title, wrapped for spreading into a clipboard entry, or nothing when there is none.",
+    "responsibilities": [
+      "6039dfa5"
+    ]
+  },
+  "entrypoints/sidepanel/lib/commandSettlement.ts::createCommandSettlementTracker": {
+    "description": "A tracker that records command statuses from the background and resolves waiters when their command settles or the connection drops.",
+    "responsibilities": [
+      "934aa6b8"
+    ]
+  },
+  "entrypoints/sidepanel/lib/commandSettlement.ts::settlementOf": {
+    "description": "The settlement outcome of a finished command status, its result and whether it succeeded.",
+    "responsibilities": [
+      "c4969153"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::bookmarkDropCopies": {
+    "description": "Whether dropping a favourite or bookmark on this target copies it rather than moving it, given the copy modifier.",
+    "responsibilities": [
+      "f267b25f"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::bookmarkRootScopeDestination": {
+    "description": "The destination that moves a dragged bookmark to a space's root, or undefined when the space has no root or already holds it.",
+    "responsibilities": [
+      "25414f8d"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::copyModifierHeld": {
+    "description": "Whether Alt, Ctrl or Cmd is held, which makes a drag copy instead of move.",
+    "responsibilities": [
+      "5b1e25b2"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::draggedFolderNodeId": {
+    "description": "The node ID of the dragged tab folder or bookmark folder, or undefined when the drag is not a folder.",
+    "responsibilities": [
+      "6816a08d"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::dragOverlayAction": {
+    "description": "The badge the drag overlay shows over a target, add, delete or forbidden, or undefined when the drop simply moves.",
+    "responsibilities": [
+      "c024f9be"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::excludeForegroundDropTargets": {
+    "description": "The candidates without any foreground drop targets, so keyboard drags fall back to the lists only.",
+    "responsibilities": [
+      "77389e0b",
+      "6b012132"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::flattenVisibleTree": {
+    "description": "The tree's visible rows in order with depth, parent and ancestors, skipping separators and collapsed folders' children unless searching.",
+    "responsibilities": [
+      "2fa94e55",
+      "91306a7f"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::indexedRootDropTarget": {
+    "description": "Whether the drop target is a tree or tabs zone carrying a parent ID and an index to insert at.",
+    "responsibilities": [
+      "8af556e9"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::isForegroundDropTarget": {
+    "description": "Whether the target is a space, archive, trash, sessions zone or global bookmarks, which sit above the lists behind them.",
+    "responsibilities": [
+      "6b012132"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::isInvalidFolderDrop": {
+    "description": "Whether the destination would put a dragged folder inside itself or one of its own descendants.",
+    "responsibilities": [
+      "88b33e71"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::prioritiseForegroundDropTargets": {
+    "description": "Only the candidates over foreground drop targets when any exist, else all candidates, so overlaid targets win collisions.",
+    "responsibilities": [
+      "fef7fb15",
+      "6b012132"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::projectedExternalTreeDepth": {
+    "description": "The tree depth an item dragged in from elsewhere would land at, measuring its horizontal offset from where it entered the tree.",
+    "responsibilities": [
+      "67234a36"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::projectedTreeDepth": {
+    "description": "The tree depth a dragged row would land at, shifting its depth by whole indents of horizontal pointer offset.",
+    "responsibilities": [
+      "67234a36"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::projectTreeDrop": {
+    "description": "The projected parent, index and depth for dropping a tree row over another at a pointer depth, or undefined when the target is gone.",
+    "responsibilities": [
+      "d599a5f9"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::removeTreeDescendants": {
+    "description": "The flattened rows without any descendants of the given parent, used to hide a dragged folder's contents.",
+    "responsibilities": [
+      "441e9670"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::rootTreeDropDestination": {
+    "description": "The destination, redirected to the source's own root when a top-level item would otherwise land under another parent.",
+    "responsibilities": [
+      "5d4ae3bc"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::spaceReorderAtIndexDestination": {
+    "description": "The destination for moving a space to an insertion index, or undefined when the index is invalid or would not change its position.",
+    "responsibilities": [
+      "411593d0",
+      "ce5ebc5f"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::targetsFavourites": {
+    "description": "Whether the drop target is a favourite, a favourite slot or the favourites zone.",
+    "responsibilities": [
+      "71601d28"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::targetsTabs": {
+    "description": "Whether the drop target is a tab, the tabs zone or the trigger that switches to the tabs pane.",
+    "responsibilities": [
+      "2d5cfd4f"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::trashDropAction": {
+    "description": "What dropping the item on the trash does, closing a tab or removing a bookmark or tab folder, or undefined when it cannot.",
+    "responsibilities": [
+      "0615d546"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::treeDropDestinationUnchanged": {
+    "description": "Whether dropping at this destination would leave the item where it is, directly before or after its own position.",
+    "responsibilities": [
+      "ce5ebc5f"
+    ]
+  },
+  "entrypoints/sidepanel/lib/drag.ts::treeDropPointerPlacement": {
+    "description": "Whether the pointer places the drop after the target row and whether it nests inside a target folder, from its vertical position and depth.",
+    "responsibilities": [
+      "f6fc17a1"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragDetection.ts::centerOverlayOnPointer": {
+    "description": "A drag overlay modifier that centres the overlay under the pointer that started a mouse drag.",
+    "responsibilities": [
+      "a0a850bd"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragDetection.ts::dragCollisionDetection": {
+    "description": "The collisions for the current drag, preferring foreground targets, then tree rows, tab tree rows and root zones, with keyboard fallbacks.",
+    "responsibilities": [
+      "e2f98a54",
+      "fef7fb15",
+      "77389e0b"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragDetection.ts::dragData": {
+    "description": "The drag item data carried by a draggable or droppable, or undefined when the value has no kind.",
+    "responsibilities": [
+      "cc5c28bb"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragDetection.ts::dragPointer": {
+    "description": "The pointer position during a drag, from the last collision check, else the starting mouse or touch point plus the drag delta.",
+    "responsibilities": [
+      "8fcb67ed"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragDetection.ts::dragPointerY": {
+    "description": "The pointer's vertical position during a drag, or undefined when it cannot be found.",
+    "responsibilities": [
+      "8fcb67ed"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragPresentation.ts::dragPresentation": {
+    "description": "What the active drag shows: its title, space, count, trash label and availability, overlay action, and whether media controls are disabled.",
+    "responsibilities": [
+      "5c5452b4",
+      "56935a53",
+      "52b14616",
+      "c024f9be"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragSelection.ts::dragSelectionCount": {
+    "description": "How many items a selection holds, counting top-level items and their own item counts.",
+    "responsibilities": [
+      "56935a53"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragSelection.ts::dragSelectionId": {
+    "description": "A selection key unique across kinds, from a tab's ID or another item's node ID.",
+    "responsibilities": [
+      "21adcba3"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragSelection.ts::dragSelectionScope": {
+    "description": "Which list an item selects within, tabs, sessions, favourites or bookmarks, since a selection never spans lists.",
+    "responsibilities": [
+      "0684cf45"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragSelection.ts::isSelectableDragItem": {
+    "description": "Whether a value is a drag item that can join a multi-selection, a bookmark, favourite, tab, tab folder or session tab.",
+    "responsibilities": [
+      "0f4b178d"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragSelection.ts::replaceDragSelection": {
+    "description": "A selection of the given items that share the first item's scope, deduplicated, anchored on the last one.",
+    "responsibilities": [
+      "3c3e0048",
+      "0684cf45",
+      "22dcb3bb"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragSelection.ts::topLevelDragSelection": {
+    "description": "The selected items not inside another selected folder, so a folder carries its own contents.",
+    "responsibilities": [
+      "4269d382"
+    ]
+  },
+  "entrypoints/sidepanel/lib/dragSelection.ts::updateDragSelection": {
+    "description": "The selection after choosing an item, extending a range from the anchor, toggling the item, or selecting just it unless it is already in a multi-selection.",
+    "responsibilities": [
+      "0ed89ecd"
+    ]
+  },
+  "entrypoints/sidepanel/lib/externalDrop.ts::snapshotExternalDrop": {
+    "description": "The files and text, HTML, URI list and Mozilla URL data of a drop, read at once before the browser clears them.",
+    "responsibilities": [
+      "7a02d6cc"
+    ]
+  },
+  "entrypoints/sidepanel/lib/externalDrop.ts::titled": {
+    "description": "Whether a dropped page has a real title rather than one that just repeats its URL.",
+    "responsibilities": [
+      "2fe25519"
+    ]
+  },
+  "entrypoints/sidepanel/lib/externalDrop.ts::unlinkableNotice": {
+    "description": "The notice explaining that dropped files cannot be linked because browsers hide their location, suggesting opening them in a tab first.",
+    "responsibilities": [
+      "1b057256"
+    ]
+  },
+  "entrypoints/sidepanel/lib/favouriteBar.ts::domainKey": {
+    "description": "The URL's domain and its group key for grouping favourite bar tiles, or undefined when the URL has no domain.",
+    "responsibilities": [
+      "e17e1b34",
+      "a880f762"
+    ]
+  },
+  "entrypoints/sidepanel/lib/favouriteBar.ts::unpinnedSlotCount": {
+    "description": "How many of the favourite bar's slots hold no favourite and are free for recent tabs.",
+    "responsibilities": [
+      "c57a52e6"
+    ]
+  },
+  "entrypoints/sidepanel/lib/groupColour.ts::spaceColourValue": {
+    "description": "The CSS colour value of the space's chosen group colour.",
+    "responsibilities": [
+      "438c3ca1"
+    ]
+  },
+  "entrypoints/sidepanel/lib/hyperCommands.ts::hyperCommandActions": {
+    "description": "The Hyper commands Search offers, the sidebar shortcuts, space switching and media controls, each running what its shortcut runs.",
+    "responsibilities": [
+      "4335377c"
+    ]
+  },
+  "entrypoints/sidepanel/lib/intentSubmission.ts::asBookmarkCreationResult": {
+    "description": "The intent result as a created bookmark node and whether it was newly created, else undefined when malformed.",
+    "responsibilities": [
+      "a462ea46",
+      "01996036"
+    ]
+  },
+  "entrypoints/sidepanel/lib/intentSubmission.ts::asBookmarkNode": {
+    "description": "The intent result as a bookmark node when it has a string ID and title, else undefined.",
+    "responsibilities": [
+      "01996036"
+    ]
+  },
+  "entrypoints/sidepanel/lib/intentSubmission.ts::asBrowserTab": {
+    "description": "The intent result as a browser tab when it has numeric index and window ID and an optional numeric ID, else undefined.",
+    "responsibilities": [
+      "c1630aa4"
+    ]
+  },
+  "entrypoints/sidepanel/lib/intentSubmission.ts::createBrowserCommandSubmitter": {
+    "description": "A submitter for browser command intents that closes tabs directly and runs other commands as tracked settled intents.",
+    "responsibilities": [
+      "1a56d583",
+      "28a9d708"
+    ]
+  },
+  "entrypoints/sidepanel/lib/intentSubmission.ts::createBrowserFeatureIntentSubmitters": {
+    "description": "Submitters for page-content access and tab media playback intents, each with the message shown when it fails.",
+    "responsibilities": [
+      "1a56d583",
+      "fbfad75c",
+      "dd68afa5"
+    ]
+  },
+  "entrypoints/sidepanel/lib/intentSubmission.ts::createSplitViewIntentSubmitter": {
+    "description": "A submitter that shows a tab beside another tab or a new page in the browser's split view.",
+    "responsibilities": [
+      "1a56d583",
+      "02d6350a"
+    ]
+  },
+  "entrypoints/sidepanel/lib/intentSubmission.ts::createTabFolderIntentSubmitters": {
+    "description": "Submitters that create, rename, remove and move tab folders and tab tree nodes through the setTabFolder intent.",
+    "responsibilities": [
+      "1a56d583",
+      "ed4e869b"
+    ]
+  },
+  "entrypoints/sidepanel/lib/itemActions.ts::pasteEntries": {
+    "description": "The paste menu action and its availability for pasting into the given target.",
+    "responsibilities": [
+      "f0558e8a"
+    ]
+  },
+  "entrypoints/sidepanel/lib/itemClipboard.ts::clipboardContents": {
+    "description": "The pasted data's Hyper clipboard payload, when present and valid, and its plain text.",
+    "responsibilities": [
+      "1f311725"
+    ]
+  },
+  "entrypoints/sidepanel/lib/itemClipboard.ts::entryHtml": {
+    "description": "The HTML for a clipboard entry, a link when it has a page URL, else its title with a nested list of children.",
+    "responsibilities": [
+      "10f31336",
+      "de538569"
+    ]
+  },
+  "entrypoints/sidepanel/lib/itemClipboard.ts::escapeHtml": {
+    "description": "The text with HTML special characters escaped as entities, for safe inclusion in clipboard HTML.",
+    "responsibilities": [
+      "f481222b"
+    ]
+  },
+  "entrypoints/sidepanel/lib/itemClipboard.ts::listHtml": {
+    "description": "An HTML unordered list of the clipboard entries, used for the clipboard's rich text form.",
+    "responsibilities": [
+      "de538569"
+    ]
+  },
+  "entrypoints/sidepanel/lib/itemClipboard.ts::parseEntry": {
+    "description": "A validated clipboard entry from untrusted pasted data, bounded in depth, count and field lengths, or undefined when invalid.",
+    "responsibilities": [
+      "36d9ab8b",
+      "27ec8855"
+    ]
+  },
+  "entrypoints/sidepanel/lib/itemGesture.ts::snapshot": {
+    "description": "The time, pointer position and selection modifier state of a mouse event, kept to judge a later click gesture.",
+    "responsibilities": [
+      "699e0055"
+    ]
+  },
+  "entrypoints/sidepanel/lib/nativeDrag.ts::carries": {
+    "description": "Whether the native drag event carries the kind of drag the stand-in expects, shared Hyper or external.",
+    "responsibilities": [
+      "b14f7c7e",
+      "6bd8ab30"
+    ]
+  },
+  "entrypoints/sidepanel/lib/nativeDrag.ts::carriesHyperDrag": {
+    "description": "Whether a native drag event carries Hyper's own drag data type, from another Hyper view.",
+    "responsibilities": [
+      "6bd8ab30"
+    ]
+  },
+  "entrypoints/sidepanel/lib/otherSessions.ts::landsInWindow": {
+    "description": "Whether a drop target is in this window's tabs, a tab, tab folder or the tabs zone.",
+    "responsibilities": [
+      "dbda2d6e"
+    ]
+  },
+  "entrypoints/sidepanel/lib/pendingOperations.ts::createPendingOperationGauge": {
+    "description": "A gauge that counts operations in flight, reporting each change, so the view can show pending work.",
+    "responsibilities": [
+      "18cf087a"
+    ]
+  },
+  "entrypoints/sidepanel/lib/projectionState.ts::projectBrowserState": {
+    "description": "The sidebar's browser state from the model projection, flattening window, space, tab ownership and remote presence data.",
+    "responsibilities": [
+      "670d4141"
+    ]
+  },
+  "entrypoints/sidepanel/lib/sharedDragDrops.ts::sharedDragStandInId": {
+    "description": "The draggable ID of the stand-in for a drag shared from another Hyper view with this token.",
+    "responsibilities": [
+      "1241302e"
+    ]
+  },
+  "entrypoints/sidepanel/lib/sharedDragDrops.ts::sharedDragToken": {
+    "description": "The shared drag token in a stand-in draggable's ID, or undefined when the ID is not a stand-in.",
+    "responsibilities": [
+      "5bb46e4f"
+    ]
+  },
+  "entrypoints/sidepanel/lib/shortcutFiles.ts::ansiStringAt": {
+    "description": "The null-terminated Windows-1252 string at the offset in a shortcut file, or undefined when absent or empty.",
+    "responsibilities": [
+      "550dd3a8",
+      "2c2d55d8"
+    ]
+  },
+  "entrypoints/sidepanel/lib/shortcutFiles.ts::fileTitle": {
+    "description": "The file name without its extension and surrounding spaces, or the full name when that would be empty.",
+    "responsibilities": [
+      "7d341237"
+    ]
+  },
+  "entrypoints/sidepanel/lib/shortcutFiles.ts::readUnsigned": {
+    "description": "The big-endian unsigned integer of this size at the offset, or undefined when out of range or unsafe.",
+    "responsibilities": [
+      "5c853880"
+    ]
+  },
+  "entrypoints/sidepanel/lib/shortcutFiles.ts::shortcutExtension": {
+    "description": "The file's lowercase extension when it is a supported shortcut file type, else undefined.",
+    "responsibilities": [
+      "2ccaab20"
+    ]
+  },
+  "entrypoints/sidepanel/lib/shortcutFiles.ts::startsWith": {
+    "description": "Whether the bytes begin with the given ASCII signature, used to recognise a shortcut file's format.",
+    "responsibilities": [
+      "644e4f83"
+    ]
+  },
+  "entrypoints/sidepanel/lib/shortcutFiles.ts::wideStringAt": {
+    "description": "The null-terminated UTF-16LE string at the offset in a shortcut file, or undefined when absent or empty.",
+    "responsibilities": [
+      "550dd3a8",
+      "4d28e897"
+    ]
+  },
+  "entrypoints/sidepanel/lib/sidebarPlacement.ts::detectSidebarSide": {
+    "description": "Which side of the browser the sidebar sits on, from the side panel layout, else Firefox window geometry, else right.",
+    "responsibilities": [
+      "c42e7449"
+    ]
+  },
+  "entrypoints/sidepanel/lib/spaceIndicatorActions.ts::createSpaceIndicatorActions": {
+    "description": "The space indicator's actions, closing, opening locally, or focusing or moving remote tabs, each showing a notice when it fails.",
+    "responsibilities": [
+      "0e2e2181",
+      "dd68afa5"
+    ]
+  },
+  "entrypoints/sidepanel/lib/spaceIndicatorActions.ts::shouldUseRemoteSpaceAction": {
+    "description": "Whether a space indicator should act on another window's tab, because only remote windows have the page in that space.",
+    "responsibilities": [
+      "ad30f091"
+    ]
+  },
+  "entrypoints/sidepanel/lib/spaceMenu.ts::spaceTabCounts": {
+    "description": "How many of a space's unpinned, non-blank tabs in this window can be closed, and how many of those are loaded to reload.",
+    "responsibilities": [
+      "e23f054c",
+      "53cd0f05",
+      "0ef97ef1",
+      "3576dca4",
+      "58a7961f"
+    ]
+  },
+  "entrypoints/sidepanel/lib/tabFolders.ts::tabIdsByFolder": {
+    "description": "The open tab IDs inside each tab folder, including nested folders' tabs, keyed by folder ID.",
+    "responsibilities": [
+      "5dbff1a5"
+    ]
+  },
+  "tests/bench/searchFixture.ts::searchBenchmarkProfile": {
+    "description": "Builds a seeded, deterministic large profile of spaces, tabs, bookmarks and page text, returning the model store, sources and commands that the search benchmark times.",
+    "responsibilities": [
+      "e2a1299b"
+    ]
+  },
+  "tests/e2e/fixtures/activeSpace.ts::seedActiveSpaceId": {
+    "description": "Stores the given space as the window's active space in the background, so a test can start from a known space.",
+    "responsibilities": [
+      "27ae6394"
+    ]
+  },
+  "tests/e2e/fixtures/localBookmarks.ts::localBookmarksRootId": {
+    "description": "Polls until the space has a local bookmarks root folder and returns its bookmark ID, failing if it never appears.",
+    "responsibilities": [
+      "324178f4",
+      "9fd1ebe7"
+    ]
+  },
+  "tests/e2e/fixtures/preferences.ts::bookmarkTree": {
+    "description": "The whole browser bookmark tree as the service worker's bookmarks.getTree reports it.",
+    "responsibilities": [
+      "227adc5d"
+    ]
+  },
+  "tests/e2e/fixtures/preferences.ts::readHyperPreferences": {
+    "description": "Reads Hyper's preferences back from the hyper root bookmark folder, so tests can assert what was persisted.",
+    "responsibilities": [
+      "a4a4a688"
+    ]
+  },
+  "tests/e2e/helpers/chrome.ts::bookmarkChildren": {
+    "description": "The direct child bookmarks and folders of the given bookmark folder, in their stored order.",
+    "responsibilities": [
+      "25bb9df4"
+    ]
+  },
+  "tests/e2e/helpers/chrome.ts::bookmarkParentId": {
+    "description": "The parent folder ID of the bookmark with this ID, or undefined when it has no parent or no longer exists.",
+    "responsibilities": [
+      "86e5b49f"
+    ]
+  },
+  "tests/e2e/helpers/chrome.ts::bookmarkTitle": {
+    "description": "The raw stored title of the bookmark with this ID, including any metadata, or undefined when it is missing.",
+    "responsibilities": [
+      "edee6a7d"
+    ]
+  },
+  "tests/e2e/helpers/extension.ts::extensionBaseUrl": {
+    "description": "The extension origin URL derived from the service worker's URL, used to build URLs for extension pages.",
+    "responsibilities": [
+      "bf63ff2d"
+    ]
+  },
+  "tests/e2e/helpers/extension.ts::isHyperWorker": {
+    "description": "Whether a service worker is Hyper's background script, identified by its URL ending in background.js.",
+    "responsibilities": [
+      "eedf9e67"
+    ]
+  },
+  "tests/e2e/helpers/extension.ts::pinExtensionHost": {
+    "description": "Pins the tab hosting the sidepanel page so it stays out of space tab handling, throwing if no such tab exists.",
+    "responsibilities": [
+      "ba82065a"
+    ]
+  },
+  "tests/e2e/helpers/extension.ts::reenableHyperExtension": {
+    "description": "Disables then re-enables Hyper on the extensions page, optionally running a callback while disabled, and returns the restarted sidepanel page and worker.",
+    "responsibilities": [
+      "a444800e",
+      "f654492b"
+    ]
+  },
+  "tests/e2e/helpers/extension.ts::reloadHyperExtension": {
+    "description": "Reloads Hyper through the developer-mode extensions page and returns the restarted sidepanel page and service worker, reporting the item state if reload fails.",
+    "responsibilities": [
+      "50baafbc",
+      "f654492b"
+    ]
+  },
+  "tests/e2e/helpers/extension.ts::sidepanelUrl": {
+    "description": "The full URL of the extension's sidepanel page, so tests can open the sidebar in an ordinary tab.",
+    "responsibilities": [
+      "f04808f1"
+    ]
+  },
+  "tests/e2e/helpers/extension.ts::titledPage": {
+    "description": "A minimal HTML document whose only content is the given title, for routed test pages.",
+    "responsibilities": [
+      "3958e43c"
+    ]
+  },
+  "tests/e2e/helpers/media.ts::setMotionTabAudible": {
+    "description": "Sets a motion fixture tab's audible state in the background and dispatches the matching tab update to the page, so audio indicators animate.",
+    "responsibilities": [
+      "8013d78b"
+    ]
+  },
+  "tests/e2e/helpers/motion.ts::createMotionFixture": {
+    "description": "Waits for Hyper's bookmark structure, then seeds two spaces, nested bookmark folders and open tabs, returning their IDs for motion tests.",
+    "responsibilities": [
+      "737f1049",
+      "d75aeb81"
+    ]
+  },
+  "tests/e2e/helpers/motion.ts::highlightExitSamples": {
+    "description": "The pagination highlight exit samples the page recorded on its global, or an empty list when none were recorded.",
+    "responsibilities": [
+      "fddde57d"
+    ]
+  },
+  "tests/e2e/helpers/motion.ts::isMonotonic": {
+    "description": "Whether the sampled values only increase or only decrease, allowing small reversals within the given tolerance.",
+    "responsibilities": [
+      "19b19912"
+    ]
+  },
+  "tests/e2e/helpers/motion.ts::sampleCompactViewSwitch": {
+    "description": "Clicks the tabs or bookmarks trigger and samples panel counts and row animation names every frame for 340ms during the compact view switch.",
+    "responsibilities": [
+      "93b3464b",
+      "a65bffd7"
+    ]
+  },
+  "tests/e2e/helpers/motion.ts::sampleSearchMorph": {
+    "description": "Clicks the search action and samples the search shell's visible width, action edge and results position every frame for 340ms during the morph.",
+    "responsibilities": [
+      "95d320d0",
+      "a65bffd7"
+    ]
+  },
+  "tests/e2e/helpers/motion.ts::sampleSettingsTransition": {
+    "description": "Opens or closes settings and samples the settings layer position and backdrop opacity every frame for 340ms.",
+    "responsibilities": [
+      "64ce1b62",
+      "a65bffd7"
+    ]
+  },
+  "tests/e2e/helpers/motion.ts::sampleSpaceSwitch": {
+    "description": "Clicks the second space's pagination dot and samples bookmark, strip and tab layer positions every frame for 420ms to measure the space transition.",
+    "responsibilities": [
+      "8af34659",
+      "a65bffd7",
+      "c2935738"
+    ]
+  },
+  "tests/e2e/helpers/restoration.ts::createBookmarkOnlyBacking": {
+    "description": "Creates a tab backing bookmark copied from an existing backing's metadata but with a new token and URL, simulating a backing whose tab is gone.",
+    "responsibilities": [
+      "3e0d02b9"
+    ]
+  },
+  "tests/e2e/helpers/restoration.ts::expectActiveTabInSpace": {
+    "description": "Asserts that the snapshot's active tab is owned by the given space and sits in a native tab group.",
+    "responsibilities": [
+      "2dce773b"
+    ]
+  },
+  "tests/e2e/helpers/restoration.ts::hyperMetadata": {
+    "description": "The hyper metadata object parsed from a bookmark title, or undefined when the title carries none.",
+    "responsibilities": [
+      "6039dfa5"
+    ]
+  },
+  "tests/e2e/helpers/restoration.ts::nativeTabBackingState": {
+    "description": "Summarizes a tab's ownership, its backing bookmark metadata, its group and position, and every tab open at the given URL.",
+    "responsibilities": [
+      "0f4beeda",
+      "e4ab4103",
+      "6039dfa5",
+      "cb5b87b2"
+    ]
+  },
+  "tests/e2e/helpers/restoration.ts::recoveryTabSignature": {
+    "description": "A stable JSON signature of the tabs at the recovery URLs with their IDs, groups and owning spaces, sorted by URL for comparison.",
+    "responsibilities": [
+      "db4b9aa3",
+      "cb5b87b2"
+    ]
+  },
+  "tests/e2e/helpers/restoration.ts::recoveryTargetCounts": {
+    "description": "Counts how many tabs in the restoration snapshot are open at each recovery URL, to catch duplicated or missing restored tabs.",
+    "responsibilities": [
+      "464933f8"
+    ]
+  },
+  "tests/e2e/helpers/restoration.ts::restorationState": {
+    "description": "Snapshots backing bookmark counts per space, native tab groups and the window's tabs with their ownership, for asserting session restoration.",
+    "responsibilities": [
+      "33645c4c",
+      "e4ab4103"
+    ]
+  },
+  "tests/e2e/helpers/restoration.ts::targetCounts": {
+    "description": "Counts how many tabs in the restoration snapshot are open at the first and second fixture URLs.",
+    "responsibilities": [
+      "464933f8"
+    ]
+  },
+  "tests/e2e/helpers/sidebar.ts::beginPointerDrag": {
+    "description": "Hovers, presses and lifts a sidebar row to start a pointer drag, then asserts the drag-mode pagination with trash target is showing.",
+    "responsibilities": [
+      "67e0dc05",
+      "1670b857"
+    ]
+  },
+  "tests/e2e/helpers/sidebar.ts::clickSelectionWithModifierReleased": {
+    "description": "Clicks a target with the platform modifier held on press but released before pointer up, reproducing a quick modifier-click selection.",
+    "responsibilities": [
+      "5eedfc18",
+      "0a8844ec"
+    ]
+  },
+  "tests/e2e/helpers/sidebar.ts::dragBookmarkToScopeTarget": {
+    "description": "Picks up an enabled bookmark row and drops it on a scope target such as a space dot, checking the target highlights before release.",
+    "responsibilities": [
+      "1638aedd",
+      "67e0dc05",
+      "a8b2ad36"
+    ]
+  },
+  "tests/e2e/helpers/sidebar.ts::dragMarqueeSelection": {
+    "description": "Drags a selection marquee across a surface covering the given rows, optionally from the right edge or with a modifier held.",
+    "responsibilities": [
+      "03aed473"
+    ]
+  },
+  "tests/e2e/helpers/sidebar.ts::dragSpaceToPaginationTarget": {
+    "description": "Drags a space's pagination dot onto another dot or the trash, asserting overlay styling and insert or hover feedback along the way.",
+    "responsibilities": [
+      "9da022b0",
+      "35d0cef0",
+      "a8b2ad36"
+    ]
+  },
+  "tests/e2e/helpers/sidebar.ts::renderedTabOrder": {
+    "description": "The tracked tab IDs in the order the sidebar renders their rows, including rows without a backing.",
+    "responsibilities": [
+      "db71abfe"
+    ]
+  },
+  "tests/e2e/helpers/sidebar.ts::selectSpace": {
+    "description": "Clicks the titled space's pagination dot, waits for it to become current and for activation work to settle.",
+    "responsibilities": [
+      "c2935738",
+      "f55fc84b",
+      "9989020f"
+    ]
+  },
+  "tests/e2e/helpers/sidebar.ts::spaceDot": {
+    "description": "The pagination dot that opens the space with this title.",
+    "responsibilities": [
+      "fd10ccfa"
+    ]
+  },
+  "tests/e2e/helpers/sidebar.ts::spaceDotById": {
+    "description": "The pagination dot for the space with this ID, located within the given page or element.",
+    "responsibilities": [
+      "fd10ccfa"
+    ]
+  },
+  "tests/e2e/helpers/sidebar.ts::tabOrder": {
+    "description": "The tracked tab IDs in the order their rows render in the sidebar, optionally skipping rows for unsupported unbacked tabs.",
+    "responsibilities": [
+      "db71abfe",
+      "99bf6779"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::createExtraSpaces": {
+    "description": "Adds the given number of numbered overflow space folders to the spaces folder, for tests that need many spaces.",
+    "responsibilities": [
+      "d75aeb81"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::createSecondSpace": {
+    "description": "Adds a second space folder beside the initialized first space and returns both space IDs with the current window ID.",
+    "responsibilities": [
+      "d75aeb81",
+      "a67da71b"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::moveSpaceGroupBefore": {
+    "description": "Moves the source space's native tab group to the index of the target space's group, simulating a user reorder in the tab strip.",
+    "responsibilities": [
+      "7e6c4dc9"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::routeTabThroughGroupChange": {
+    "description": "Marks a tab as owned by a space and moves it into a fresh native group, then waits until the background claims that group.",
+    "responsibilities": [
+      "0c4677e0",
+      "ad980ee4",
+      "3bb0db81"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::sessionValues": {
+    "description": "Reads the given keys from the extension's session storage through the service worker.",
+    "responsibilities": [
+      "11a0ae68"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::setSpaceLastActiveTabToken": {
+    "description": "Rewrites a space's bookmark title to record the given last active tab token, optionally for one window.",
+    "responsibilities": [
+      "dbde6c7e"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::spaceAndGroupOrder": {
+    "description": "The space bookmark order alongside the order of the spaces' native tab groups in the window, to compare the two orderings.",
+    "responsibilities": [
+      "c362efbc",
+      "a45d6a9b"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::spaceIdByTitle": {
+    "description": "The bookmark ID of the first node whose visible title matches, or undefined when no such space exists.",
+    "responsibilities": [
+      "cb5ea464",
+      "3255151e"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::spaceLastActiveTabToken": {
+    "description": "The last active tab token stored in a space's bookmark metadata, per window when a window ID is given, or undefined.",
+    "responsibilities": [
+      "67bfa230"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::spacesFolder": {
+    "description": "The spaces folder inside Hyper's root bookmark folder, or undefined before the extension has created it.",
+    "responsibilities": [
+      "5c729832"
+    ]
+  },
+  "tests/e2e/helpers/spaces.ts::waitForTabSpaceGroup": {
+    "description": "Polls until the tab sits in a native group that session storage records as the space's group, then waits for activation to settle.",
+    "responsibilities": [
+      "3bb0db81",
+      "9fd1ebe7",
+      "9989020f"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::activateTab": {
+    "description": "Makes the tab with this ID the active tab in its window through the browser API.",
+    "responsibilities": [
+      "2b7ece74"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::byIndex": {
+    "description": "A copy of the tabs sorted by their position in the tab strip.",
+    "responsibilities": [
+      "b5ff6b3c"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::clearHyperRuntimeOwnership": {
+    "description": "Removes every tab's stored space ownership value and clears session storage, simulating lost runtime state.",
+    "responsibilities": [
+      "a3bbdf3f",
+      "3020cbd8"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::closeWindow": {
+    "description": "Closes the browser window with this ID through the browser API.",
+    "responsibilities": [
+      "20b94112"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::currentWindowId": {
+    "description": "The ID of the browser's current window, throwing when the browser reports none.",
+    "responsibilities": [
+      "a67da71b"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::currentWindowTabIds": {
+    "description": "The IDs of the current window's tabs in tab strip order.",
+    "responsibilities": [
+      "2365f197",
+      "b5ff6b3c"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::matchingTabState": {
+    "description": "The current window's active tab ID and the IDs of its tabs open at the given URL, to detect duplicates.",
+    "responsibilities": [
+      "60c8a3a7",
+      "cb5b87b2"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::navigateTab": {
+    "description": "Navigates the tab with this ID to the given URL through the browser API.",
+    "responsibilities": [
+      "21b920e6"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::navigationState": {
+    "description": "The current window's active tab, plus the tracked tabs in strip order with their pending or committed URLs.",
+    "responsibilities": [
+      "60c8a3a7",
+      "b5ff6b3c",
+      "8f1091b6"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::pageAtUrl": {
+    "description": "Waits for a browser page at exactly this URL and returns it, throwing if it disappears before lookup.",
+    "responsibilities": [
+      "6fa619e9"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::pageTabWindows": {
+    "description": "For each URL, the window IDs of every tab open at it, to check which windows hold each page.",
+    "responsibilities": [
+      "a475e65a",
+      "cb5b87b2"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::queryTabs": {
+    "description": "The browser tabs matching the query as chrome.tabs.query reports them, all tabs by default.",
+    "responsibilities": [
+      "6a278095"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::recordedTabLifecycle": {
+    "description": "The tab created, removed and updated events the background has recorded on its global since the last reset.",
+    "responsibilities": [
+      "d04a4160"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::resetRecordedTabLifecycle": {
+    "description": "Clears the tab created, removed and updated events the background has recorded, so a test observes only later events.",
+    "responsibilities": [
+      "6dccd686"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::tabBackingToken": {
+    "description": "The backing token stored for the tab's space ownership, or undefined when it has none.",
+    "responsibilities": [
+      "0f4c9258"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::tabOwnershipSummary": {
+    "description": "Whether every tracked tab has a stored owning space, and how many distinct spaces own them.",
+    "responsibilities": [
+      "046a71ac",
+      "6585091c"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::tabUrl": {
+    "description": "The tab's pending URL, or its committed URL once navigation has finished.",
+    "responsibilities": [
+      "8f1091b6"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::transientCreatedTabs": {
+    "description": "The recorded created tabs that were later removed, excluding extensions page control tabs, to detect flashed tabs.",
+    "responsibilities": [
+      "b405e64e",
+      "d04a4160"
+    ]
+  },
+  "tests/e2e/helpers/tabs.ts::waitForNewPage": {
+    "description": "Runs an action and returns the first page it opens that did not exist beforehand.",
+    "responsibilities": [
+      "b017bd97"
+    ]
+  }
+}
