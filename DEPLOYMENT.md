@@ -10,19 +10,21 @@ The workflow uses `0.1.<GitHub run number>.<run attempt>` as the extension manif
 
 ## Render
 
-The production service is already provisioned as a Node web service:
+The production service is a static site:
 
-- Service ID: `srv-dc3ojfui0phs73832dk0`
-- URL: https://hyper-bar.onrender.com
+- Service: `hyper-bar-static`
+- Service ID: `srv-dc3pd06q1p3s73bu5n10`
+- URL: https://hyper-bar-static.onrender.com
 - Branch: `main`
 - Build command: `npm ci --legacy-peer-deps && npm run build:site`
-- Start command: `npm start -w apps/site`
-- Health check: `/`
+- Publish directory: `apps/site/out`
 - Auto-deploy: off (GitHub Actions triggers deploys after checks)
 
-The Render deploy hook is already stored in the GitHub `production` environment as `RENDER_DEPLOY_HOOK_URL`.
+The static Render deploy hook is stored in the GitHub `production` environment as `RENDER_DEPLOY_HOOK_URL`.
 
-This project uses a web service rather than Render's static-site runtime because the Next.js favicon endpoint is server-rendered.
+## Local site builds
+
+Run `npm run build` from `apps/site`, or `npm run build:site` from the repository root. Both generate the deployable static files in `apps/site/out`; the top-level `index.html` and `demo/index.html` are the expected entry points.
 
 ## Browser stores
 

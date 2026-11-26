@@ -5,12 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "npm run prepare:wxt -w hyper-sidebar && next build"
   },
   "dependencies": {
-    "@hyper/ui": "*",
-    "hyper-sidebar": "*",
+    "@hyper/ui": "file:../../packages/ui",
+    "hyper-sidebar": "file:../../extensions/hyper",
     "next": "15.5.3",
     "react": "19.2.8",
     "react-dom": "19.2.8"
