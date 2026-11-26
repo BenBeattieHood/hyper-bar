@@ -316,7 +316,7 @@ export function useDemoBrowserSession() {
     const source = findNode(bookmarkTree, id);
     if (!source) return undefined;
     if (options.skipExisting && descendants(bookmarkTree, destination.parentId).some((node) => node.url && node.url === source.url)) return undefined;
-    const copied = { ...source, id: nextId('copy'), parentId: destination.parentId, ...(source.children ? { children: source.children.map((child) => ({ ...child, parentId: nextId('parent') })) } : {}),
+    const copied = { ...source, id: nextId('copy'), parentId: destination.parentId, ...(source.children ? { children: source.children.map((child: BookmarkNode) => ({ ...child, parentId: nextId('parent') })) } : {}),
       title: options.favouriteSlot === undefined ? source.title : bookmarkTitleWithFavouriteSlot(source, options.favouriteSlot),
     };
     setBookmarkTree((current) => insertNode(current, destination.parentId, copied, destination.index));
