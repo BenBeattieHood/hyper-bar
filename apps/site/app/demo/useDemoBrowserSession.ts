@@ -534,7 +534,8 @@ export function useDemoBrowserSession() {
     focusRemoteTab: async () => undefined, moveRemoteTabToWindow: async () => undefined, offerDrag: async () => undefined, takeSharedDragTabs: async () => undefined,
     moveTabsIntoTree: async (tabIds: number[], _windowId: number, index: number, tree: { spaceId?: string; parentId: string }) => moveTabEntries(tabIds, tree.spaceId ?? activeSpaceId, tree.parentId, index),
     withdrawDrag: async () => undefined, splitTab: async ({ tabId, withTabId }: { tabId: number; withTabId?: number }) => { if (withTabId) await groupTabsInSpace([tabId, withTabId], activeSpaceId); },
-    navigateTab, closeTab: async (id: number) => closeTabs([id]), closeTabs, reloadTabs, createTab: () => addTab(), searchInNewTab: async (query: string) => addTab(`https://search.hyper.local/?q=${encodeURIComponent(query)}`),
+    navigateTab, closeTab: async (id: number) => closeTabs([id]), closeTabs, reloadTabs, createTab: () => addTab(), setActiveSpace: setActiveSpaceId,
+    searchInNewTab: async (query: string) => addTab(`https://search.hyper.local/?q=${encodeURIComponent(query)}`),
     setTabMuted, deleteHistory: async () => undefined, moveTab: async (id: number, _windowId: number, index: number) => { setTabs((current) => current.map((candidate) => candidate.id === id ? { ...candidate, index } : candidate).sort((a,b) => a.index-b.index).map((candidate,index) => ({...candidate,index}))); },
     moveTabs: async (ids: number[], _windowId: number, index: number) => { setTabs((current) => { const moving = current.filter((candidate) => ids.includes(candidate.id ?? -1)); const rest = current.filter((candidate) => !ids.includes(candidate.id ?? -1)); rest.splice(index, 0, ...moving); return rest.map((candidate, candidateIndex) => ({ ...candidate, index: candidateIndex })); }); },
     setTabMediaPlayback: async (tabId: number, state: 'paused' | 'playing') => { setTabs((current) => current.map((candidate) => candidate.id === tabId ? { ...candidate, audible: state === 'playing', mutedInfo: { muted: state === 'paused' } } : candidate)); },
@@ -555,6 +556,7 @@ export function useDemoBrowserSession() {
     address: currentTab?.url ?? currentTab?.pendingUrl ?? START_URL,
     controls: {
       createTab: () => addTab(),
+      setActiveSpace: setActiveSpaceId,
       closeTab: (id: number) => closeTabs([id]),
       activateTab: focusTab,
       navigate: async (value: string, tabId = activeTabIdRef.current) => {

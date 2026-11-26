@@ -314,7 +314,7 @@ function FavouriteTile({
           if (node.url) onOpen(node.url, event.altKey);
         }}
         onAuxClick={tileAuxClick(closeFavourite, unpin)}
-        onMouseDown={(event) => event.button === 1 && event.preventDefault()}
+        onMouseDownCapture={(event) => event.button === 1 && event.preventDefault()}
         onContextMenu={openMenu}
         aria-label={group ? `${groupLabel(group, 'items', isCurrent)}, pinned` : `${title}, pinned${openTabs.length ? `, open in ${openTabs.length} tab${openTabs.length === 1 ? '' : 's'}${isSleeping ? ', sleeping' : ''}` : openSpace ? `, open in ${openSpace.title}` : ''}`}
         aria-description={addressDescription(title, node.url)}
@@ -445,7 +445,7 @@ function RecentTabTile({
           else onFocusTab(tab);
         }}
         onAuxClick={tileAuxClick(() => onCloseTabs(tabIds), () => onDismiss(tabs))}
-        onMouseDown={(event) => event.button === 1 && event.preventDefault()}
+        onMouseDownCapture={(event) => event.button === 1 && event.preventDefault()}
         onContextMenu={openMenu}
         aria-label={group ? groupLabel(group, 'recent tabs', active) : `${title}, recent tab${tab.active ? ', current' : ''}`}
         aria-description={group ? undefined : addressDescription(title, url)}

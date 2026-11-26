@@ -3,6 +3,8 @@
 import './mockup.css';
 import HyperDemo from './HyperDemo';
 
+const HYPER_STORE_URL = 'https://chromewebstore.google.com/detail/hyper/hmehbjpfbehoidnpnlpoabdgbfkdgbpk';
+
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
@@ -20,7 +22,7 @@ export default function HomePage() {
           <a href="#how-it-works">How it works</a>
           <a href="#faq">FAQ</a>
         </nav>
-        <a className="nav-action" href="#get-hyper">Get Hyper <Arrow /></a>
+        <a className="nav-action" href={HYPER_STORE_URL} target="_blank" rel="noopener noreferrer">Get Hyper <Arrow /></a>
       </header>
 
       <section className="hero">
@@ -32,7 +34,7 @@ export default function HomePage() {
             searchable space. Less hunting. More doing.
           </p>
           <div className="hero-actions">
-            <a className="primary-action" href="#get-hyper">Get Hyper <Arrow /></a>
+            <a className="primary-action" href={HYPER_STORE_URL} target="_blank" rel="noopener noreferrer">Get Hyper <Arrow /></a>
             <a className="secondary-action" href="#features">See how it works <span aria-hidden="true">↓</span></a>
           </div>
           <div className="hero-proof" aria-label="Hyper features">
@@ -110,7 +112,7 @@ export default function HomePage() {
           <p className="eyebrow">Made to move with you</p>
           <h2>Less managing.<br /><em>More momentum.</em></h2>
           <p>Hyper is a lightweight sidebar that fits into your browser—not another place to spend your time. Your spaces stay yours, and your next step is always close.</p>
-          <a href="#get-hyper">Make room for focus <Arrow /></a>
+          <a href={HYPER_STORE_URL} target="_blank" rel="noopener noreferrer">Make room for focus <Arrow /></a>
         </div>
         <div className="shortcut-card" aria-hidden="true"><kbd>⌘ K</kbd><p>One shortcut<br />to find anything.</p></div>
       </section>
@@ -120,7 +122,7 @@ export default function HomePage() {
         <p className="eyebrow">Your browser can feel different</p>
         <h2>Find your <em>flow.</em></h2>
         <p>Make the web feel a little more like yours.</p>
-        <a className="primary-action" href="mailto:hello@hyperbar.app?subject=Get%20Hyper">Get Hyper <Arrow /></a>
+        <a className="primary-action" href={HYPER_STORE_URL} target="_blank" rel="noopener noreferrer">Get Hyper <Arrow /></a>
         <span>A calmer corner of the internet.</span>
       </section>
 

@@ -164,7 +164,7 @@ function FolderRow(props: FolderRowProps) {
               event.preventDefault();
               onCloseFolder(tabIds, title);
             }}
-            onMouseDown={(event) => event.button === 1 && event.preventDefault()}
+            onMouseDownCapture={(event) => event.button === 1 && event.preventDefault()}
             onContextMenu={(event) => {
               if (!actions) return;
               const items = actions.itemsFor(dragData);
@@ -373,7 +373,7 @@ function TabRow(props: TabRowProps) {
               event.preventDefault();
               onClose(tab.id);
             }}
-            onMouseDown={(event) => event.button === 1 && event.preventDefault()}
+            onMouseDownCapture={(event) => event.button === 1 && event.preventDefault()}
             onContextMenu={openMenu}
             aria-label={`${title}${bookmarkState === 'bookmarked' ? ', bookmarked' : ''}${isTabSleeping(tab) ? ', sleeping' : ''}${tab.audible ? ', playing audio' : ''}`}
             title={itemTooltip(title, rawUrl)}
@@ -599,6 +599,9 @@ export function Tabs(props: TabsProps) {
     >
       <div
         {...surface.surfaceProps('tabs-tree-container')}
+        onMouseDownCapture={(event) => {
+          if (event.button === 1) event.preventDefault();
+        }}
         onDoubleClick={(event) => {
           if (
             event.target instanceof Element &&

@@ -8,3 +8,4 @@ apps/site/.next-dev/
 apps/site/out/
 coverage/
 logs/
+*.log

@@ -1,10 +1,14 @@
 import type { Metadata } from 'next';
+import extensionIcon from '../../../extensions/hyper/public/icon/128.png';
 import './root.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://hyperbar.app'),
   title: 'Hyper | Spatial Browser Workspaces',
   description: 'Hyper is an Arc-inspired browser extension for tabs, spaces, and durable context.',
+  icons: {
+    icon: extensionIcon.src,
+  },
   alternates: {
     canonical: '/',
   },

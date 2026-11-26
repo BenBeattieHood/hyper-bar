@@ -1,13 +1,63 @@
+.hyper-browser-window[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* The browser theme is represented explicitly by this sandbox attribute. Do not
+   depend on the iframe's media query, since browser chrome and web-page colour
+   scheme preferences can differ. */
+:root:has(.hyper-browser-window[data-theme='dark']) {
+  color: #f0f3f2;
+  background: #182125;
+  --canvas: #182125;
+  --canvas-deep: #11181b;
+  --surface: rgba(37, 45, 48, 0.74);
+  --surface-strong: #242c2f;
+  --surface-control: rgba(255, 255, 255, 0.07);
+  --surface-hover: rgba(255, 255, 255, 0.12);
+  --ink: #f0f3f2;
+  --muted: #adb8bb;
+  --faint: #7e8d91;
+  --line: rgba(240, 245, 246, 0.13);
+  --line-strong: rgba(240, 245, 246, 0.24);
+  --accent: #83afc0;
+  --accent-soft: rgba(91, 140, 159, 0.24);
+  --accent-strong: #b2d2dd;
+  --warm: #df8178;
+  --focus: #8cc1d4;
+  --topbar: rgba(24, 33, 37, 0.9);
+  --grid-line: rgba(235, 244, 246, 0.025);
+  --overlay: rgba(4, 7, 8, 0.48);
+  --shadow: rgba(0, 0, 0, 0.38);
+  --space-pagination-opaque-background: var(--canvas);
+  --list-hover-background: var(--surface-control);
+  --tab-group-grey: #84817e;
+  --tab-group-blue: #69a1fa;
+  --tab-group-red: #cf87da;
+  --tab-group-yellow: #c1a256;
+  --tab-group-green: #4a89ba;
+  --tab-group-pink: #ee5fb7;
+  --tab-group-purple: #b696ff;
+  --tab-group-cyan: #4cb4b7;
+  --tab-group-orange: #df8e64;
+  --command-border-aqua: #56ead7;
+  --command-border-cyan: #5fcdf6;
+  --command-border-purple: #b89aff;
+  --command-border-pink: #df8bd5;
+}
+
 .hyper-browser-window {
-  --chrome-bg: #f3f5f7;
-  --chrome-panel: #e3e7eb;
-  --chrome-tab: #f9fafb;
-  --chrome-tab-inactive: #dce1e6;
-  --chrome-line: #c5ccd3;
-  --chrome-text: #20262b;
-  --chrome-muted: #68737c;
-  --chrome-address: #f8f9fb;
+  --chrome-bg: #ffffff;
+  --chrome-panel: #ffffff;
+  --chrome-tab: #ffffff;
+  --chrome-tab-inactive: #e4e4e5;
+  --chrome-line: transparent;
+  --chrome-text: #3f3f40;
+  --chrome-muted: #5f6368;
+  --chrome-tab-text: #8e8f91;
+  --chrome-address: #f2f2f3;
   --chrome-accent: #3b82f6;
+  --chrome-omnibar-text: #3f3f40;
+  --chrome-tabstrip: #e4e4e5;
   height: 100dvh;
   min-height: 0;
   display: grid;
@@ -18,32 +68,36 @@
 }
 
 .hyper-browser-window[data-theme='dark'] {
-  --chrome-bg: #202124;
-  --chrome-panel: #2b2c2f;
-  --chrome-tab: #35363a;
-  --chrome-tab-inactive: #292a2d;
-  --chrome-line: #42454a;
-  --chrome-text: #e8eaed;
-  --chrome-muted: #a8adb3;
-  --chrome-address: #303134;
-  --chrome-accent: #8ab4f8;
+  --chrome-bg: #39393b;
+  --chrome-panel: #39393b;
+  --chrome-tab: #39393b;
+  --chrome-tab-inactive: #1f1f23;
+  --chrome-line: transparent;
+  --chrome-text: #f1f3f4;
+  --chrome-muted: #f1f3f4;
+  --chrome-tab-text: #97979a;
+  --chrome-address: #1c1c1d;
+  --chrome-omnibar-text: #97979a;
+  --chrome-tabstrip: #1f1f23;
 }
 .hyper-browser-window[data-browser='edge'][data-theme='light'] { --chrome-accent: #0f6cbd; }
 .hyper-browser-window[data-browser='edge'][data-theme='dark'] { --chrome-accent: #69afe7; }
 .hyper-browser-window[data-browser='firefox'][data-theme='light'] {
-  --chrome-bg: #f9f8fb;
-  --chrome-panel: #eceaf0;
-  --chrome-tab-inactive: #e3e1e8;
-  --chrome-accent: #7b36e8;
+  --chrome-bg: #ffffff;
+  --chrome-panel: #ffffff;
+  --chrome-tab: #ffffff;
+  --chrome-tab-inactive: #e4e4e5;
+  --chrome-accent: #8230ff;
+  --chrome-address: #f2f2f3;
 }
 .hyper-browser-window[data-browser='firefox'][data-theme='dark'] {
-  --chrome-bg: #1c1b22;
-  --chrome-panel: #2b2a33;
-  --chrome-tab: #3a3842;
-  --chrome-tab-inactive: #24232b;
-  --chrome-line: #4d4b55;
-  --chrome-address: #23222a;
-  --chrome-accent: #c6a0ff;
+  --chrome-bg: #39393b;
+  --chrome-panel: #39393b;
+  --chrome-tab: #39393b;
+  --chrome-tab-inactive: #1f1f23;
+  --chrome-line: transparent;
+  --chrome-address: #1c1c1d;
+  --chrome-accent: #b696ff;
 }
 .hyper-browser-window[data-browser='brave'][data-theme='light'] { --chrome-accent: #e54827; }
 .hyper-browser-window[data-browser='brave'][data-theme='dark'] { --chrome-accent: #ff8b6b; }
@@ -62,6 +116,10 @@
 .browser-window-controls,
 .browser-window-actions { display: flex; align-items: center; gap: 7px; }
 .browser-window-actions { justify-content: flex-end; }
+.browser-window-actions button {
+  display: grid;
+  place-items: center;
+}
 .browser-window-actions button {
   width: 25px;
   height: 23px;
@@ -87,9 +145,27 @@
   gap: 3px;
   padding: 5px 8px 0;
   overflow: hidden;
-  border-bottom: 1px solid var(--chrome-line);
-  background: var(--chrome-panel);
+  border-bottom: 0;
+  background: var(--chrome-tabstrip);
 }
+.browser-tab-group { display: flex; align-items: flex-end; gap: 3px; min-width: 0; }
+.browser-tab-group.is-collapsed { flex: 0 0 42px; }
+.browser-tab-group-collapsed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 9px 9px 0 0;
+  color: var(--chrome-tab-text);
+  background: var(--chrome-tab-inactive);
+  cursor: pointer;
+}
+.browser-tab-group-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--tab-group-colour); }
+.browser-tab-group-count { font-size: 9px; }
 .browser-tab-button {
   display: flex;
   align-items: center;
@@ -99,7 +175,7 @@
   padding: 0 10px;
   border: 0;
   border-radius: 9px 9px 0 0;
-  color: var(--chrome-muted);
+  color: var(--chrome-tab-text);
   background: var(--chrome-tab-inactive);
   font-size: 10px;
   white-space: nowrap;
@@ -116,7 +192,7 @@
   align-items: center;
   gap: 5px;
   padding: 7px 9px;
-  border-bottom: 1px solid var(--chrome-line);
+  border-bottom: 2px solid var(--active-tab-group-colour);
   background: var(--chrome-panel);
 }
 .browser-toolbar-button {
@@ -131,6 +207,14 @@
   background: transparent;
   cursor: pointer;
 }
+.browser-toolbar-button svg,
+.browser-window-actions button svg,
+.browser-tab-add svg,
+.browser-tab-button small svg {
+  display: block;
+  flex: 0 0 auto;
+}
+.browser-toolbar-button svg { width: 15px; height: 15px; }
 .browser-toolbar-button:hover { color: var(--chrome-text); background: color-mix(in srgb, var(--chrome-text) 8%, transparent); }
 .hyper-browser-window[data-browser='edge'] .browser-toolbar-button,
 .hyper-browser-window[data-browser='firefox'] .browser-toolbar-button { border-radius: 50%; }
@@ -147,7 +231,7 @@
   background: var(--chrome-address);
 }
 .browser-address span { color: var(--chrome-accent); font-size: 10px; }
-.browser-address input { min-width: 0; padding: 0; border: 0; outline: 0; color: var(--chrome-text); background: transparent; font-size: 11px; }
+.browser-address input { min-width: 0; padding: 0; border: 0; outline: 0; color: var(--chrome-omnibar-text); background: transparent; font-size: 11px; }
 
 .hyper-browser-content {
   display: grid;
@@ -178,9 +262,15 @@
 .browser-page-card span { display: block; width: 68%; height: 5px; margin: 6px 0; border-radius: 5px; background: #c9d0ce; }
 .hyper-browser-window[data-theme='dark'] .browser-page-card span { background: #4a5152; }
 .browser-page-card span:nth-child(3) { width: 45%; }
-.browser-extension { position: relative; min-width: 0; min-height: 0; overflow: hidden; border-left: 1px solid rgba(0, 0, 0, .2); background: #e8ecee; }
+.browser-extension { position: relative; min-width: 0; min-height: 0; height: 100%; overflow: hidden; border-left: 1px solid rgba(0, 0, 0, .2); background: #e8ecee; }
+.hyper-browser-window[data-theme='dark'] .browser-extension { background: #182125; }
+.browser-extension-iframe { display: block; width: 100%; height: 100%; min-height: 0; margin: 0; padding: 0; border: 0; overflow: auto; background: #e8ecee; }
+.hyper-browser-window[data-theme='dark'] .browser-extension-iframe { background: #182125; }
 .browser-extension .app-shell { height: 100%; min-height: 0; }
 .browser-extension .workspace-scroll { min-height: 0; }
+.browser-content-resize-handle { position: absolute; z-index: 10; left: 0; top: 0; width: 6px; height: 100%; padding: 0; border: 0; cursor: ew-resize; touch-action: none; background: transparent; }
+.browser-content-resize-handle:hover,
+.browser-content-resize-handle:active { background: color-mix(in srgb, var(--chrome-accent) 18%, transparent); }
 
 @media (max-width: 820px) {
   .hyper-browser-content { grid-template-columns: minmax(0, 1fr) minmax(280px, 42%); }

@@ -1,3 +1,5 @@
+'use client';
+
 export { SidebarApp } from './entrypoints/sidepanel/App';
 import type { useBrowserState } from './entrypoints/sidepanel/hooks/useBrowserState';
 export type BrowserStateApi = ReturnType<typeof useBrowserState>;

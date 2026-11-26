@@ -129,7 +129,7 @@ function SessionTab({
               event.preventDefault();
               close();
             }}
-            onMouseDown={(event) => event.button === 1 && event.preventDefault()}
+            onMouseDownCapture={(event) => event.button === 1 && event.preventDefault()}
             onContextMenu={openMenu}
           >
             <Favicon url={node.url ?? ''} title={title} />
