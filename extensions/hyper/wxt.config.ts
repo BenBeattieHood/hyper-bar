@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 import { defineConfig } from 'wxt';
 import { manifestKey, shortcutBinding } from './entrypoints/lib/shortcuts';
 
@@ -32,10 +33,10 @@ export default defineConfig({
     },
     resolve: {
       alias: {
-        flexsearch: fileURLToPath(new URL(
-          'node_modules/flexsearch/dist/flexsearch.light.module.min.js',
-          import.meta.url,
-        )),
+        flexsearch: resolve(
+          dirname(fileURLToPath(import.meta.resolve('flexsearch'))),
+          'flexsearch.light.module.min.js',
+        ),
       },
     },
   }),
