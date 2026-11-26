@@ -15,6 +15,9 @@
     "check": "npm run check -w extensions/hyper",
     "dev:hyper": "npm run dev -w extensions/hyper",
     "dev:site": "npm run dev -w apps/site",
-    "prepare:hyper": "npm run prepare -w extensions/hyper"
+    "prepare:hyper": "npm run prepare:wxt -w extensions/hyper"
+  },
+  "devDependencies": {
+    "vite": "^7.2.2"
   }
 }
