@@ -26,10 +26,10 @@
     "check": "npm run compile --silent && npm run test:quiet --silent",
     "verify": "npm run compile && npm test && npm run build && npm run build:firefox",
     "index": "node scripts/generateIndex.ts",
-    "prepare": "wxt prepare"
+    "prepare:wxt": "wxt prepare"
   },
   "dependencies": {
-    "@hyper/ui": "*",
+    "@hyper/ui": "file:../../packages/ui",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",

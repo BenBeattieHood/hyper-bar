@@ -28,7 +28,7 @@ jobs:
         run: npm ci --ignore-scripts --legacy-peer-deps
 
       - name: Prepare extension
-        run: npm run prepare -w extensions/hyper
+        run: npm run prepare:wxt -w extensions/hyper
 
       - name: Check extension
         run: npm run check
@@ -68,7 +68,7 @@ jobs:
         run: npm ci --ignore-scripts --legacy-peer-deps
 
       - name: Prepare extension
-        run: npm run prepare -w extensions/hyper
+        run: npm run prepare:wxt -w extensions/hyper
 
       - name: Download extension package
         uses: actions/download-artifact@v4
