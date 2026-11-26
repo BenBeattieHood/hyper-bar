@@ -1,0 +1,197 @@
+.hyper-browser-window {
+  --chrome-bg: #f3f5f7;
+  --chrome-panel: #e3e7eb;
+  --chrome-tab: #f9fafb;
+  --chrome-tab-inactive: #dce1e6;
+  --chrome-line: #c5ccd3;
+  --chrome-text: #20262b;
+  --chrome-muted: #68737c;
+  --chrome-address: #f8f9fb;
+  --chrome-accent: #3b82f6;
+  height: 100dvh;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 34px 38px 45px minmax(0, 1fr);
+  color: var(--chrome-text);
+  background: var(--chrome-bg);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.hyper-browser-window[data-theme='dark'] {
+  --chrome-bg: #202124;
+  --chrome-panel: #2b2c2f;
+  --chrome-tab: #35363a;
+  --chrome-tab-inactive: #292a2d;
+  --chrome-line: #42454a;
+  --chrome-text: #e8eaed;
+  --chrome-muted: #a8adb3;
+  --chrome-address: #303134;
+  --chrome-accent: #8ab4f8;
+}
+.hyper-browser-window[data-browser='edge'][data-theme='light'] { --chrome-accent: #0f6cbd; }
+.hyper-browser-window[data-browser='edge'][data-theme='dark'] { --chrome-accent: #69afe7; }
+.hyper-browser-window[data-browser='firefox'][data-theme='light'] {
+  --chrome-bg: #f9f8fb;
+  --chrome-panel: #eceaf0;
+  --chrome-tab-inactive: #e3e1e8;
+  --chrome-accent: #7b36e8;
+}
+.hyper-browser-window[data-browser='firefox'][data-theme='dark'] {
+  --chrome-bg: #1c1b22;
+  --chrome-panel: #2b2a33;
+  --chrome-tab: #3a3842;
+  --chrome-tab-inactive: #24232b;
+  --chrome-line: #4d4b55;
+  --chrome-address: #23222a;
+  --chrome-accent: #c6a0ff;
+}
+.hyper-browser-window[data-browser='brave'][data-theme='light'] { --chrome-accent: #e54827; }
+.hyper-browser-window[data-browser='brave'][data-theme='dark'] { --chrome-accent: #ff8b6b; }
+
+.hyper-browser-titlebar {
+  display: grid;
+  grid-template-columns: 90px 1fr 90px;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--chrome-line);
+  color: var(--chrome-muted);
+  background: var(--chrome-panel);
+  font-size: 10px;
+}
+.hyper-browser-window[data-platform='mac'] .hyper-browser-titlebar { direction: ltr; }
+.browser-window-controls,
+.browser-window-actions { display: flex; align-items: center; gap: 7px; }
+.browser-window-actions { justify-content: flex-end; }
+.browser-window-actions button {
+  width: 25px;
+  height: 23px;
+  padding: 0;
+  border: 0;
+  color: var(--chrome-muted);
+  background: transparent;
+  line-height: 1;
+  pointer-events: none;
+}
+.browser-window-controls i { width: 7px; height: 7px; border-radius: 50%; background: #aeb4ba; }
+.hyper-browser-window[data-platform='mac'] .browser-window-controls i:nth-child(1) { background: #ff5f57; }
+.hyper-browser-window[data-platform='mac'] .browser-window-controls i:nth-child(2) { background: #febc2e; }
+.hyper-browser-window[data-platform='mac'] .browser-window-controls i:nth-child(3) { background: #28c840; }
+.hyper-browser-window[data-platform='mac'] .browser-window-actions { visibility: hidden; }
+.hyper-browser-window[data-platform='other'] .browser-window-controls { visibility: hidden; }
+.browser-window-title { display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 0; overflow: hidden; color: var(--chrome-muted); text-overflow: ellipsis; white-space: nowrap; }
+.browser-window-title i { width: 12px; height: 12px; flex: 0 0 auto; border-radius: 4px; background: var(--chrome-accent); }
+
+.hyper-browser-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  padding: 5px 8px 0;
+  overflow: hidden;
+  border-bottom: 1px solid var(--chrome-line);
+  background: var(--chrome-panel);
+}
+.browser-tab-button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 170px;
+  height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 9px 9px 0 0;
+  color: var(--chrome-muted);
+  background: var(--chrome-tab-inactive);
+  font-size: 10px;
+  white-space: nowrap;
+}
+.hyper-browser-window[data-browser='firefox'] .browser-tab-button { border-radius: 5px 5px 0 0; }
+.browser-tab-button span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.browser-tab-button small { margin-left: auto; font-size: 11px; }
+.browser-tab-button.is-active { color: var(--chrome-text); background: var(--chrome-tab); }
+.browser-tab-add { width: 28px; height: 28px; border: 0; color: var(--chrome-muted); background: transparent; cursor: pointer; }
+
+.hyper-browser-toolbar {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--chrome-line);
+  background: var(--chrome-panel);
+}
+.browser-toolbar-button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: var(--chrome-muted);
+  background: transparent;
+  cursor: pointer;
+}
+.browser-toolbar-button:hover { color: var(--chrome-text); background: color-mix(in srgb, var(--chrome-text) 8%, transparent); }
+.hyper-browser-window[data-browser='edge'] .browser-toolbar-button,
+.hyper-browser-window[data-browser='firefox'] .browser-toolbar-button { border-radius: 50%; }
+.browser-address {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  height: 31px;
+  padding: 0 11px;
+  border: 1px solid var(--chrome-line);
+  border-radius: 999px;
+  color: var(--chrome-muted);
+  background: var(--chrome-address);
+}
+.browser-address span { color: var(--chrome-accent); font-size: 10px; }
+.browser-address input { min-width: 0; padding: 0; border: 0; outline: 0; color: var(--chrome-text); background: transparent; font-size: 11px; }
+
+.hyper-browser-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 37%);
+  min-height: 0;
+  overflow: hidden;
+  background: #e6e9e5;
+}
+.browser-page {
+  position: relative;
+  overflow: auto;
+  min-width: 0;
+  padding: clamp(24px, 3vw, 42px);
+  color: #202525;
+  background: linear-gradient(135deg, #f3f4ef, #dbe2dc);
+}
+.hyper-browser-window[data-theme='dark'] .browser-page { color: #e6e9e7; background: linear-gradient(135deg, #272b2c, #1e2324); }
+.hyper-browser-window[data-theme='dark'] .browser-page h2 { color: #f3f4f2; }
+.hyper-browser-window[data-theme='dark'] .browser-page p { color: #aab4b5; }
+.browser-page-kicker { margin: 0 0 12px; color: #667175; font-size: 9px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+.browser-page h2 { max-width: 520px; margin: 0 0 13px; color: #202525; font-size: clamp(24px, 3vw, 42px); line-height: 1.02; letter-spacing: -.05em; }
+.browser-page p { max-width: 520px; color: #667175; font-size: 12px; line-height: 1.6; }
+.browser-page-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 24px; }
+.browser-page-card { min-height: 96px; padding: 14px; border: 1px solid rgba(30, 40, 42, .12); border-radius: 10px; background: rgba(255, 255, 255, .68); }
+.hyper-browser-window[data-theme='dark'] .browser-page-card { border-color: rgba(255,255,255,.1); background: rgba(255,255,255,.06); }
+.hyper-browser-window[data-theme='dark'] .browser-page-card strong { color: #dfe3e2; }
+.browser-page-card strong { display: block; margin-bottom: 8px; color: #2c3435; font-size: 11px; }
+.browser-page-card span { display: block; width: 68%; height: 5px; margin: 6px 0; border-radius: 5px; background: #c9d0ce; }
+.hyper-browser-window[data-theme='dark'] .browser-page-card span { background: #4a5152; }
+.browser-page-card span:nth-child(3) { width: 45%; }
+.browser-extension { position: relative; min-width: 0; min-height: 0; overflow: hidden; border-left: 1px solid rgba(0, 0, 0, .2); background: #e8ecee; }
+.browser-extension .app-shell { height: 100%; min-height: 0; }
+.browser-extension .workspace-scroll { min-height: 0; }
+
+@media (max-width: 820px) {
+  .hyper-browser-content { grid-template-columns: minmax(0, 1fr) minmax(280px, 42%); }
+  .browser-page { padding: 25px 22px; }
+  .browser-page-cards { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .hyper-browser-content { grid-template-columns: 1fr; }
+  .browser-page { display: none; }
+  .browser-extension { border-left: 0; }
+  .browser-tab-button { max-width: 110px; }
+  .hyper-browser-toolbar { grid-template-columns: auto minmax(0, 1fr) auto auto; }
+  .hyper-browser-toolbar .browser-toolbar-button:nth-child(2) { display: none; }
+}

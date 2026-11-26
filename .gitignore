@@ -1,0 +1,10 @@
+node_modules/
+.wxt/
+output/
+extensions/hyper/output/
+extensions/hyper/.wxt/
+apps/site/.next/
+apps/site/.next-dev/
+apps/site/out/
+coverage/
+logs/
