@@ -1,7 +1,3 @@
-# Chrome Web Store permission justifications
-
-Copy the text below into the Chrome Web Store Privacy practices tab. Hyper does not currently send bookmark, tab, history, clipboard, or page-content data off the device, and it contains no analytics service.
-
 ## bookmarks
 
 Hyper is a sidebar for managing bookmarks, and uses bookmarks as its durable store for spaces, bookmark folders, favourites, tab backing records, and preferences. It needs this permission to read bookmark trees, create and organize Hyper's folders, move/rename/update/delete bookmarks in response to user actions, detect external bookmark changes, and restore the user's tab workspace after browser restarts. Hyper does not upload or sell bookmark data.

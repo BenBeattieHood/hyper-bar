@@ -1,8 +1,9 @@
 'use client';
 
-import { ArrowLeft, ArrowRight, Bookmark, CornerDownLeft, Minus, Plus, RotateCw, Square, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CornerDownLeft, Minus, Plus, RotateCw, Square, X } from 'lucide-react';
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import type { BrowserTab } from 'hyper-sidebar/demo';
+import { SidebarApp } from 'hyper-sidebar/demo';
 import { useBrowserAppearance } from './browserAppearance';
 import { useDemoBrowserSession } from './useDemoBrowserSession';
 
@@ -103,7 +104,6 @@ export default function FakeBrowser() {
       <div className="hyper-browser-titlebar">
         <div className="browser-window-controls" aria-hidden="true"><i /><i /><i /></div>
         <span className="browser-window-title"><i /> {appearance.label} — {titleFor(session.activeTab)}</span>
-        <span className="browser-window-actions" aria-hidden="true"><button tabIndex={-1}><Minus size={12} strokeWidth={1.8} /></button><button tabIndex={-1}><Square size={10} strokeWidth={1.8} /></button><button tabIndex={-1}><X size={12} strokeWidth={1.8} /></button></span>
       </div>
 
       <div className="hyper-browser-tabs" role="tablist" aria-label="Browser tabs">
@@ -155,14 +155,22 @@ export default function FakeBrowser() {
           );
         })}
         <button type="button" className="browser-tab-add" onClick={() => void session.controls.createTab()} aria-label="New browser tab"><Plus size={16} strokeWidth={1.8} /></button>
+        <span className="browser-window-actions" aria-hidden="true">
+          <button tabIndex={-1}><Minus size={12} strokeWidth={1.8} /></button>
+          <button tabIndex={-1}><Square size={10} strokeWidth={1.8} /></button>
+          <button tabIndex={-1}><X size={12} strokeWidth={1.8} /></button>
+        </span>
       </div>
 
       <div className="hyper-browser-toolbar">
         <button type="button" className="browser-toolbar-button" onClick={() => void session.controls.back()} aria-label="Go back">
-          <ArrowLeft />
+          <ChevronLeft size={15} strokeWidth={1.8} />
         </button>
         <button type="button" className="browser-toolbar-button" onClick={() => void session.controls.forward()} aria-label="Go forward">
-          <ArrowRight />
+          <ChevronRight size={15} strokeWidth={1.8} />
+        </button>
+        <button type="button" className="browser-toolbar-button" onClick={() => void session.controls.reload()} aria-label="Reload page">
+          <RotateCw size={15} strokeWidth={1.8} />
         </button>
         <form className="browser-address" onSubmit={navigate}>
           <span aria-hidden="true">●</span>
@@ -185,8 +193,6 @@ export default function FakeBrowser() {
           />
         </form>
         <button type="button" className="browser-toolbar-button" onClick={() => void session.controls.navigate(address, session.activeTab?.id)} aria-label="Go to address"><CornerDownLeft size={15} strokeWidth={1.8} /></button>
-        <button type="button" className="browser-toolbar-button" onClick={() => void session.controls.reload()} aria-label="Reload page"><RotateCw size={15} strokeWidth={1.8} /></button>
-        <button type="button" className="browser-toolbar-button" onClick={() => void session.controls.bookmarkCurrentPage(session.activeTab?.id)} aria-label="Bookmark current page"><Bookmark size={15} strokeWidth={1.8} /></button>
       </div>
 
       <div
@@ -206,12 +212,7 @@ export default function FakeBrowser() {
             onPointerUp={stopResize}
             onPointerCancel={stopResize}
           />
-          <iframe
-            src="/demo/sidebar"
-            className="browser-extension-iframe"
-            title="Browser extension"
-            aria-label="Hyper extension content"
-          />
+          <SidebarApp browserState={session.browserState} />
         </aside>
       </div>
     </div>
