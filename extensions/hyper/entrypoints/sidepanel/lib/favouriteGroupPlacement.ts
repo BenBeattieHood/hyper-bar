@@ -5,7 +5,7 @@
 export type FavouriteGroupPlacement = 'bar' | 'tile';
 
 /** Where the in-page sidebar's bar is too narrow for a list to sit clear of the tiles, its lists open below their tiles and on click only. */
-export const NARROW_IN_PAGE_QUERY = '(width < 290px)';
+export const NARROW_IN_PAGE_WIDTH = 290;
 export const GROUP_LIST_WIDTH = 280;
 
 interface Box {

@@ -61,6 +61,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  container: hyper-sidebar / inline-size;
   color: var(--ink);
 }
 
@@ -283,7 +284,7 @@ body {
   isolation: isolate;
   top: 50%;
   right: 0;
-  width: calc(100vw - var(--search-shell-gutter));
+  width: calc(100cqw - var(--search-shell-gutter));
   height: 40px;
   overflow: visible;
   border-radius: 8px;
@@ -562,7 +563,7 @@ body {
   font-size: 9.5px;
 }
 
-@media (width < 205px) {
+@container hyper-sidebar (width < 205px) {
   .settings-toggle-row small,
   .settings-slider-row small {
     display: none;
@@ -1771,7 +1772,7 @@ body {
 .bookmark-menu-popover {
   z-index: 100;
   display: grid;
-  width: min(174px, calc(100vw - 8px));
+  width: min(174px, calc(100cqw - 8px));
   overflow-y: auto;
   padding: 5px;
   border: 1px solid rgba(44, 41, 36, 0.14);
@@ -1808,7 +1809,7 @@ body {
 }
 
 .bookmark-picker-popover {
-  width: min(248px, calc(100vw - 8px));
+  width: min(248px, calc(100cqw - 8px));
 }
 
 .bookmark-menu-separator {
@@ -3785,510 +3786,99 @@ body {
   }
 }
 
-@media (max-width: 300px) {
-  .topbar {
-    padding-inline: 10px;
-  }
-
-  .favourites-section {
-    --favourites-padding-inline: 10px;
-  }
-
-  .favourites-grid {
-    gap: 6px;
-  }
-
-  .favourite-title {
-    font-size: 9px;
-  }
+@container hyper-sidebar (width < 240px) {
+  .tree-row, .tab-row, .tab-split-row, .tree-drop-placeholder { --tree-indent: 0px; }
 }
-
-@media (width < 240px) {
-  .tree-row,
-  .tab-row,
-  .tab-split-row,
-  .tree-drop-placeholder {
-    --tree-indent: 0px;
-  }
+@container hyper-sidebar (width < 225px) {
+  .search-command-shell:not(.is-open) { display: none; }
+  .topbar-actions:not(.is-search-open) { padding-right: 0; }
 }
-
-/* The header keeps room for the space title: Search steps aside first, then Settings.
-   useWorkspaceLayout mirrors these breakpoints, closing each when the sidebar narrows past it. Search still opens by shortcut. */
-@media (width < 225px) {
-  .search-command-shell:not(.is-open) {
-    display: none;
-  }
-
-  .topbar-actions:not(.is-search-open) {
-    padding-right: 0;
-  }
+@container hyper-sidebar (width < 190px) { .settings-button { display: none; } }
+@container hyper-sidebar (width < 150px) {
+  .favourites-grid { --favourites-row-gap: 6px; grid-template-columns: minmax(0, 1fr); gap: var(--favourites-row-gap); }
+  .favourite-slot { height: 50px; aspect-ratio: auto; }
+  .favourite-tile { --tile-space-wash: color-mix(in srgb, var(--tile-space-colour) 14%, transparent); gap: 4px; padding: 0 5px; }
+  .favourite-title { display: block; max-height: none; text-overflow: clip; white-space: nowrap; }
+  .favourites-grid .favourite-tile.has-space { background: var(--tile-space-wash); box-shadow: none; }
+  .favourites-grid .favourite-tile-wrap:hover .favourite-tile.has-space:not(.is-active), .favourites-grid .favourite-slot.is-hovered .favourite-tile.has-space:not(.is-active) { background: color-mix(in srgb, var(--tile-space-colour) 20%, transparent); }
+  .favourites-grid .favourite-tile.is-active.has-space { background: color-mix(in srgb, var(--tile-space-colour) 30%, var(--surface-hover)); }
+  .favourite-tile.is-open::after, .favourite-tile.is-recent.has-space::after { display: none; }
+  .favourite-slot.joins-previous .favourite-tile { border-top-left-radius: 0; border-top-right-radius: 0; }
+  .favourite-slot.joins-next .favourite-tile { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  .favourite-slot.joins-previous .favourite-tile::before { position: absolute; top: calc(-1px - var(--favourites-row-gap)); right: -1px; left: -1px; height: var(--favourites-row-gap); background: var(--tile-space-wash); content: ""; pointer-events: none; transition: background 150ms ease; }
+  .global-bookmarks-slot, .tree-workspace > .tree-section { display: none; }
+  .tree-workspace > .space-pagination { margin-top: auto; }
+  .topbar { --search-shell-gutter: 10px; min-height: 0; padding: 0; border-bottom: 0; background: transparent; backdrop-filter: none; }
+  .topbar-space-title { padding: 2px 5px; }
+  .topbar-space-title .space-title-input { height: 30px; font-size: 12px; text-align: center; }
+  .topbar.has-search { min-height: 52px; padding: 7px 5px; border-bottom: 1px solid var(--line); background: var(--topbar); backdrop-filter: blur(18px); }
+  .topbar.is-settings { min-height: 44px; padding: 5px; background: var(--topbar); backdrop-filter: blur(18px); }
+  .topbar:not(.has-search):has(.countdown-notice) { min-height: 34px; padding: 2px 5px; }
 }
-
-@media (width < 190px) {
-  .settings-button {
-    display: none;
-  }
+@container hyper-sidebar (max-width: 189px) {
+  .settings-page { padding-inline: 8px; }
+  .space-pagination { padding-inline: 5px; }
+  .space-pagination-items { gap: 2px; }
+  .empty-tree-action { gap: 4px; padding: 0 6px; }
 }
-
-/* Only the favourites and the spaces bar fit. useWorkspaceLayout mirrors this breakpoint.
-   The favourites stack in one column of full-width tiles, each named under its icon,
-   washed in its space's colour and joined to its neighbours in the same space. */
-@media (width < 150px) {
-  .favourites-grid {
-    --favourites-row-gap: 6px;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--favourites-row-gap);
-  }
-
-  .favourite-slot {
-    height: 50px;
-    aspect-ratio: auto;
-  }
-
-  .favourite-tile {
-    --tile-space-wash: color-mix(in srgb, var(--tile-space-colour) 14%, transparent);
-    gap: 4px;
-    padding: 0 5px;
-  }
-
-  .favourite-title {
-    display: block;
-    max-height: none;
-    text-overflow: clip;
-    white-space: nowrap;
-  }
-
-  .favourites-grid .favourite-tile.has-space {
-    background: var(--tile-space-wash);
-    box-shadow: none;
-  }
-
-  .favourites-grid .favourite-tile-wrap:hover .favourite-tile.has-space:not(.is-active),
-  .favourites-grid .favourite-slot.is-hovered .favourite-tile.has-space:not(.is-active) {
-    background: color-mix(in srgb, var(--tile-space-colour) 20%, transparent);
-  }
-
-  .favourites-grid .favourite-tile.is-active.has-space {
-    background: color-mix(in srgb, var(--tile-space-colour) 30%, var(--surface-hover));
-  }
-
-  /* The wash shows the space, so the line under the icon would repeat it. */
-  .favourite-tile.is-open::after,
-  .favourite-tile.is-recent.has-space::after {
-    display: none;
-  }
-
-  .favourite-slot.joins-previous .favourite-tile {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-
-  .favourite-slot.joins-next .favourite-tile {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  /* Bridges the row gap to the tile above, outside this tile's 1px border. */
-  .favourite-slot.joins-previous .favourite-tile::before {
-    position: absolute;
-    top: calc(-1px - var(--favourites-row-gap));
-    right: -1px;
-    left: -1px;
-    height: var(--favourites-row-gap);
-    background: var(--tile-space-wash);
-    content: "";
-    pointer-events: none;
-    transition: background 150ms ease;
-  }
-
-  .global-bookmarks-slot,
-  .tree-workspace > .tree-section {
-    display: none;
-  }
-
-  .tree-workspace > .space-pagination {
-    margin-top: auto;
-  }
-
-  /* The header keeps to the space's title in compact text. */
-  .topbar {
-    --search-shell-gutter: 10px;
-    min-height: 0;
-    padding: 0;
-    border-bottom: 0;
-    background: transparent;
-    backdrop-filter: none;
-  }
-
-  .topbar-space-title {
-    padding: 2px 5px;
-  }
-
-  .topbar-space-title .space-title-input {
-    height: 30px;
-    font-size: 12px;
-    text-align: center;
-  }
-
-  .topbar.has-search {
-    min-height: 52px;
-    padding: 7px 5px;
-    border-bottom: 1px solid var(--line);
-    background: var(--topbar);
-    backdrop-filter: blur(18px);
-  }
-
-  .topbar.is-settings {
-    min-height: 44px;
-    padding: 5px;
-    background: var(--topbar);
-    backdrop-filter: blur(18px);
-  }
-
-  /* A timed message takes the header as the title does. */
-  .topbar:not(.has-search):has(.countdown-notice) {
-    min-height: 34px;
-    padding: 2px 5px;
-  }
+@container hyper-sidebar (max-width: 99px) {
+  .settings-page { padding-inline: 4px; }
+  .settings-section { padding-inline: 0; }
+  .topbar-actions { display: none; }
+  .topbar:not(.has-search):has(.countdown-notice) .topbar-space-title { display: block; }
+  .topbar.is-settings:has(.countdown-notice) .settings-topbar { flex: 1 1 auto; width: 100%; }
+  .topbar.is-settings:has(.countdown-notice) .settings-topbar h1 { display: block; }
+  .topbar.has-search .topbar-actions { display: flex; width: 100%; }
+  .favourites-section { --favourites-padding-bottom: 6px; --favourites-padding-inline: 5px; padding-top: 8px; }
+  .favourites-grid { min-height: 0; }
+  .editor-backdrop { padding: 3px; }
+  .editor-heading { grid-template-columns: minmax(0, 1fr) 28px; gap: 4px; padding: 6px; }
+  .editor-heading-icon, .editor-heading p { display: none; }
+  .bookmark-editor form, .space-delete-body { min-width: 0; padding: 8px 6px 6px; overflow: hidden; }
+  .bookmark-editor form label, .bookmark-editor form input, .bookmark-editor form select, .editor-actions { width: 100%; min-width: 0; max-width: 100%; }
 }
-
-@media (max-width: 189px) {
-  .settings-page {
-    padding-inline: 8px;
-  }
-
-  .space-pagination {
-    padding-inline: 5px;
-  }
-
-  .space-pagination-items {
-    gap: 2px;
-  }
-
-  /* Tight enough for the whole label at the narrowest list, 150px wide. */
-  .empty-tree-action {
-    gap: 4px;
-    padding: 0 6px;
-  }
+@container hyper-sidebar (max-width: 49px) {
+  .settings-page { padding-inline: 1px; }
+  .settings-topbar { gap: 2px; }
+  .settings-topbar .icon-button { flex-basis: 24px; width: 24px; height: 24px; }
+  .settings-topbar h1 { font-size: 10px; }
+  .topbar.has-search { padding: 4px 2px; }
+  .bookmark-menu-popover { width: calc(100cqw - 4px); padding: 2px; }
+  .bookmark-menu-popover button { display: grid; grid-template-columns: 1fr; justify-items: center; min-height: 28px; gap: 0; padding: 0; }
+  .bookmark-menu-popover button span, .bookmark-menu-popover button kbd { display: none; }
+  .space-pagination { --space-pagination-inline-inset: 2px; }
+  .space-pagination:has(.now-playing-transition) { grid-template-columns: 28px minmax(0, 1fr); }
+  .space-pagination-items { gap: 1px; }
+  .add-space-button { width: 18px; height: 20px; }
+  .editor-heading h2 { font-size: 10px; }
+  .editor-actions { align-items: stretch; flex-direction: column-reverse; }
+  .space-delete-prompt .editor-actions { flex-direction: column; }
+  .space-delete-body p { font-size: 9.5px; }
+  .editor-actions button { width: 100%; min-width: 0; max-width: 100%; padding-inline: 3px; overflow: hidden; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
 }
-
-@media (max-width: 99px) {
-  .settings-page {
-    padding-inline: 4px;
-  }
-
-  .settings-section {
-    padding-inline: 0;
-  }
-
-  .topbar-actions {
-    display: none;
-  }
-
-  /* Too narrow for a message, so the space keeps its title. */
-  .topbar:not(.has-search):has(.countdown-notice) .topbar-space-title {
-    display: block;
-  }
-
-  .topbar.is-settings:has(.countdown-notice) .settings-topbar {
-    flex: 1 1 auto;
-    width: 100%;
-  }
-
-  .topbar.is-settings:has(.countdown-notice) .settings-topbar h1 {
-    display: block;
-  }
-
-  .topbar.has-search .topbar-actions {
-    display: flex;
-    width: 100%;
-  }
-
-  .favourites-section {
-    --favourites-padding-bottom: 6px;
-    --favourites-padding-inline: 5px;
-    padding-top: 8px;
-  }
-
-  .favourites-grid {
-    min-height: 0;
-  }
-
-  .editor-backdrop {
-    padding: 3px;
-  }
-
-  .editor-heading {
-    grid-template-columns: minmax(0, 1fr) 28px;
-    gap: 4px;
-    padding: 6px;
-  }
-
-  .editor-heading-icon,
-  .editor-heading p {
-    display: none;
-  }
-
-  .bookmark-editor form,
-  .space-delete-body {
-    min-width: 0;
-    padding: 8px 6px 6px;
-    overflow: hidden;
-  }
-
-  .bookmark-editor form label,
-  .bookmark-editor form input,
-  .bookmark-editor form select,
-  .editor-actions {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 49px) {
-  .settings-page {
-    padding-inline: 1px;
-  }
-
-  .settings-topbar {
-    gap: 2px;
-  }
-
-  .settings-topbar .icon-button {
-    flex-basis: 24px;
-    width: 24px;
-    height: 24px;
-  }
-
-  .settings-topbar h1 {
-    font-size: 10px;
-  }
-
-  .topbar.has-search {
-    padding: 4px 2px;
-  }
-
-  .bookmark-menu-popover {
-    width: calc(100vw - 4px);
-    padding: 2px;
-  }
-
-  .bookmark-menu-popover button {
-    display: grid;
-    grid-template-columns: 1fr;
-    justify-items: center;
-    min-height: 28px;
-    gap: 0;
-    padding: 0;
-  }
-
-  .bookmark-menu-popover button span,
-  .bookmark-menu-popover button kbd {
-    display: none;
-  }
-
-  .space-pagination {
-    --space-pagination-inline-inset: 2px;
-  }
-
-  .space-pagination:has(.now-playing-transition) {
-    grid-template-columns: 28px minmax(0, 1fr);
-  }
-
-  .space-pagination-items {
-    gap: 1px;
-  }
-
-  .add-space-button {
-    width: 18px;
-    height: 20px;
-  }
-
-  .editor-heading h2 {
-    font-size: 10px;
-  }
-
-  .editor-actions {
-    align-items: stretch;
-    flex-direction: column-reverse;
-  }
-
-  .space-delete-prompt .editor-actions {
-    flex-direction: column;
-  }
-
-  .space-delete-body p {
-    font-size: 9.5px;
-  }
-
-  .editor-actions button {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    padding-inline: 3px;
-    overflow: hidden;
-    font-size: 9px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
 @media (prefers-color-scheme: dark) {
-  :root {
-    color: #f0f3f2;
-    background: #182125;
-    --canvas: #182125;
-    --canvas-deep: #11181b;
-    --surface: rgba(37, 45, 48, 0.74);
-    --surface-strong: #242c2f;
-    --surface-control: rgba(255, 255, 255, 0.07);
-    --surface-hover: rgba(255, 255, 255, 0.12);
-    --ink: #f0f3f2;
-    --muted: #adb8bb;
-    --faint: #7e8d91;
-    --line: rgba(240, 245, 246, 0.13);
-    --line-strong: rgba(240, 245, 246, 0.24);
-    --accent: #83afc0;
-    --accent-soft: rgba(91, 140, 159, 0.24);
-    --accent-strong: #b2d2dd;
-    --warm: #df8178;
-    --focus: #8cc1d4;
-    --topbar: rgba(24, 33, 37, 0.9);
-    --grid-line: rgba(235, 244, 246, 0.025);
-    --overlay: rgba(4, 7, 8, 0.48);
-    --shadow: rgba(0, 0, 0, 0.38);
-    --space-pagination-opaque-background: var(--canvas);
-    --list-hover-background: var(--surface-control);
-    --tab-group-grey: #84817e;
-    --tab-group-blue: #69a1fa;
-    --tab-group-red: #cf87da;
-    --tab-group-yellow: #c1a256;
-    --tab-group-green: #4a89ba;
-    --tab-group-pink: #ee5fb7;
-    --tab-group-purple: #b696ff;
-    --tab-group-cyan: #4cb4b7;
-    --tab-group-orange: #df8e64;
-  }
-
-  .favourite-title,
-  .folder-item {
-    color: var(--ink);
-  }
-
-  .settings-slider input::-webkit-slider-thumb {
-    background: var(--ink);
-  }
-
-  .settings-slider input::-moz-range-thumb {
-    background: var(--ink);
-  }
-
-  .section-add-button:hover,
-  .section-add-button:focus-visible {
-    background: var(--surface-control);
-  }
-
-  .tab-folder-row.drop-inside .tab-folder-content {
-    background: var(--accent-soft);
-  }
-
-  .tab-folder-row.drop-inside.is-invalid-drop .tab-folder-content {
-    background: color-mix(in srgb, var(--warm) 12%, transparent);
-  }
-
-  .favourite-tile {
-    background: var(--surface-control);
-    box-shadow: 0 2px 8px var(--shadow);
-  }
-
-  .favourite-tile-wrap:hover .favourite-tile,
-  .favourite-slot.is-hovered .favourite-tile {
-    background: var(--surface-hover);
-    box-shadow: 0 5px 14px var(--shadow);
-  }
-
-  .favourite-tile.is-open {
-    background: var(--surface-hover);
-  }
-
-  .favourite-tile.is-active:is(.is-pinned, .is-recent) {
-    background: color-mix(in srgb, var(--tile-space-colour) 30%, var(--surface-hover));
-  }
-
-  .favourite-placeholder {
-    border-color: var(--line);
-    background: rgba(255, 255, 255, 0.035);
-  }
-
-  .favourite-tile.is-recent {
-    background: rgba(255, 255, 255, 0.02);
-    box-shadow: none;
-  }
-
-  .global-bookmarks-button {
-    border-color: var(--line);
-  }
-
-  .global-bookmarks-button:hover,
-  .global-bookmarks-button:focus-visible {
-    border-color: color-mix(in srgb, var(--ink) 24%, transparent);
-    background: var(--surface-hover);
-    box-shadow: 0 5px 14px var(--shadow);
-  }
-
-  .global-bookmarks-button.is-active {
-    border-color: transparent;
-    background: transparent;
-  }
-
-  .bookmark-menu-popover,
-  .bookmark-editor {
-    border-color: var(--line);
-    background: var(--surface-strong);
-    box-shadow: 0 18px 60px var(--shadow);
-  }
-
-  .bookmark-menu-popover button:hover,
-  .bookmark-menu-popover button:focus-visible,
-  .editor-heading > button:hover {
-    background: var(--surface-hover);
-  }
-
-  .bookmark-editor input,
-  .bookmark-editor select {
-    border-color: var(--line);
-    color: var(--ink);
-    background: var(--surface-control);
-  }
-
-  .space-pagination {
-    background: color-mix(in srgb, var(--canvas) 88%, transparent);
-  }
-
-  .space-pagination-marker {
-    background: var(--faint);
-  }
-
-  .editor-backdrop {
-    background: var(--overlay);
-  }
-
-  .drag-overlay {
-    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-    color: var(--accent-strong);
-    background: var(--surface-strong);
-    box-shadow: 0 10px 28px var(--shadow);
-  }
+  :root { color: #f0f3f2; background: #182125; --canvas: #182125; --canvas-deep: #11181b; --surface: rgba(37,45,48,.74); --surface-strong: #242c2f; --surface-control: rgba(255,255,255,.07); --surface-hover: rgba(255,255,255,.12); --ink: #f0f3f2; --muted: #adb8bb; --faint: #7e8d91; --line: rgba(240,245,246,.13); --line-strong: rgba(240,245,246,.24); --accent: #83afc0; --accent-soft: rgba(91,140,159,.24); --accent-strong: #b2d2dd; --warm: #df8178; --focus: #8cc1d4; --topbar: rgba(24,33,37,.9); --grid-line: rgba(235,244,246,.025); --overlay: rgba(4,7,8,.48); --shadow: rgba(0,0,0,.38); --space-pagination-opaque-background: var(--canvas); --list-hover-background: var(--surface-control); --tab-group-grey: #84817e; --tab-group-blue: #69a1fa; --tab-group-red: #cf87da; --tab-group-yellow: #c1a256; --tab-group-green: #4a89ba; --tab-group-pink: #ee5fb7; --tab-group-purple: #b696ff; --tab-group-cyan: #4cb4b7; --tab-group-orange: #df8e64; }
+  .favourite-title, .folder-item { color: var(--ink); }
+  .settings-slider input::-webkit-slider-thumb { background: var(--ink); }
+  .settings-slider input::-moz-range-thumb { background: var(--ink); }
+  .section-add-button:hover, .section-add-button:focus-visible { background: var(--surface-control); }
+  .tab-folder-row.drop-inside .tab-folder-content { background: var(--accent-soft); }
+  .tab-folder-row.drop-inside.is-invalid-drop .tab-folder-content { background: color-mix(in srgb, var(--warm) 12%, transparent); }
+  .favourite-tile { background: var(--surface-control); box-shadow: 0 2px 8px var(--shadow); }
+  .favourite-tile-wrap:hover .favourite-tile, .favourite-slot.is-hovered .favourite-tile { background: var(--surface-hover); box-shadow: 0 5px 14px var(--shadow); }
+  .favourite-tile.is-open { background: var(--surface-hover); }
+  .favourite-tile.is-active:is(.is-pinned, .is-recent) { background: color-mix(in srgb, var(--tile-space-colour) 30%, var(--surface-hover)); }
+  .favourite-placeholder { border-color: var(--line); background: rgba(255,255,255,.035); }
+  .favourite-tile.is-recent { background: rgba(255,255,255,.02); box-shadow: none; }
+  .global-bookmarks-button { border-color: var(--line); }
+  .global-bookmarks-button:hover, .global-bookmarks-button:focus-visible { border-color: color-mix(in srgb, var(--ink) 24%, transparent); background: var(--surface-hover); box-shadow: 0 5px 14px var(--shadow); }
+  .global-bookmarks-button.is-active { border-color: transparent; background: transparent; }
+  .bookmark-menu-popover, .bookmark-editor { border-color: var(--line); background: var(--surface-strong); box-shadow: 0 18px 60px var(--shadow); }
+  .bookmark-menu-popover button:hover, .bookmark-menu-popover button:focus-visible, .editor-heading > button:hover { background: var(--surface-hover); }
+  .bookmark-editor input, .bookmark-editor select { border-color: var(--line); color: var(--ink); background: var(--surface-control); }
+  .space-pagination { background: color-mix(in srgb, var(--canvas) 88%, transparent); }
+  .space-pagination-marker { background: var(--faint); }
+  .editor-backdrop { background: var(--overlay); }
+  .drag-overlay { border-color: color-mix(in srgb, var(--accent) 45%, transparent); color: var(--accent-strong); background: var(--surface-strong); box-shadow: 0 10px 28px var(--shadow); }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }

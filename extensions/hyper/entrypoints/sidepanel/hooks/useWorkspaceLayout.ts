@@ -1,26 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import type { WorkspaceTransitionKind } from '../components/WorkspaceMotion';
 import { detectSidebarSide, type SidebarSide } from '../lib/sidebarPlacement';
 import { useHoldTimer } from './useHoldTimer';
 import { listen } from '../lib/listen';
 
-const WIDE_WORKSPACE_QUERY = '(min-width: 720px)';
+export const WIDE_WORKSPACE_WIDTH = 720;
 /** Matches `sidepanel/style.css`, which hides the Tabs and Bookmarks lists below this width. */
-export const LISTS_HIDDEN_QUERY = '(width < 150px)';
+export const LISTS_HIDDEN_WIDTH = 150;
 /** Match `sidepanel/style.css`, which hides the Search and Settings buttons below these widths. */
-const SEARCH_BUTTON_HIDDEN_QUERY = '(width < 225px)';
-const SETTINGS_BUTTON_HIDDEN_QUERY = '(width < 190px)';
+const SEARCH_BUTTON_HIDDEN_WIDTH = 225;
+const SETTINGS_BUTTON_HIDDEN_WIDTH = 190;
 
-export function useWorkspaceLayout({ dragging }: { dragging(): boolean }) {
+export function useWorkspaceLayout({ dragging, shellRef }: {
+  dragging(): boolean;
+  shellRef: RefObject<HTMLElement | null>;
+}) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [listsHidden, setListsHidden] = useState(
-    () => window.matchMedia(LISTS_HIDDEN_QUERY).matches,
-  );
+  const [listsHidden, setListsHidden] = useState(false);
   const [bookmarksOpen, setBookmarksOpen] = useState(false);
-  const [wideWorkspace, setWideWorkspace] = useState(
-    () => window.matchMedia(WIDE_WORKSPACE_QUERY).matches,
-  );
+  const [wideWorkspace, setWideWorkspace] = useState(false);
   const [sidebarSide, setSidebarSide] = useState<SidebarSide>('right');
   const bookmarksOpenRef = useRef(false);
   const viewSwitch = useHoldTimer<'tabs' | 'bookmarks'>(500);
@@ -56,29 +55,22 @@ export function useWorkspaceLayout({ dragging }: { dragging(): boolean }) {
     });
   };
 
-  useEffect(() => {
-    const query = window.matchMedia(LISTS_HIDDEN_QUERY);
-    return listen([query, 'change', () => setListsHidden(query.matches)]);
-  }, []);
-
-  // Narrowing past the point where a button hides closes what it opened; the shortcut can still reopen it.
-  useEffect(() => {
-    const search = window.matchMedia(SEARCH_BUTTON_HIDDEN_QUERY);
-    const settings = window.matchMedia(SETTINGS_BUTTON_HIDDEN_QUERY);
-    return listen(
-      [search, 'change', () => { if (search.matches) setSearchOpen(false); }],
-      [settings, 'change', () => { if (settings.matches) setSettingsOpen(false); }],
-    );
-  }, []);
-
-  useEffect(() => {
-    const query = window.matchMedia(WIDE_WORKSPACE_QUERY);
-    const updateWideWorkspace = () => {
-      setWideWorkspace(query.matches);
-      if (query.matches) clearViewSwitchTimer();
+  useLayoutEffect(() => {
+    const shell = shellRef.current;
+    if (!shell) return;
+    const update = () => {
+      const width = shell.getBoundingClientRect().width;
+      setListsHidden(width < LISTS_HIDDEN_WIDTH);
+      setWideWorkspace(width >= WIDE_WORKSPACE_WIDTH);
+      if (width >= WIDE_WORKSPACE_WIDTH) clearViewSwitchTimer();
+      if (width < SEARCH_BUTTON_HIDDEN_WIDTH) setSearchOpen(false);
+      if (width < SETTINGS_BUTTON_HIDDEN_WIDTH) setSettingsOpen(false);
     };
-    return listen([query, 'change', updateWideWorkspace]);
-  }, []);
+    const observer = new ResizeObserver(update);
+    observer.observe(shell);
+    update();
+    return () => observer.disconnect();
+  }, [clearViewSwitchTimer, shellRef]);
 
   useEffect(() => {
     let latestRequest = 0;

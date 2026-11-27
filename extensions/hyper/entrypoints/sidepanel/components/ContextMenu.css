@@ -14,7 +14,7 @@
   z-index: 1000;
   width: max-content;
   min-width: 168px;
-  max-width: min(260px, calc(100vw - 8px));
+  max-width: min(260px, calc(100cqw - 8px));
   padding: 5px;
   outline: 0;
   transition: opacity 100ms ease-out;

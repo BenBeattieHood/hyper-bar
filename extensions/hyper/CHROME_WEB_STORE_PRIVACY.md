@@ -1,6 +1,6 @@
 ## bookmarks
 
-Hyper is a sidebar for managing bookmarks, and uses bookmarks as its durable store for spaces, bookmark folders, favourites, tab backing records, and preferences. It needs this permission to read bookmark trees, create and organize Hyper's folders, move/rename/update/delete bookmarks in response to user actions, detect external bookmark changes, and restore the user's tab workspace after browser restarts. Hyper does not upload or sell bookmark data.
+Hyper is a sidebar for managing bookmarks, and uses bookmarks as its durable store for spaces, bookmark folders, favourites, tab backing records, and preferences. It needs this permission to read bookmark trees, create and organize Hyper's folders, move/rename/update/delete bookmarks in response to user actions, detect external bookmark changes, and restore the user's tab workspace after browser restarts. Hyper does not upload or share your bookmark data - it is held within your browser only.
 
 ## clipboardRead
 
@@ -16,11 +16,11 @@ Hyper displays favicons to identify open tabs, bookmarks, history results, recen
 
 ## history
 
-Hyper's Search includes the user's Chrome history entries alongside open tabs and bookmarks. It reads recent history to build a local, in-memory search index and listens for history changes to keep that index current. When the user explicitly chooses the Search command to remove a history result, Hyper deletes that URL from history. Hyper does not transmit history data; the index is discarded when the extension worker stops and is rebuilt locally.
+Hyper's Search includes the user's Chrome history entries alongside open tabs and bookmarks. It reads recent history to build a local, in-memory search index and listens for history changes to keep that index current. When the user explicitly chooses the Search command to remove a history result, Hyper deletes that URL from history. Hyper does not upload or share history data; the index is discarded when the extension worker stops and is rebuilt locally.
 
 ## Host permission use (`http://*/*`, `https://*/*`)
 
-Hyper injects a content script on HTTP(S) pages to provide the user-invoked page Search shortcut, the optional in-page sidebar, media playback controls, and page-text Search when that setting is enabled. The script does not alter page content, track browsing, or send page data off the device. Page URLs, titles, headings, and body text are processed locally only for Hyper's requested UI and search features. Incognito pages are excluded from Hyper's captured search content.
+Hyper injects a content script on HTTP(S) pages in order to allow a global in-page Search shortcut, the optional in-page sidebar, media playback controls, and page-text Search when that setting is enabled. The script does not alter page content, read data, or share page data off the device. Page URLs, titles, headings, and body text are processed locally only for Hyper's own local features. Incognito pages are excluded from Hyper's captured search content.
 
 The same host patterns are declared as optional host access because Chrome also offers users a per-site opt-in when scripting access is needed for the selected site. The extension requests only the origin shown in that opt-in prompt, and only after the user activates “Fix play/pause?” for an inaccessible media page.
 

@@ -1,8 +1,7 @@
 import { useLayoutEffect, useState, type RefObject } from 'react';
 import { MAX_FAVOURITES } from '../../lib/bookmarks';
 import { favouriteRowColumns } from '../lib/favouriteBar';
-import { listen } from '../lib/listen';
-import { LISTS_HIDDEN_QUERY } from './useWorkspaceLayout';
+import { LISTS_HIDDEN_WIDTH } from './useWorkspaceLayout';
 
 /** The bar's slots that show, laid out in its grid; the hidden global bookmarks button is not one. */
 const shownSlots = (grid: HTMLElement) => [...grid.children].filter((element) =>
@@ -51,20 +50,18 @@ export function useFavouriteSlotCount(gridRef: RefObject<HTMLElement | null>): {
     const spacesBar = scroll?.querySelector<HTMLElement>(':scope > .tree-workspace > .space-pagination');
     const workspace = spacesBar?.parentElement;
     if (!grid || !scroll || !spacesBar || !workspace) return;
-    const listsHidden = window.matchMedia(LISTS_HIDDEN_QUERY);
+    const shell = grid.closest<HTMLElement>('.app-shell');
+    if (!shell) return;
     const update = () => {
       const columns = rowColumns(grid);
-      const slotCount = listsHidden.matches ? fittingFavouriteSlotCount(grid, scroll, spacesBar) : columns - 1;
+      const listsHidden = shell.getBoundingClientRect().width < LISTS_HIDDEN_WIDTH;
+      const slotCount = listsHidden ? fittingFavouriteSlotCount(grid, scroll, spacesBar) : columns - 1;
       setLayout((current) => current.columns === columns && current.slotCount === slotCount ? current : { columns, slotCount });
     };
     const observer = new ResizeObserver(update);
-    for (const element of [grid, scroll, workspace, spacesBar]) observer.observe(element);
+    for (const element of [grid, scroll, workspace, spacesBar, shell]) observer.observe(element);
     update();
-    const unlisten = listen([listsHidden, 'change', update]);
-    return () => {
-      observer.disconnect();
-      unlisten();
-    };
+    return () => observer.disconnect();
   }, [gridRef]);
   return layout;
 }

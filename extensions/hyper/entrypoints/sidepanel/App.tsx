@@ -73,7 +73,7 @@ import { extensionOrigin as readExtensionOrigin } from './lib/extensionOrigin';
 
 export function SidebarApp({ browserState }: { browserState: ReturnType<typeof useBrowserState> }) {
   const reduceMotion = useReducedMotion();
-  const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const shellRef = useRef<HTMLDivElement>(null); const searchTriggerRef = useRef<HTMLButtonElement>(null);
   const {
     armWorkspaceView,
     bookmarksOpen,
@@ -92,7 +92,7 @@ export function SidebarApp({ browserState }: { browserState: ReturnType<typeof u
     sidebarSide,
     wideWorkspace,
     workspaceTransitionKind,
-  } = useWorkspaceLayout({ dragging: () => Boolean(activeDragRef.current) });
+  } = useWorkspaceLayout({ dragging: () => Boolean(activeDragRef.current), shellRef });
   const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
   const toggleCollapsedId = (id: string) => setCollapsedIds((current) => toggleFolder(current, id));
   const searchRef = useRef<HTMLInputElement>(null);
@@ -523,7 +523,7 @@ export function SidebarApp({ browserState }: { browserState: ReturnType<typeof u
           },
         }}
       >
-        <div className="app-shell" data-space-colour={activeSpaceColour} style={groupColourStyle('--space-colour', activeSpaceColour)}>
+        <div ref={shellRef} className="app-shell" data-space-colour={activeSpaceColour} style={groupColourStyle('--space-colour', activeSpaceColour)}>
           <SpaceColourStrip
             colour={activeSpaceColour}
             direction={spaceSlideDirection}
